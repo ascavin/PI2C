@@ -12,7 +12,7 @@ def main(argv):
     inComingaddress = ("127.0.0.1",3000)
     connect(socket,outComingAddress)
     askSubscribe(socket,port)
-    toPrint = ping(inComingaddress)
+    ping(inComingaddress)
 
 def connect(s,address):
     # connect to server
