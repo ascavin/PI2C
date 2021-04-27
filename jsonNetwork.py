@@ -14,6 +14,7 @@ def sendJSON(socket, obj):
 		raise NotAJSONObject('sendJSON support only JSON Object Type')
 	message = message.encode('utf8')
 	total = 0
+	print(message)
 	while total < len(message):
 		sent = socket.send(message[total:])
 		total += sent
