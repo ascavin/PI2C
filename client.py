@@ -4,6 +4,7 @@ from threading import Thread
 import sys
 import json
 import time
+import movetest
 
 class game:
 
@@ -76,6 +77,10 @@ def computeMove(grid):
 
 def checkMove(grid):
     return False
+
+def move(state):
+    
+
 
 if (__name__=="__main__"):
     main(sys.argv)
