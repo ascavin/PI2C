@@ -11,6 +11,7 @@ class game:
     __name = "toto"
     __port_client = 3001
     __port_server = 3000
+    __host = "127.0.0.1"
 
     def subscribe(self):
 
