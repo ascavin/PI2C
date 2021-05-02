@@ -78,8 +78,6 @@ def computeMove(grid):
 def checkMove(grid):
     return False
 
-def move(state):
-    
 
 
 if (__name__=="__main__"):
