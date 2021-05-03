@@ -184,6 +184,8 @@ def Abalone(players):
 		]
 	}
 
+			
+			
 	# move = {
 	# 	'marbles': [],
 	# 	'direction': ''
@@ -251,17 +253,64 @@ def MAX(state,player):
     return False
 
 class isPossibleTo:
-    def __init__(self):
-       pass 
-    def moveManyMarbles():
-        return False
+	def __init__(self,Grid):
+		self.symbolAllies="W"
+		self.symbolOpponent="B" 
+		self.grid=Grid
 
-    def aMarblesNextToAllies():
-        return False
+	def moveManyMarbles(self):
+		return False
 
-    def moveOpponentMarbleOutOfTheBoard():
-        return False
+	def aMarblesNextToAllies(self):
+		return False
 
+	def moveOpponentMarbleOutOfTheBoard(self):
+		#is near border ?
+		#	yes : Is allies ?
+		#			Yes : Do this neighbor in contact ?
+		# 					Yes: Is Allies ?
+		#
+		# 					No : 
+		#			No : 
+		#		
+		#	no	: None  
+		marbleNextToBorder=findMarbleNearBorder(self.grid,self.symbolOpponent)
+		for marble in marbleNextToBorder:
+			alliesMarble= findNeighbor(marble,self.symbolAllies)
+
+		# for marble in marbleNextToBorder:
+		# 	aNeighbor = findNeighbor(marble,self.symbolAllies)
+		# for marble in aNeighbor:
+		# 	twoNeighbor = findNeighbor(marble,self.symbolAllies)		
+		return False
+
+def exitMove(location):
+	exitMove={
+			(0,0):['NW','W','NE'],
+			(0,1):['NW','NE'],
+			(0,2):['NW','NE'],
+			(0,3):['NW','NE'],
+			(0,4):['NW','E','NE'],
+			(1,5):['E','NE'],
+			(2,6):['E','NE'],
+			(3,7):['E','NE'],
+			(4,8):['NE','E','SE'],
+			(5,8):['E','SE'],
+			(6,8):['E','SE'],
+			(7,8):['E','SE'],
+			(8,8):['SW','E','SE'],
+			(8,7):['SE','SW'],
+			(8,6):['SE','SW'],
+			(8,5):['SE','SW'],
+			(8,4):['SE','W','SW'],
+			(7,3):['SE','W'],
+			(6,2):['SE','W'],
+			(5,1):['SE','W'],
+			(4,0):['SW','W','NW'],
+			(3,0):['W','NW'],
+			(2,0):['W','NW'],
+			(1,0):['W','NW']]
+	}
 
 def move(state, player):
     ask = isPossibleTo()
@@ -287,7 +336,7 @@ def move(state, player):
             else :
                 outMove=[(None,None)]
 
-def findMarbleNearBorder():
+def getBorder():
 	border=[(0,0),
 			(0,1),
 			(0,2),
@@ -295,12 +344,66 @@ def findMarbleNearBorder():
 			(0,4),
 			(1,5),
 			(2,6),
-			(2,3),
-			(1,0),
-			(2,0),
-			(3,0),
+			(3,7),
+			(4,8),
+			(5,8),
+			(6,8),
+			(7,8),
+			(8,8),
+			(8,7),
+			(8,6),
+			(8,5),
+			(8,4),
+			(7,3),
+			(6,2),
+			(5,1),
 			(4,0),
-			]
+			(3,0),
+			(2,0),
+			(1,0)]
+	return border
+
+def findMarbleNearBorder(grid,opponentSymbol):
+	opponentMarbles=findOpponentMarbles(grid,opponentSymbol)
+	borders = getBorder()
+	nextToBorder = []
+	for marble in opponentMarbles :
+		for border in borders:
+			if (border==marble):
+				nextToBorder.append(marble)
+	return nextToBorder
+
+def findOpponentMarbles(grid,opponentSymbol):
+	borderMarbles = []
+	for l,line in enumerate(grid):
+		for c,column in enumerate(line):
+			if (grid[l][c] == opponentSymbol):
+				borderMarbles.append((l,c))
+	return borderMarbles
+
+def findNeighbor(grid,location):
+	symbols=grid[location[0]][location[1]]
+	neighbors=[]
+	if (location[1]<=7) :
+		if (grid[location[0]][location[1]+1]==symbols):  #E
+			neighbors.append((location[0],location[1]+1))
+	if (location[1]>=1):
+		if (grid[location[0]][location[1]-1]==symbols):  #W
+			neighbors.append((location[0],location[1]-1))
+
+	if (location[1]<=7 and location[0]<=7):
+		if (grid[location[0]+1][location[1]+1]==symbols):  #SE
+			neighbors.append((location[0]+1,location[1]+1))
+	if  (location[1]>=1 and location[0]>=1):
+		if (grid[location[0]-1][location[1]-1]==symbols):  #NW
+			neighbors.append((location[0]-1,location[1]-1))
+	if (location[0]>=1):
+		if (grid[location[0]-1][location[1]]==symbols):  #NE
+			neighbors.append((location[0]-1,location[1]))
+	if (location[0]<=7) :
+		if (grid[location[0]+1][location[1]]==symbols):  #SW
+			neighbors.append((location[0]+1,location[1]))
+	return neighbors
 
 #try go contact with most neighbour of my color
 #strategies:
@@ -352,11 +455,6 @@ def findMarbleNearBorder():
 #                        No : pass
 
 
-    for line in state['board']:
-        for column in line:
-
-
-
 
 
 
@@ -370,13 +468,17 @@ if __name__=='__main__':
 
 	state, next = Abalone(['LUR', 'LRG'])
 
-	state['board'][3][3] = 'B'
-	state['board'][4][3] = 'W'
 
+	#state['board'][3][3] = 'B'
+	state['board'][2][0] = '0' #line, column
+	#findMarbleNearBorder(state['board'])
+	neighbor=findNeighbor(state['board'],(0,0))
+	nextToBorderMarble=findMarbleNearBorder(state['board'],'B')
+	print(nextToBorderMarble,'\n')
 	show(state)
 
-	state = moveMarblesTrain(state, [(0,0),(1,1),(2,2)], 'SE')
-	show(state)
+	#state = moveMarblesTrain(state, [(2,2)], 'SW')
+	#show(state)
 	#state = moveMarblesTrain(state, [(1, 3), (2, 3), (3, 3)], 'SW')
 	#show(state)
 	#state = moveMarblesTrain(state, [(2, 3), (3, 3), (4, 3)], 'SW')
