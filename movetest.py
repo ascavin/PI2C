@@ -287,6 +287,20 @@ def move(state, player):
             else :
                 outMove=[(None,None)]
 
+def findMarbleNearBorder():
+	border=[(0,0),
+			(0,1),
+			(0,2),
+			(0,3),
+			(0,4),
+			(1,5),
+			(2,6),
+			(2,3),
+			(1,0),
+			(2,0),
+			(3,0),
+			(4,0),
+			]
 
 #try go contact with most neighbour of my color
 #strategies:
