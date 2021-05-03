@@ -338,8 +338,8 @@ def move(state, player):
 #                        No : pass
 
 
-    for line in state['board']:
-        for column in line:
+    #for line in state['board']:
+    #    for column in line:
 
 
 
