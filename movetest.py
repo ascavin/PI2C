@@ -263,12 +263,20 @@ def MAX(state,player):
     return False
 
 class IsPossibleTo:
+
+	
 	def __init__(self,Grid,State):
 		self.symbolAllies="W"
 		self.symbolOpponent="B" 
 		self.grid=Grid
 		self.exitMove=exitMove()
-		self.state=State
+		self.state=State.copy()
+
+	def isContact(self):
+		AlliesMarble=getMarbleLocation(self.state,self.symbolAllies)
+		for elem in AlliesMarble:
+			findNeighbor(self.state['board'],self.symbolOpponent)
+		return False
 
 	def moveManyMarbles(self):
 		return False
@@ -335,14 +343,16 @@ class IsPossibleTo:
 		askDanger.symbolOpponent='W'
 		result=askDanger.moveOpponentMarbleOutOfTheBoard(danger=True)
 		return result
+	
 		
 	def canIEscape(self):
+		return False
 
 
 
 
 def getMarbleLocation(state,symbol):
-	locations=[]
+	locations=[] 
 	for i,line in enumerate(state['board']):
 		for e,column in enumerate(line) :
 			if (state['board'][i][e]==symbol):
@@ -453,8 +463,7 @@ def exitMove():
 		}
 	return exitMove
 
-def isContact():
-	return False
+
 
 def move(state, player):
     ask = IsPossibleTo(state)
