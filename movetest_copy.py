@@ -124,7 +124,7 @@ def bouclecenter(li,ci):
 
 
 	
-def boucleangleonemarble(li,ci):
+def boucleangleonemarble(li,ci,state):
 	#result = []
 	dictio = {}
 	isitp = False
@@ -304,7 +304,7 @@ def bouclestayonboard2marble(state,li,ci):
 		pass
 	elif li == 8 and ci ==4:
 		print("8 and 4")
-		for elem in ["W","NW","NE"]:
+		for elem in ["NW","NE","E"]:
 			#print(mvt.addDirection((li,ci),elem))
 			xi,yi=mvt.addDirection((li,ci),elem)
 			if state['board'][xi][yi] == "E":
@@ -333,7 +333,27 @@ def bouclestayonboard2marble(state,li,ci):
 				isitp = True
 				#result.append([mvt.addDirection((li,ci),elem),elem])
 				dictio[elem] = (xi,yi)	
-							
+
+	elif li == 0 and ci == 0:
+		print("4 and 8")
+		for elem in ["SW","SE","E"]:
+			#print(mvt.addDirection((li,ci),elem))
+			xi,yi=mvt.addDirection((li,ci),elem)
+			if state['board'][xi][yi] == "E":
+				isitp = True
+				#result.append([mvt.addDirection((li,ci),elem),elem])
+				dictio[elem] = (xi,yi)				
+
+	elif li == 8 and ci == 8:
+		print("8 and 8")
+		for elem in ["W","NW","NE"]:
+			#print(mvt.addDirection((li,ci),elem))
+			xi,yi=mvt.addDirection((li,ci),elem)
+			if state['board'][xi][yi] == "E":
+				isitp = True
+				#result.append([mvt.addDirection((li,ci),elem),elem])
+				dictio[elem] = (xi,yi)
+
 		pass
 	elif 4<li<8 and 0<ci<4:
 		print("48 and 04")
@@ -486,20 +506,18 @@ def moveennemi(state,pos,dictio,currentmarble):
 		
 		if state['board'][xvp1][yvp1] == opponentplayer and state['board'][xvp2][yvp2] == "E":
 			dictio[elem][elem] = (xv,yv)
-			print("ok",dictio[elem])
+			#print("ok",dictio[elem])
 			pass
 
-		elif state['board'][xim1][yim1] == opponentplayer and state['board'][xim2][yim2] == "E":
-			#dictio[elem][elem] = (xim1,yim1)
+		if state['board'][xim1][yim1] == opponentplayer and state['board'][xim2][yim2] == "E":
+			dictio[elem][opposite[elem]] = (xim1,yim1)
 			pass
-		#state['board'][x][y]
-		#print(dictio)
 
 	return False
 
 def moveaMarbleispossible(state, pos):
 	li, ci = pos
-	return boucleangleonemarble(li, ci)
+	return boucleangleonemarble(li,ci,state)
 
 def move2Marbleispossible(state,pos):
 	l1,c1 = pos#possition of the marble
@@ -549,7 +567,9 @@ if __name__=='__main__':
 	state['board'][4][5] = 'B'
 	state['board'][4][6] = 'W'
 	state['board'][4][3] = 'W'
-	state['board'][5][4] = 'B'
+	state['board'][4][7] = 'W'
+	state['board'][4][2] = 'W'
+	#state['board'][5][4] = 'B'
 	show(state)
 	#moveaMarbleispossible(state, (4,4))
 	#print(moveaMarbleispossible(state, (4,3)))
