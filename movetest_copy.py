@@ -564,11 +564,11 @@ if __name__=='__main__':
 	#print(state)
 	#state['board'][4][3] = 'B'
 	state['board'][4][4] = 'B'
-	state['board'][4][5] = 'B'
-	state['board'][4][6] = 'W'
-	state['board'][4][3] = 'W'
-	state['board'][4][7] = 'W'
-	state['board'][4][2] = 'W'
+	state['board'][5][5] = 'B'
+	state['board'][3][3] = 'W'
+	state['board'][6][6] = 'W'
+	#state['board'][7][7] = 'W'
+	#state['board'][2][2] = 'W'
 	#state['board'][5][4] = 'B'
 	show(state)
 	#moveaMarbleispossible(state, (4,4))
