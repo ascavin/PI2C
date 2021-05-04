@@ -125,134 +125,397 @@ def bouclecenter(li,ci):
 
 	
 def boucleangleonemarble(li,ci):
-	result = []
+	#result = []
+	dictio = {}
 	isitp = False
 	if li == 4 and ci == 0:
 		print("4 and 0")
 		for elem in ["NE","E","SE"]:
-			print(mvt.addDirection((li,ci),elem))
+			#print(mvt.addDirection((li,ci),elem))
 			xi,yi=mvt.addDirection((li,ci),elem)
 			if state['board'][xi][yi] == "E":
 				isitp = True
-				result.append([mvt.addDirection((li,ci),elem),elem])
+				#result.append([mvt.addDirection((li,ci),elem),elem])
+				dictio[elem] = (xi,yi)
+
 		pass
 	elif li == 8 and ci ==4:
 		print("8 and 4")
 		for elem in ["W","NW","NE"]:
-			print(mvt.addDirection((li,ci),elem))
+			#print(mvt.addDirection((li,ci),elem))
 			xi,yi=mvt.addDirection((li,ci),elem)
 			if state['board'][xi][yi] == "E":
 				isitp = True
-				result.append([mvt.addDirection((li,ci),elem),elem])			
+				#result.append([mvt.addDirection((li,ci),elem),elem])
+				dictio[elem] = (xi,yi)			
 		pass
 	elif li == 0 and ci == 4:
 		print("0 and 4")
 		for elem in ["W","SW","SE"]:
-			print(mvt.addDirection((li,ci),elem))
+			#print(mvt.addDirection((li,ci),elem))
 			xi,yi=mvt.addDirection((li,ci),elem)
 			if state['board'][xi][yi] == "E":
 				isitp = True
-				result.append([mvt.addDirection((li,ci),elem),elem])			
+				#result.append([mvt.addDirection((li,ci),elem),elem])
+				dictio[elem] = (xi,yi)			
 		pass
 	elif li == 4 and ci == 8:
 		print("4 and 8")
 		for elem in ["NW","W","SW"]:
-			print(mvt.addDirection((li,ci),elem))
+			#print(mvt.addDirection((li,ci),elem))
 			xi,yi=mvt.addDirection((li,ci),elem)
 			if state['board'][xi][yi] == "E":
 				isitp = True
-				result.append([mvt.addDirection((li,ci),elem),elem])			
+				#result.append([mvt.addDirection((li,ci),elem),elem])
+				dictio[elem] = (xi,yi)			
 		pass
 	elif 4<li<8 and 0<ci<4:
 		print("48 and 04")
 		for elem in ["NW","NE","E","SE"]:
-			print(mvt.addDirection((li,ci),elem))
+			#print(mvt.addDirection((li,ci),elem))
 			xi,yi=mvt.addDirection((li,ci),elem)
 			if state['board'][xi][yi] == "E":
 				isitp = True
-				result.append([mvt.addDirection((li,ci),elem),elem])			
+				#result.append([mvt.addDirection((li,ci),elem),elem])
+				dictio[elem] = (xi,yi)			
 		pass
 	elif 4<li<8 and 4<ci<8:
 		print("48 and 04")
 		for elem in ["W","NW","NE","E"]:
-			print(mvt.addDirection((li,ci),elem))
+			#print(mvt.addDirection((li,ci),elem))
 			xi,yi=mvt.addDirection((li,ci),elem)
 			if state['board'][xi][yi] == "E":
 				isitp = True
-				result.append([mvt.addDirection((li,ci),elem),elem])			
+				#result.append([mvt.addDirection((li,ci),elem),elem])
+				dictio[elem] = (xi,yi)			
 		pass	
 	elif 0<li<4 and 4<ci<8:
 		print("04 and 48")
 		for elem in ["NW","W","SW","SE"]:
-			print(mvt.addDirection((li,ci),elem))
+			#print(mvt.addDirection((li,ci),elem))
 			xi,yi=mvt.addDirection((li,ci),elem)
 			if state['board'][xi][yi] == "E":
 				isitp = True
-				result.append([mvt.addDirection((li,ci),elem),elem])			
+				#result.append([mvt.addDirection((li,ci),elem),elem])
+				dictio[elem] = (xi,yi)			
 		pass
 	elif li==0 and 0<ci<4:
 		print("0 and 04")
 		for elem in ["W","SW","SE","E"]:
-			print(mvt.addDirection((li,ci),elem))
+			#print(mvt.addDirection((li,ci),elem))
 			xi,yi=mvt.addDirection((li,ci),elem)
 			if state['board'][xi][yi] == "E":
 				isitp = True
-				result.append([mvt.addDirection((li,ci),elem),elem])			
+				#result.append([mvt.addDirection((li,ci),elem),elem])
+				dictio[elem] = (xi,yi)			
 		pass
 	elif 0<li<4 and ci==0:
 		print("04 and 0")
 		for elem in ["SW","SE","E","NE"]:
-			print(mvt.addDirection((li,ci),elem))
+			#print(mvt.addDirection((li,ci),elem))
 			xi,yi=mvt.addDirection((li,ci),elem)
 			if state['board'][xi][yi] == "E":
 				isitp = True
-				result.append([mvt.addDirection((li,ci),elem),elem])			
+				#result.append([mvt.addDirection((li,ci),elem),elem])
+				dictio[elem] = (xi,yi)			
 		pass
 	elif 4<li<8 and ci==8:
 		print("48 and 8")
 		for elem in ["SW","W","NW","NE"]:
-			print(mvt.addDirection((li,ci),elem))
+			#print(mvt.addDirection((li,ci),elem))
 			xi,yi=mvt.addDirection((li,ci),elem)
 			if state['board'][xi][yi] == "E":
 				isitp = True
-				result.append([mvt.addDirection((li,ci),elem),elem])			
+				#result.append([mvt.addDirection((li,ci),elem),elem])
+				dictio[elem] = (xi,yi)			
 		pass
 	elif li==8 and 4<ci<8:
 		print("8 and 48")
 		for elem in ["W","NW","NE","E"]:
-			print(mvt.addDirection((li,ci),elem))
-			xi,yi=mvt.addDirection((xi,yi),elem)
-			if state['board'][li][ci] == "E":
-				isitp = True
-				result.append([mvt.addDirection((li,ci),elem),elem])			
-		pass
-	
-	else : 
-		print("center")
-		for elem in ["W","NW","NE","E","SE","SW"]:
-			print(mvt.addDirection((li,ci),elem))
+			#print(mvt.addDirection((li,ci),elem))
 			xi,yi=mvt.addDirection((li,ci),elem)
 			if state['board'][xi][yi] == "E":
 				isitp = True
-				result.append([mvt.addDirection((li,ci),elem),elem])			
+				#result.append([mvt.addDirection((li,ci),elem),elem])
+				dictio[elem] = (xi,yi)			
 		pass
-	result.insert(0,isitp)
-	return result
+	
+	else : 
+		#print("center")
+		for elem in ["W","NW","NE","E","SE","SW"]:
+			#print(mvt.addDirection((li,ci),elem))
+			xi,yi=mvt.addDirection((li,ci),elem)
+			if state['board'][xi][yi] == "E":
+				isitp = True
+				#result.append([mvt.addDirection((li,ci),elem),elem])
+				dictio[elem] = (xi,yi)
 
+		pass
+	#result.insert(0,isitp)
+	return isitp,dictio
+
+def isnotOnBoard(pos):
+	l, c = pos
+	if min(pos) < 0:
+		return True
+	if max(pos) > 8:
+		return True
+	if abs(c-l) >= 5:
+		return True
+	return False
+
+def boucleangle2marble(state,li,ci):
+	Opponent = mvt.opponent(mvt.symbols[state['current']])
+	Allie = mvt.symbols[state['current']]
+	#print(Allie)
+	#result = []
+	dictio = {}
+	isitp = False
+	if li == 4 and ci == 0:
+		print("4 and 0")
+		for elem in ["NE","E","SE"]:
+			#print(mvt.addDirection((li,ci),elem))
+			xi,yi=mvt.addDirection((li,ci),elem)
+			if state['board'][xi][yi] == "E":
+				isitp = True
+				#result.append([mvt.addDirection((li,ci),elem),elem])
+				dictio[elem] = (xi,yi)
+			elif state['board'][xi][yi] == Opponent:# si il y a un adversaire
+				xo,yo = mvt.addDirection((xi,yi),elem)
+				if state['board'][xo][yo] =="E" or state['board'][xo][yo] =="X" or  isnotOnBoard((xo,yo)):# si il n'y a rien derriere 
+					dictio[elem] = (xi,yi)
+					isitp = True
+					pass
+
+		pass
+	elif li == 8 and ci ==4:
+		print("8 and 4")
+		for elem in ["W","NW","NE"]:
+			#print(mvt.addDirection((li,ci),elem))
+			xi,yi=mvt.addDirection((li,ci),elem)
+			if state['board'][xi][yi] == "E":
+				isitp = True
+				#result.append([mvt.addDirection((li,ci),elem),elem])
+				dictio[elem] = (xi,yi)
+			elif state['board'][xi][yi] == Opponent:# si il y a un adversaire
+				xo,yo = mvt.addDirection((xi,yi),elem)
+				if state['board'][xo][yo] =="E" or state['board'][xo][yo] =="X" or  isnotOnBoard((xo,yo)):# si il n'y a rien derriere 
+					dictio[elem] = (xi,yi)
+					isitp = True
+					pass			
+		pass
+	elif li == 0 and ci == 4:
+		print("0 and 4")
+		for elem in ["W","SW","SE"]:
+			#print(mvt.addDirection((li,ci),elem))
+			xi,yi=mvt.addDirection((li,ci),elem)
+			if state['board'][xi][yi] == "E":
+				isitp = True
+				#result.append([mvt.addDirection((li,ci),elem),elem])
+				dictio[elem] = (xi,yi)			
+			elif state['board'][xi][yi] == Opponent:# si il y a un adversaire
+				xo,yo = mvt.addDirection((xi,yi),elem)
+				if state['board'][xo][yo] =="E" or state['board'][xo][yo] =="X" or  isnotOnBoard((xo,yo)):# si il n'y a rien derriere 
+					dictio[elem] = (xi,yi)
+					isitp = True
+					pass
+		
+		pass
+	elif li == 4 and ci == 8:
+		print("4 and 8")
+		for elem in ["NW","W","SW"]:
+			#print(mvt.addDirection((li,ci),elem))
+			xi,yi=mvt.addDirection((li,ci),elem)
+			if state['board'][xi][yi] == "E":
+				isitp = True
+				#result.append([mvt.addDirection((li,ci),elem),elem])
+				dictio[elem] = (xi,yi)	
+			elif state['board'][xi][yi] == Opponent:# si il y a un adversaire
+				xo,yo = mvt.addDirection((xi,yi),elem)
+				if state['board'][xo][yo] =="E" or state['board'][xo][yo] =="X" or  isnotOnBoard((xo,yo)):# si il n'y a rien derriere 
+					dictio[elem] = (xi,yi)
+					isitp = True
+					pass					
+		pass
+	elif 4<li<8 and 0<ci<4:
+		print("48 and 04")
+		for elem in ["NW","NE","E","SE"]:
+			#print(mvt.addDirection((li,ci),elem))
+			xi,yi=mvt.addDirection((li,ci),elem)
+			if state['board'][xi][yi] == "E":
+				isitp = True
+				#result.append([mvt.addDirection((li,ci),elem),elem])
+				dictio[elem] = (xi,yi)
+			elif state['board'][xi][yi] == Opponent:# si il y a un adversaire
+				xo,yo = mvt.addDirection((xi,yi),elem)
+				if state['board'][xo][yo] =="E" or state['board'][xo][yo] =="X" or  isnotOnBoard((xo,yo)):# si il n'y a rien derriere 
+					dictio[elem] = (xi,yi)
+					isitp = True
+					pass			
+		pass
+	elif 4<li<8 and 4<ci<8:
+		print("48 and 04")
+		for elem in ["W","NW","NE","E"]:
+			#print(mvt.addDirection((li,ci),elem))
+			xi,yi=mvt.addDirection((li,ci),elem)
+			if state['board'][xi][yi] == "E":
+				isitp = True
+				#result.append([mvt.addDirection((li,ci),elem),elem])
+				dictio[elem] = (xi,yi)	
+			elif state['board'][xi][yi] == Opponent:# si il y a un adversaire
+				xo,yo = mvt.addDirection((xi,yi),elem)
+				if state['board'][xo][yo] =="E" or state['board'][xo][yo] =="X" or  isnotOnBoard((xo,yo)):# si il n'y a rien derriere 
+					dictio[elem] = (xi,yi)
+					isitp = True
+					pass		
+		pass	
+	elif 0<li<4 and 4<ci<8:
+		print("04 and 48")
+		for elem in ["NW","W","SW","SE"]:
+			#print(mvt.addDirection((li,ci),elem))
+			xi,yi=mvt.addDirection((li,ci),elem)
+			if state['board'][xi][yi] == "E":
+				isitp = True
+				#result.append([mvt.addDirection((li,ci),elem),elem])
+				dictio[elem] = (xi,yi)
+			elif state['board'][xi][yi] == Opponent:# si il y a un adversaire
+				xo,yo = mvt.addDirection((xi,yi),elem)
+				if state['board'][xo][yo] =="E" or state['board'][xo][yo] =="X" or  isnotOnBoard((xo,yo)):# si il n'y a rien derriere 
+					dictio[elem] = (xi,yi)
+					isitp = True
+					pass			
+		pass
+	elif li==0 and 0<ci<4:
+		print("0 and 04")
+		for elem in ["W","SW","SE","E"]:
+			#print(mvt.addDirection((li,ci),elem))
+			xi,yi=mvt.addDirection((li,ci),elem)
+			if state['board'][xi][yi] == "E":
+				isitp = True
+				#result.append([mvt.addDirection((li,ci),elem),elem])
+				dictio[elem] = (xi,yi)	
+			elif state['board'][xi][yi] == Opponent:# si il y a un adversaire
+				xo,yo = mvt.addDirection((xi,yi),elem)
+				if state['board'][xo][yo] =="E" or state['board'][xo][yo] =="X" or  isnotOnBoard((xo,yo)):# si il n'y a rien derriere 
+					dictio[elem] = (xi,yi)
+					isitp = True
+					pass		
+		pass
+	elif 0<li<4 and ci==0:
+		print("04 and 0")
+		for elem in ["SW","SE","E","NE"]:
+			#print(mvt.addDirection((li,ci),elem))
+			xi,yi=mvt.addDirection((li,ci),elem)
+			if state['board'][xi][yi] == "E":
+				isitp = True
+				#result.append([mvt.addDirection((li,ci),elem),elem])
+				dictio[elem] = (xi,yi)	
+			elif state['board'][xi][yi] == Opponent:# si il y a un adversaire
+				xo,yo = mvt.addDirection((xi,yi),elem)
+				if state['board'][xo][yo] =="E" or state['board'][xo][yo] =="X" or  isnotOnBoard((xo,yo)):# si il n'y a rien derriere 
+					dictio[elem] = (xi,yi)
+					isitp = True
+					pass		
+		pass
+	elif 4<li<8 and ci==8:
+		print("48 and 8")
+		for elem in ["SW","W","NW","NE"]:
+			#print(mvt.addDirection((li,ci),elem))
+			xi,yi=mvt.addDirection((li,ci),elem)
+			if state['board'][xi][yi] == "E":
+				isitp = True
+				#result.append([mvt.addDirection((li,ci),elem),elem])
+				dictio[elem] = (xi,yi)	
+			elif state['board'][xi][yi] == Opponent:# si il y a un adversaire
+				xo,yo = mvt.addDirection((xi,yi),elem)
+				if state['board'][xo][yo] =="E" or state['board'][xo][yo] =="X" or  isnotOnBoard((xo,yo)):# si il n'y a rien derriere 
+					dictio[elem] = (xi,yi)
+					isitp = True
+					pass		
+		pass
+	elif li==8 and 4<ci<8:
+		print("8 and 48")
+		for elem in ["W","NW","NE","E"]:
+			#print(mvt.addDirection((li,ci),elem))
+			xi,yi=mvt.addDirection((xi,yi),elem)
+			if state['board'][xi][yi] == "E":
+				isitp = True
+				#result.append([mvt.addDirection((li,ci),elem),elem])
+				dictio[elem] = (xi,yi)
+			elif state['board'][xi][yi] == Opponent:# si il y a un adversaire
+				xo,yo = mvt.addDirection((xi,yi),elem)
+				if state['board'][xo][yo] =="E" or state['board'][xo][yo] =="X" or  isnotOnBoard((xo,yo)):# si il n'y a rien derriere 
+					dictio[elem] = (xi,yi)
+					isitp = True
+					pass
+		pass
+	
+	else : 
+		#print("center")
+		for elem in ["W","NW","NE","E","SE","SW"]:
+			#print(mvt.addDirection((li,ci),elem))
+			xi,yi=mvt.addDirection((li,ci),elem)
+			if state['board'][xi][yi] == "E":
+				isitp = True
+				#result.append([mvt.addDirection((li,ci),elem),elem])
+				dictio[elem] = (xi,yi)
+			elif state['board'][xi][yi] == Opponent:# si il y a un adversaire
+				xo,yo = mvt.addDirection((xi,yi),elem)
+				if state['board'][xo][yo] =="E" or state['board'][xo][yo] =="X" or  isnotOnBoard((xo,yo)):# si il n'y a rien derriere 
+					dictio[elem] = (xi,yi)
+					isitp = True
+					pass
+
+		pass
+	#result.insert(0,isitp)
+	return isitp,dictio
+
+def boucle2marbles(dictio1,dictio2):
+	dict2marble = {}
+	#print(dictio1)
+	#print(dictio2)
+	statevar3 = False
+	for elem in dictio1:		
+		for otherelem in dictio2:
+			#print(dictio1[elem])
+			#print(dictio2[otherelem])
+			if elem == otherelem:
+				#print("ok")
+				dict2marble[elem] = dictio1[elem]
+				statevar3 = True
+	return statevar3,dict2marble
 
 def moveaMarbleispossible(state, pos):
 	li, ci = pos
 	return boucleangleonemarble(li, ci)
+
+def move2Marbleispossible(state,pos1,pos2):
+	l1,c1 = pos1
+	l2,c2 = pos2
+	statevar1,dictio1 = boucleangle2marble(state,l1, c1)
+	statevar2,dictio2 = boucleangle2marble(state,l2, c2)
+	statevar3,dictio12 = boucle2marbles(dictio1,dictio2)
+
+	return statevar3,dictio12
+
+def canImoveamarblenexttoallie(state,pos):
+	return False
+
 
 if __name__=='__main__':
 	def show(state):
 		print('\n'.join([' '.join(line) for line in state['board']]))
 		print()
 	state, next = mvt.Abalone(["jojo","jack"])
+	#print(state)
+	state['board'][4][3] = 'B'
 	state['board'][4][4] = 'B'
+	#state['board'][4][5] = 'W'
+	#state['board'][4][6] = 'W'
 	show(state)
 	#moveaMarbleispossible(state, (4,4))
-	print(moveaMarbleispossible(state, (1,4)))
+	#print(moveaMarbleispossible(state, (1,4)))
+	print(move2Marbleispossible(state,(4,3),(4,4)))
 
 
 
