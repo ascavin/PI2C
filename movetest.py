@@ -161,8 +161,8 @@ def isWinning(state):
 
 
 
-     
-                 
+	 
+				 
 
 
 
@@ -247,20 +247,20 @@ def isAdvantage(state):
 	return 0
 
 def utility(state,players):
-    theWinner = isAdvantage(state)
-    if players == theWinner :
-        return 1
-    if theWinner == None :
-        return 0
-    return -1
+	theWinner = isAdvantage(state)
+	if players == theWinner :
+		return 1
+	if theWinner == None :
+		return 0
+	return -1
 
 def MAX(state,player):
-    if isWinning(state):
-        return utility(state, player)
-    res = float('-inf')
-    for move in moves(state):
-        break
-    return False
+	if isWinning(state):
+		return utility(state, player)
+	res = float('-inf')
+	for move in moves(state):
+		break
+	return False
 
 class IsPossibleTo:
 
@@ -278,10 +278,10 @@ class IsPossibleTo:
 			findNeighbor(self.state['board'],self.symbolOpponent)
 		return False
 
-	def moveManyMarbles(self):
+	def aMarblesNextToAllies():
 		return False
 
-	def aMarblesNextToAllies(self):
+	def moveOpponentMarbleOutOfTheBoard():
 		return False
 
 	def moveOpponentMarbleOutOfTheBoard(self,danger=False):
@@ -466,28 +466,28 @@ def exitMove():
 
 
 def move(state, player):
-    ask = IsPossibleTo(state)
-    if (isContact()) :
-        if (ask.moveOpponentMarbleOutOfTheBoard()):
-            if (manyContact()):
-                moves=computeMovesKeepingMaxNeighbour()
-                validMoves=ValidMove(Moves)               # return valid possibilites
-                outMove=chooseMove(validMove)
-            else :
-                move=computeMoveWithMaxMarble()
-                outmove=ValidMoves(move)              
-    else :
-        if (ask.moveManyMarbles()):
-            moves = computeMovesKeepingMaxNeighbour() # return many possibilites
-            validMoves=ValidMove(Moves)               # return valid possibilites
-            outMove=chooseMove(validMove)             # out move 
-        else :
-            if ( ask.aMarblesNextToAllies()):
-                moves=computeSingleMarbleMove()       # return many possibilities
-                validMoves=ValidMove(Moves)               # return valid possibilites
-                outMove=chooseMove(validMove)             # out move
-            else :
-                outMove=[(None,None)]
+	ask = IsPossibleTo(state)
+	if (isContact()) :
+		if (ask.moveOpponentMarbleOutOfTheBoard()):
+			if (manyContact()):
+				moves=computeMovesKeepingMaxNeighbour()
+				validMoves=ValidMove(Moves)               # return valid possibilites
+				outMove=chooseMove(validMove)
+			else :
+				move=computeMoveWithMaxMarble()
+				outmove=ValidMoves(move)              
+	else :
+		if (ask.moveManyMarbles()):
+			moves = computeMovesKeepingMaxNeighbour() # return many possibilites
+			validMoves=ValidMove(Moves)               # return valid possibilites
+			outMove=chooseMove(validMove)             # out move 
+		else :
+			if ( ask.aMarblesNextToAllies()):
+				moves=computeSingleMarbleMove()       # return many possibilities
+				validMoves=ValidMove(Moves)               # return valid possibilites
+				outMove=chooseMove(validMove)             # out move
+			else :
+				outMove=[(None,None)]
 
 def getBorder():
 	border=[(0,0),
@@ -606,6 +606,11 @@ def findNeighbor(grid,location,symbol):
 #                        No : pass
 
 
+	#for line in state['board']:
+	#    for column in line:
+
+
+
 
 
 
@@ -619,6 +624,8 @@ if __name__=='__main__':
 
 	state, next = Abalone(['LUR', 'LRG'])
 
+	state['board'][3][3] = 'B'
+	state['board'][4][3] = 'W'
 
 	#state['board'][3][3] = 'B'
 	#state['board'][2][0] = '0' #line, column
