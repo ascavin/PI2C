@@ -181,10 +181,15 @@ def run(state):
 				if (state['board'][i][e]==symbol):
 					locations.append((i,e))
 		return locations
-	marbles = getMarbleLocation(state,'B')
+	marbles = getMarbleLocation(state,'W')
+	print(marbles)
 	possibleMoves = []
-	for marble in marbles:
+	for i,marble in enumerate(marbles):
+		print("***********************************************************",i)
+		print(possibleMoves)
 		possibleMoves.append(find.moveaMarbleispossible(state,marble))
+	print("***********************************************************")
+	print(possibleMoves)
 	index=random.randint(0,len(possibleMoves))
 	return possibleMoves[index]
 
