@@ -659,14 +659,14 @@ def moveennemi2m(state,pos,dictio,currentmarble):
 		# je veux regarder sur la ligne si il ny a pas dadversaire 
 		xv,yv=addDirection((li,ci),elem)#coordonne du voisin 
 
-		print(isboardFree(state, addDirection((xv,yv),elem)),addDirection((xv,yv),elem),xv,yv,elem)
+		#print(isboardFree(state, addDirection((xv,yv),elem)),addDirection((xv,yv),elem),xv,yv,elem)
 		#if isboardFree(state, addDirection((xv,yv),elem)):
 		if isOnBoard(addDirection((xv,yv),elem)):
-			print("ok")
+			#print("ok")
 			xvp1,yvp1 = addDirection((xv,yv),elem)#1 case apres le voisin
 			#if isFree(state, addDirection((xvp1,yvp1),elem)):
 			if isOnBoard(addDirection((xvp1,yvp1),elem)):
-				print("ok2")
+				#print("ok2")
 				
 				xvp2,yvp2 = addDirection((xvp1,yvp1),elem)# 2 cases apres le voisin
 				
@@ -685,7 +685,7 @@ def moveennemi2m(state,pos,dictio,currentmarble):
 			if isOnBoard(addDirection((xim1,yim1),elemopo)):
 				xim2,yim2 = addDirection((xim1,yim1),elemopo)#2 cases avant moi direction oppose
 				#print("xv,yv",xv,yv,"xvp1,yvp1",xvp1,yvp1,"xvp2,yvp2",xvp2,yvp2,"xim1,yim1",xim1,yim1,"xim2,yim2",xim2,yim2)
-				print("ok")
+				#print("ok")
 
 				if state['board'][xim1][yim1] == opponentplayer and (state['board'][xim2][yim2] == "E" or state['board'][xvp2][yvp2] == "X"):
 					dictio[elem][opposite[elem]] = (xim1,yim1)
