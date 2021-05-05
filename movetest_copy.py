@@ -591,9 +591,6 @@ def moveennemi2m(state,pos,dictio,currentmarble):
 
 def moveaMarbleispossible(state, pos):
 	li, ci = pos
-<<<<<<< HEAD
-	return boucleangleonemarble(li, ci,state)
-=======
 	return boucleangleonemarble(li,ci,state)
 
 def move3Marbleispossible(state,pos):
@@ -610,7 +607,6 @@ def move3Marbleispossible(state,pos):
 			print(xn,yn,xnp1,ynp1)
 
 	return None
->>>>>>> 9408ddf8a1e8cfa47c2f503f435d060c3b82b159
 
 def move2Marbleispossible(state,pos):
 	l1,c1 = pos#possition of the marble

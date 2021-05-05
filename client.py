@@ -4,7 +4,6 @@ from threading import Thread
 import sys
 import json
 import time
-import movetest as mv
 from collections import defaultdict
 import random
 import negamax

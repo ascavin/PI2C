@@ -1,7 +1,7 @@
 from collections import defaultdict
 import random
 import time 
-import movetest_copy as find
+import move as find
 
 state = [ 
     None,None,None,
@@ -18,34 +18,24 @@ lines = [
 	[0, 4, 8],
 	[2, 4, 6]
 ]
+symbols = ['B', 'W']
 
-def winner(state):
-	for line in lines:
-		values = set((state[i] for i in line))
-		if len(values) == 1:
-			player = values.pop()
-			if player is not None:
-				return player
-	return None
-
-def isWinning(state):
-	symbols = ['B', 'W']
-	toCount = find.mvt.opponent(symbols[state['current']])
+def isWinning(state,player):
+	toCount = player
 	count = 0
 	for line in state['board']:
 		for case in line:
 			if case == toCount:
 				count += 1
 	if count<9:
-		return state['player']
-	return None
+		True
+	return False
 
 def winner(state):
-	isWinning(state)
+	if isWinning(state,find.opponent(symbols[state['current']])) :
+		return state['player'][state['current']]
+	return None
 	 
-
-
-
 
 def utility(state, player):
 	theWinner = winner(state)
@@ -58,35 +48,44 @@ def utility(state, player):
 def gameOver(state):
 	if winner(state) is not None:
 		return True
-
-	empty = 0
-	for elem in state:
-		if elem is None:
-			empty += 1
-	return empty == 0
+	else : 
+		return False
 
 def currentPlayer(state):
-	counters = {1: 0, 2: 0, None: 0}
-	for elem in state:
-		counters[elem] += 1
-	
-	if counters[1] == counters[2]:
-		return 1
-	return 2
+	return state['player'][state['current']]
 
 def moves(state):               
 	res = []
-	for i, elem in enumerate(state):
-		if elem is None:
-			res.append(i)
-	
-	random.shuffle(res)
+	def getMarbleLocation(state,symbol):
+		locations=[] 
+		for i,line in enumerate(state['board']):
+			for e,column in enumerate(line) :
+				if (state['board'][i][e]==symbol):
+					locations.append((i,e))
+		return locations
+	marbles = getMarbleLocation(state,symbols[state['current']])
+	moves=[]
+	print(marbles)
+	for marble in marbles:
+		moveschoices=find.move2Marbleispossible(state,marble)
+		if moveschoices[0]==True:
+			print(moveschoices)
+			break
+	# 		directions=list(moveschoices[1].keys())
+	# 		moves.append({marble:directions})
+	# position=random.choice(moves)
+	# for key in position:
+	# 	p=key
+	# 	d=position[key]
+	# direction=random.sample(d,1)
+	# result={"response": "move",
+	# "move": {'marbles':[[p[0],p[1]]],'direction':direction[0]},
+	# "message": "Fun message"}
 	return res
 
-def apply(state, move):            #to change state of grid use papply
+def apply(state, move):            #to change state of grid use apply
 	player = currentPlayer(state)
-	res = list(state)
-	res[move] = player
+	res=[]
 	return res
 
 def timeit(fun):
@@ -181,41 +180,8 @@ def negamaxWithPruningIterativeDeepening(state, player, timeout=0.2):
 
 
 def run(state):
-	# state = [
-	# 	None, None, None,
-	# 	None, None, None,
-	# 	None, None, None,
-	# ]
-
-	# show(state)
-	# while not gameOver(state):
-	# 	move = next(state, negamaxWithPruningIterativeDeepening)
-	# 	state = apply(state, move)
-	# 	show(state)
-	symbols = ['B', 'W']
-	def getMarbleLocation(state,symbol):
-		locations=[] 
-		for i,line in enumerate(state['board']):
-			for e,column in enumerate(line) :
-				if (state['board'][i][e]==symbol):
-					locations.append((i,e))
-		return locations
-	marbles = getMarbleLocation(state,symbols[state['current']])
-	moves=[]
-	print(marbles)
-	for marble in marbles:
-		moveschoices=find.moveaMarbleispossible(state,marble)
-		if moveschoices[0]==True:
-			directions=list(moveschoices[1].keys())
-			moves.append({marble:directions})
-	position=random.choice(moves)
-	for key in position:
-		p=key
-		d=position[key]
-	direction=random.sample(d,1)
-	result={"response": "move",
-	"move": {'marbles':[[p[0],p[1]]],'direction':direction[0]},
-	"message": "Fun message"}
+	result=[]
+	moves
 	return result
 
 
