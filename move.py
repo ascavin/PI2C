@@ -572,7 +572,7 @@ def bouclestayonboard2marble(state,li,ci):
 		print("8 and 48")
 		for elem in ["W","NW","NE","E"]:
 			#print(addDirection((li,ci),elem))
-			xi,yi=addDirection((xi,yi),elem)
+			xi,yi=addDirection((li,ci),elem)
 			if state['board'][xi][yi] == "E":
 				isitp = True
 				#result.append([addDirection((li,ci),elem),elem])
@@ -649,22 +649,26 @@ def moveennemi2m(state,pos,dictio,currentmarble):
 		elemopo = opposite[elem]
 		# je veux regarder sur la ligne si il ny a pas dadversaire 
 		xv,yv=addDirection((li,ci),elem)#coordonne du voisin 
-		xvp1,yvp1 = addDirection((xv,yv),elem)#1 case apres le voisin
-		xvp2,yvp2 = addDirection((xvp1,yvp1),elem)# 2 cases apres le voisin
-		xim1,yim1 = addDirection((li,ci),elemopo)#1case avant moi direction oppose
-		xim2,yim2 = addDirection((xim1,yim1),elemopo)#2 cases avant moi direction oppose
-		#print("xv,yv",xv,yv,"xvp1,yvp1",xvp1,yvp1,"xvp2,yvp2",xvp2,yvp2,"xim1,yim1",xim1,yim1,"xim2,yim2",xim2,yim2)
+		if isFree(state, addDirection((xv,yv),elem)):
+			xvp1,yvp1 = addDirection((xv,yv),elem)#1 case apres le voisin
+			if isFree(state, addDirection((xvp1,yvp1),elem)):
+				xvp2,yvp2 = addDirection((xvp1,yvp1),elem)# 2 cases apres le voisin
+				if isFree(state, addDirection((xvp2,yvp2),elem)):
+					xim1,yim1 = addDirection((li,ci),elemopo)#1case avant moi direction oppose
+					if isFree(state, addDirection((xim1,yim1),elem)):
+						xim2,yim2 = addDirection((xim1,yim1),elemopo)#2 cases avant moi direction oppose
+						#print("xv,yv",xv,yv,"xvp1,yvp1",xvp1,yvp1,"xvp2,yvp2",xvp2,yvp2,"xim1,yim1",xim1,yim1,"xim2,yim2",xim2,yim2)
 		
-		if state['board'][xvp1][yvp1] == opponentplayer and (state['board'][xvp2][yvp2] == "E" or state['board'][xvp2][yvp2] == "X") :
-			dictio[elem][elem] = (xv,yv)
-			#print("ok",dictio[elem])
-			
-			
-			pass
+						if state['board'][xvp1][yvp1] == opponentplayer and (state['board'][xvp2][yvp2] == "E" or state['board'][xvp2][yvp2] == "X") :
+							dictio[elem][elem] = (xv,yv)
+							#print("ok",dictio[elem])
+							pass
 
-		if state['board'][xim1][yim1] == opponentplayer and (state['board'][xim2][yim2] == "E" or state['board'][xvp2][yvp2] == "X"):
-			dictio[elem][opposite[elem]] = (xim1,yim1)
-			#print("ok")
+						if state['board'][xim1][yim1] == opponentplayer and (state['board'][xim2][yim2] == "E" or state['board'][xvp2][yvp2] == "X"):
+							dictio[elem][opposite[elem]] = (xim1,yim1)
+							#print("ok")
+							pass
+		else :
 			pass
 
 	return False
@@ -791,6 +795,8 @@ if __name__=='__main__':
 	#state['board'][4][3] = 'B'
 	#state['board'][4][4] = 'B'
 	state['board'][5][2] = 'B'
+	state['board'][0][0] = 'B'
+	state['board'][0][1] = 'B'
 	#state['board'][3][3] = 'W'
 	state['board'][5][1] = 'W'
 	#state['board'][4][3] = 'W'
@@ -807,8 +813,10 @@ if __name__=='__main__':
 	#moveaMarbleispossible(state, (4,4))
 
 	#print(moveaMarbleispossible(state, (4,3)))
-	print(move2Marbleispossible(state,(5,3)))
+	print(move2Marbleispossible(state,(8,8)))
 	#print(move3Marbleispossible(state,(5,5)))
+	#print(findNeighbor(state['board'],(8,8),'B',True))
+	#print(addDirection((0,0),'NW'))
 
 
 

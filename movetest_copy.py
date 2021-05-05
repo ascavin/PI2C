@@ -569,6 +569,7 @@ def moveennemi2m(state,pos,dictio,currentmarble):
 		elemopo = opposite[elem]
 		# je veux regarder sur la ligne si il ny a pas dadversaire 
 		xv,yv=addDirection((li,ci),elem)#coordonne du voisin 
+		#comment faire pour eviter le out of range ?
 		xvp1,yvp1 = addDirection((xv,yv),elem)#1 case apres le voisin
 		xvp2,yvp2 = addDirection((xvp1,yvp1),elem)# 2 cases apres le voisin
 		xim1,yim1 = addDirection((li,ci),elemopo)#1case avant moi direction oppose
