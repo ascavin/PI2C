@@ -2,6 +2,7 @@ from collections import defaultdict
 import random
 import time 
 import move as find
+import find_move as rs
 
 state = [ 
     None,None,None,
@@ -194,10 +195,10 @@ def run(state):
 	allMoves=moves(state)
 	newStates=[]
 	M=find.opponent(symbols[state['current']])
-	previous=0
-	nextstep=0
 	for move in allMoves:
-		print(move)
+		#+print(move)
+		previous=0
+		nextstep=0
 		newState=find.moveMarblesTrain(state,move[0],move[1])
 		for i,line in enumerate(state['board']):
 			for e,column in enumerate(line):
@@ -209,18 +210,14 @@ def run(state):
 					nextstep=nextstep+1
 		if nextstep<previous:
 			result={"response": "move",
-			"move": {'marbles':move[0],'direction':move[1]},
+			"move": {'marbles':move[0][0],'direction':move[0][1]},
 			"message": "pass"}
 			return result
 		else :
 			newStates.append(newState)
-
-
-				
-	if len(allMoves)!=0:
-		nextMove=random.sample(allMoves,1)
-	else : nextMove=[[[],[]]]
-	print(nextMove)
+	print("-------------")	
+	nextMove=random.sample(allMoves,1)
+	print("next",nextMove)
 	result={"response": "move",
 	"move": {'marbles':nextMove[0][0],'direction':nextMove[0][1]},
 	"message": "pass"}
@@ -229,3 +226,41 @@ def run(state):
 
 
 
+def bin(state):
+	def getMarbleLocation(state,symbol):
+		locations=[] 
+		for i,line in enumerate(state['board']):
+			for e,column in enumerate(line) :
+				if (state['board'][i][e]==symbol):
+					locations.append((i,e))
+		return locations
+	marbles = getMarbleLocation(state,symbols[state['current']])
+	allMoves=[]
+	moves_marble=[]
+	for marble in marbles:
+		moves_marble = rs.findMove(state['board'],marble,symbols[state['current']])
+		for elem in moves_marble:		
+			allMoves.append(elem)
+	M=symbols[state['current']]
+	goodMoves=[]
+	for move in allMoves:
+		previous=0
+		nextstep=0
+		newState=find.moveMarblesTrain(state,move[0],move[1])
+		for i,line in enumerate(state['board']):
+			for e,column in enumerate(line):
+				if state['board'][i][e]==M:
+					previous=previous+1
+		for i,line in enumerate(newState['board']):
+			for e,column in enumerate(line):
+				if newState['board'][i][e]==M:
+					nextstep=nextstep+1
+		if nextstep==previous:
+			goodMoves.append(move)
+	print((goodMoves))	
+	nextMove=random.sample(goodMoves,1)
+	print("next",nextMove)
+	result={"response": "move",
+	"move": {'marbles':nextMove[0][0],'direction':nextMove[0][1]},
+	"message": "pass"}
+	return False
