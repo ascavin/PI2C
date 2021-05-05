@@ -277,6 +277,7 @@ def findNeighbor(grid,location,symbol,varstate=False):
 			isneigbour = True
 
 	if varstate == True :
+		print("v1",isneigbour,dictneighbour)
 		return isneigbour,dictneighbour
 	return neighbors
 
@@ -620,51 +621,57 @@ def bouclestayonboard2marble(state,li,ci):
 
 def boucle2marblesexceptionmove(dictio1,dictio2,pos1,pos2):# mouvements possible pour les 2 billes
 	dict2marble = {}
+	dictio11 = dictio1
+	dictio22 = dictio2
 	#print(dictio1)
 	#print(dictio2)
 	x1,y1 = pos1
 	x2,y2 = pos2
-	#print(pos2)
+	#print("ok1")
 	statevar3 = False
+
 	for elem in dictio1:		
 		for otherelem in dictio2:
-			
+			print("ok2")
 			if elem == otherelem: # si 2 deplacements en commun ( deplacement en parallele)
 				#print("ok")
 				dict2marble[elem] = dictio1[elem]
 				#print(dictio1[elem])
 				statevar3 = True
 
-			# deplacements en serie 
-			elif (dictio2[otherelem][0],dictio2[otherelem][1]-2) == pos1 or (dictio2[otherelem][0],dictio2[otherelem][1]+2) == pos1 :#axe des y vu du voisin
-				dict2marble[otherelem] = dictio2[otherelem]
-				#print("other",elem,dictio2[otherelem],otherelem)
-				
-				pass
+	for otherelem in dictio2:
+		# deplacements en serie 
+		if (dictio2[otherelem][0],dictio2[otherelem][1]-2) == pos1 or (dictio2[otherelem][0],dictio2[otherelem][1]+2) == pos1 :#axe des y vu du voisin
+			dict2marble[otherelem] = dictio2[otherelem]
+			#print("other",elem,dictio2[otherelem],otherelem)
+			pass
+	
+		elif (dictio2[otherelem][0]-2,dictio2[otherelem][1]) == pos1 or (dictio2[otherelem][0]+2,dictio2[otherelem][1]) == pos1 :#axe des x vu du voisin
+			dict2marble[otherelem] = dictio2[otherelem]
+			pass
+		# en diagonale 
+		elif (dictio2[otherelem][0]-2,dictio2[otherelem][1]-2) == pos1 or (dictio2[otherelem][0]+2,dictio2[otherelem][1]+2) == pos1 :#diag vu du voisin
+			dict2marble[otherelem] = dictio2[otherelem]
+			#print("other",elem,dictio2[otherelem],otherelem)
+			pass		
 
-			elif (dictio2[otherelem][0]-2,dictio2[otherelem][1]) == pos1 or (dictio2[otherelem][0]+2,dictio2[otherelem][1]) == pos1 :#axe des x vu du voisin
-				dict2marble[otherelem] = dictio2[otherelem]
-				
-				pass
-			elif (dictio1[elem][0],dictio1[elem][1]+2) == pos2 or (dictio1[elem][0],dictio1[elem][1]-2) == pos2 : # axe des y vue de moi
-				dict2marble[elem] = dictio1[elem]
-				#print("ok")
-				#print("me",elem,dictio1[elem])
-				pass
-			elif (dictio1[elem][0]+2,dictio1[elem][1]) == pos2 or (dictio1[elem][0]-2,dictio1[elem][1]) == pos2 :# axes des x vu de moi
-				dict2marble[elem] = dictio1[elem]
-				pass
+	for elem in dictio1:		
+		if (dictio1[elem][0],dictio1[elem][1]+2) == pos2 or (dictio1[elem][0],dictio1[elem][1]-2) == pos2 : # axe des y vue de moi
+			dict2marble[elem] = dictio1[elem]
+			#print("ok")
+			#print("me",elem,dictio1[elem])
+			pass
+		
+		elif (dictio1[elem][0]+2,dictio1[elem][1]) == pos2 or (dictio1[elem][0]-2,dictio1[elem][1]) == pos2 :# axes des x vu de moi
+			dict2marble[elem] = dictio1[elem]
+			pass
 
-			# en diagonale 
-			elif (dictio2[otherelem][0]-2,dictio2[otherelem][1]-2) == pos1 or (dictio2[otherelem][0]+2,dictio2[otherelem][1]+2) == pos1 :#diag vu du voisin
-				dict2marble[otherelem] = dictio2[otherelem]
-				#print("other",elem,dictio2[otherelem],otherelem)
-				pass
-			elif (dictio1[elem][0]+2,dictio1[elem][1]+2) == pos2 or (dictio1[elem][0]-2,dictio1[elem][1]-2) == pos2 : #diag vue de moi
-				dict2marble[elem] = dictio1[elem]
-				#print("me",elem,dictio1[elem])
-				pass	
+		elif (dictio1[elem][0]+2,dictio1[elem][1]+2) == pos2 or (dictio1[elem][0]-2,dictio1[elem][1]-2) == pos2 : #diag vue de moi
+			dict2marble[elem] = dictio1[elem]
+			#print("me",elem,dictio1[elem])
+			pass
 
+	print(dict2marble)		
 	return statevar3,dict2marble
 
 def moveennemi2m(state,pos,dictio,currentmarble):
@@ -738,9 +745,9 @@ def move2Marbleispossible(state,pos):
 	statevarneighbour = False
 	dictio13 = {}
 	Allie = symbols[state['current']]# get allie symbole
-	if findNeighbor(state['board'],(l1,c1),Allie,True)[0] :# si il y a voisin
-		for elem in list(findNeighbor(state['board'],(l1,c1),Allie,True)[1].keys()): # regarde pour chaque direction des voisins
-			xn,yn = findNeighbor(state['board'],(l1,c1),Allie,True)[1][elem]		#recupere les coordonnes de chaque voisin
+	if findNeighborv2(state['board'],(l1,c1),Allie,True)[0] :# si il y a voisin
+		for elem in list(findNeighborv2(state['board'],(l1,c1),Allie,True)[1].keys()): # regarde pour chaque direction des voisins
+			xn,yn = findNeighborv2(state['board'],(l1,c1),Allie,True)[1][elem]		#recupere les coordonnes de chaque voisin
 
 			statevar1,dictio1 = bouclestayonboard2marble(state,l1,c1)# mouvement possible pour ma bille 
 			statevar2,dictio2 = bouclestayonboard2marble(state,xn,yn)# mouvement possible pour mon voisin allie
@@ -748,34 +755,44 @@ def move2Marbleispossible(state,pos):
 			#print(dictio2)
 			pos1 = l1,c1
 			pos2 = xn,yn
-			#print(pos2)
+			#print("ok")
 			statevar3,dictio12 = boucle2marblesexceptionmove(dictio1,dictio2,pos1,pos2)# mouvements possible pour les 2 billes
 			dictio13[elem] = dictio12
 		pass
 	else :
 		return statevarneighbour 
 	moveennemi2m(state,pos,dictio13,Allie)
-	posmarbles = findNeighbor(state['board'],(l1,c1),Allie,True)
+	posmarbles = findNeighborv2(state['board'],(l1,c1),Allie,True)
 	posmarbles[1]["marble1"] = pos
 	#dictio13["marbles"] = pos2marbles(state, pos,Allie)# recupere les cordonne de la bille initiale et des voisins
 	return statevar3,posmarbles[1],dictio13
 #############################################################
 ############################################################
-def pos2marbles(state,pos,Allie):
-	l1,c1 = pos#position of the marble
-	dictioposmarbles = {}
-	dictioposmarbles["marble1"] = pos
-	if findNeighbor(state['board'],(l1,c1),Allie,True)[0] :# si il y a voisin
-		for elem in list(findNeighbor(state['board'],(l1,c1),Allie,True)[1].keys()): # regarde pour chaque direction des voisins
-			xn,yn = findNeighbor(state['board'],(l1,c1),Allie,True)[1][elem]		#recupere les coordonnes de chaque voisin
-			print(elem)
-			dictioposmarbles[elem] = (xn,yn)
-	#print(dictioposmarbles)
-	return dictioposmarbles
+#def pos2marbles(state,pos,Allie):
+#	l1,c1 = pos#position of the marble
+#	dictioposmarbles = {}
+#	dictioposmarbles["marble1"] = pos
+#	if findNeighborv2(state['board'],(l1,c1),Allie,True)[0] :# si il y a voisin
+#		for elem in list(findNeighborv2(state['board'],(l1,c1),Allie,True)[1].keys()): # regarde pour chaque direction des voisins
+#			xn,yn = findNeighborv2(state['board'],(l1,c1),Allie,True)[1][elem]		#recupere les coordonnes de chaque voisin
+#			print(elem)
+#			dictioposmarbles[elem] = (xn,yn)
+#	#print(dictioposmarbles)
+#	return dictioposmarbles
 #################################################################
 #################################################################
 def canImoveamarblenexttoallie(state,pos):
 	return False
+
+def findNeighborv2(grid,location,symbol,varstate=False):
+	isneigbour = False
+	dictneighbour = {}
+	for direction in list(directions.keys()):
+		if isOnBoard(addDirection(location,direction)):
+			dictneighbour[direction] = addDirection(location,direction)
+			isneigbour = True
+	#print("v2",isneigbour,dictneighbour)
+	return isneigbour,dictneighbour 
 
 def find2Neighbor(grid,location,symbol,varstate=False):
 	neighbors=[]
@@ -819,6 +836,7 @@ def find2Neighbor(grid,location,symbol,varstate=False):
 			isneigbour = True
 
 	if varstate == True :
+		print("v1",isneigbour,dictneighbour)
 		return isneigbour,dictneighbour
 	return neighbors
 
@@ -864,7 +882,7 @@ if __name__=='__main__':
 	#moveaMarbleispossible(state, (4,4))
 
 	#print(moveaMarbleispossible(state, (4,3)))
-	print(move2Marbleispossible(state,(3,5)))
+	print(move2Marbleispossible(state,(0,0)))
 	#print(move3Marbleispossible(state,(5,5)))
 	#print(findNeighbor(state['board'],(8,8),'B',True))
 	#print(addDirection((0,0),'NW'))
