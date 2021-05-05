@@ -55,7 +55,6 @@ def currentPlayer(state):
 	return state['player'][state['current']]
 
 def moves(state):               
-	res = []
 	def getMarbleLocation(state,symbol):
 		locations=[] 
 		for i,line in enumerate(state['board']):
@@ -67,12 +66,26 @@ def moves(state):
 	moves=[]
 	print(marbles)
 	for marble in marbles:
-		moveschoices=find.move2Marbleispossible(state,marble)
-		if moveschoices[0]==True:
-			print(moveschoices)
-			break
-	# 		directions=list(moveschoices[1].keys())
-	# 		moves.append({marble:directions})
+		try :
+			moveschoices=find.move2Marbleispossible(state,marble)
+			if moveschoices[0]==True:
+			# print(moveschoices)
+			# print('All dict',moveschoices[1])
+			# print('Position',moveschoices[1]['marble1'])
+				for key in moveschoices[1] :
+					if key != 'marble1':
+						# print("My Neighor",moveschoices[1][key])
+						for direction in moveschoices[2][key]:
+							# print(direction)
+							move=[[[moveschoices[1]['marble1'][0],moveschoices[1]['marble1'][1]],[moveschoices[1][key][0],moveschoices[1][key][1]]],direction]
+							# print(move)
+							moves.append(move)
+		except :
+			print("something goes wrong in",marble)
+		
+	return moves
+	# directions=list(moveschoices[1].keys())
+	# moves.append({marble:directions})
 	# position=random.choice(moves)
 	# for key in position:
 	# 	p=key
@@ -81,11 +94,9 @@ def moves(state):
 	# result={"response": "move",
 	# "move": {'marbles':[[p[0],p[1]]],'direction':direction[0]},
 	# "message": "Fun message"}
-	return res
 
 def apply(state, move):            #to change state of grid use apply
-	player = currentPlayer(state)
-	res=[]
+	res=find.moveMarblesTrain(state,move[0],move[1])
 	return res
 
 def timeit(fun):
@@ -133,13 +144,12 @@ def heuristic(state, player):
 	if gameOver(state):
 		theWinner = winner(state)
 		if theWinner is None:
-			return 0
+			return 1000
 		if theWinner == player:
 			return 9
 		return -9
 	res = 0
-	for line in lines:
-		res += lineValue([state[i] for i in line], player)
+	
 	return res
 
 from collections import defaultdict
@@ -181,7 +191,39 @@ def negamaxWithPruningIterativeDeepening(state, player, timeout=0.2):
 
 def run(state):
 	result=[]
-	moves
+	allMoves=moves(state)
+	newStates=[]
+	M=find.opponent(symbols[state['current']])
+	previous=0
+	nextstep=0
+	for move in allMoves:
+		print(move)
+		newState=find.moveMarblesTrain(state,move[0],move[1])
+		for i,line in enumerate(state['board']):
+			for e,column in enumerate(line):
+				if state['board'][i][e]==M:
+					previous=previous+1
+		for i,line in enumerate(newState['board']):
+			for e,column in enumerate(line):
+				if newState['board'][i][e]==M:
+					nextstep=nextstep+1
+		if nextstep<previous:
+			result={"response": "move",
+			"move": {'marbles':move[0],'direction':move[1]},
+			"message": "pass"}
+			return result
+		else :
+			newStates.append(newState)
+
+
+				
+	if len(allMoves)!=0:
+		nextMove=random.sample(allMoves,1)
+	else : nextMove=[[[],[]]]
+	print(nextMove)
+	result={"response": "move",
+	"move": {'marbles':nextMove[0][0],'direction':nextMove[0][1]},
+	"message": "pass"}
 	return result
 
 
