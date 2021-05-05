@@ -28,6 +28,25 @@ def winner(state):
 				return player
 	return None
 
+def isWinning(state):
+	symbols = ['B', 'W']
+	toCount = find.mvt.opponent(symbols[state['current']])
+	count = 0
+	for line in state['board']:
+		for case in line:
+			if case == toCount:
+				count += 1
+	if count<9:
+		return state['player']
+	return None
+
+def winner(state):
+	isWinning(state)
+	 
+
+
+
+
 def utility(state, player):
 	theWinner = winner(state)
 	if theWinner is None:
@@ -162,7 +181,6 @@ def negamaxWithPruningIterativeDeepening(state, player, timeout=0.2):
 
 
 def run(state):
-	print(state)
 	# state = [
 	# 	None, None, None,
 	# 	None, None, None,
@@ -174,6 +192,7 @@ def run(state):
 	# 	move = next(state, negamaxWithPruningIterativeDeepening)
 	# 	state = apply(state, move)
 	# 	show(state)
+	symbols = ['B', 'W']
 	def getMarbleLocation(state,symbol):
 		locations=[] 
 		for i,line in enumerate(state['board']):
@@ -181,17 +200,23 @@ def run(state):
 				if (state['board'][i][e]==symbol):
 					locations.append((i,e))
 		return locations
-	marbles = getMarbleLocation(state,'W')
+	marbles = getMarbleLocation(state,symbols[state['current']])
+	moves=[]
 	print(marbles)
-	possibleMoves = []
-	for i,marble in enumerate(marbles):
-		print("***********************************************************",i)
-		print(possibleMoves)
-		possibleMoves.append(find.moveaMarbleispossible(state,marble))
-	print("***********************************************************")
-	print(possibleMoves)
-	index=random.randint(0,len(possibleMoves))
-	return possibleMoves[index]
+	for marble in marbles:
+		moveschoices=find.moveaMarbleispossible(state,marble)
+		if moveschoices[0]==True:
+			directions=list(moveschoices[1].keys())
+			moves.append({marble:directions})
+	position=random.choice(moves)
+	for key in position:
+		p=key
+		d=position[key]
+	direction=random.sample(d,1)
+	result={"response": "move",
+	"move": {'marbles':[[p[0],p[1]]],'direction':direction[0]},
+	"message": "Fun message"}
+	return result
 
 
 

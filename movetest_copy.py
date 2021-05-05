@@ -124,7 +124,7 @@ def bouclecenter(li,ci):
 
 
 	
-def boucleangleonemarble(li,ci):
+def boucleangleonemarble(li,ci,state):
 	#result = []
 	dictio = {}
 	isitp = False
@@ -499,7 +499,7 @@ def moveennemi(state,pos,dictio,currentmarble):
 
 def moveaMarbleispossible(state, pos):
 	li, ci = pos
-	return boucleangleonemarble(li, ci)
+	return boucleangleonemarble(li, ci,state)
 
 def move2Marbleispossible(state,pos):
 	l1,c1 = pos#possition of the marble
