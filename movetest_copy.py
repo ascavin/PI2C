@@ -11,6 +11,15 @@ directions = {
 	 'W': ( 0, -1)
 }
 
+opposite = {
+	'NE': 'SW',
+	'SW': 'NE',
+	'NW': 'SE',
+	'SE': 'NW',
+	'E': 'W',
+	'W': 'E'
+}
+
 def findNeighbor(grid,location,symbol,varstate=False):
 	neighbors=[]
 	isneigbour = False
@@ -570,10 +579,12 @@ def moveennemi2m(state,pos,dictio,currentmarble):
 			dictio[elem][elem] = (xv,yv)
 			#print("ok",dictio[elem])
 			
+			
 			pass
 
 		if state['board'][xim1][yim1] == opponentplayer and (state['board'][xim2][yim2] == "E" or state['board'][xvp2][yvp2] == "X"):
 			dictio[elem][opposite[elem]] = (xim1,yim1)
+			#print("ok")
 			pass
 
 	return False
@@ -688,14 +699,7 @@ def find2Neighbor(grid,location,symbol,varstate=False):
 
 
 
-opposite = {
-	'NE': 'SW',
-	'SW': 'NE',
-	'NW': 'SE',
-	'SE': 'NW',
-	'E': 'W',
-	'W': 'E'
-}
+
 
 if __name__=='__main__':
 	def show(state):
@@ -705,12 +709,12 @@ if __name__=='__main__':
 	#print(state)
 	#state['board'][4][3] = 'B'
 	#state['board'][4][4] = 'B'
-	state['board'][4][5] = 'B'
+	state['board'][5][2] = 'B'
 	#state['board'][3][3] = 'W'
-	state['board'][4][2] = 'W'
-	state['board'][4][3] = 'W'
+	state['board'][5][1] = 'W'
+	#state['board'][4][3] = 'W'
 	#state['board'][5][2] = 'W'
-	state['board'][4][4] = 'B'
+	state['board'][5][3] = 'B'
 	#state['board'][5][3] = 'B'
 	#state['board'][5][6] = 'B'
 	#state['board'][5][7] = 'B'
@@ -722,7 +726,7 @@ if __name__=='__main__':
 	#moveaMarbleispossible(state, (4,4))
 
 	#print(moveaMarbleispossible(state, (4,3)))
-	print(move2Marbleispossible(state,(4,4)))
+	print(move2Marbleispossible(state,(5,3)))
 	#print(move3Marbleispossible(state,(5,5)))
 
 
