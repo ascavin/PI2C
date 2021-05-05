@@ -109,6 +109,11 @@ def getStatus(state, pos):
 		raise game.BadMove('The position {} is outside the board'.format(pos))
 	return state['board'][pos[0]][pos[1]]
 
+def getStatusgrid(state, pos):
+	if not isOnBoard(pos):
+		raise game.BadMove('The position {} is outside the board'.format(pos))
+	return state[pos[0]][pos[1]]
+
 def isEmpty(state, pos):
 	return getStatus(state, pos) == 'E'
 
@@ -277,23 +282,23 @@ def findNeighbor(grid,location,symbol,varstate=False):
 			isneigbour = True
 
 	if varstate == True :
-		print("v1",isneigbour,dictneighbour)
+		#print("v1",isneigbour,dictneighbour)
 		return isneigbour,dictneighbour
 	return neighbors
 
 
 
-def bouclecenter(li,ci):
-
-		for x in [li-1,li,li+1]:
-			for y in [ci-1,ci,ci+1]:# tout autour de la bille
-				print(x,y)
-				#status = getStatus(state, (x,y))
-				#if status == 'E' :
-				#	statevar = True
-				#else : 
-				#	statevar = False
-		return False
+#def bouclecenter(li,ci):
+#
+#	for x in [li-1,li,li+1]:
+#		for y in [ci-1,ci,ci+1]:# tout autour de la bille
+#			#print(x,y)
+#			#status = getStatus(state, (x,y))
+#			#if status == 'E' :
+#			#	statevar = True
+#			#else : 
+#			#	statevar = False
+#	return False
 
 
 	
@@ -302,7 +307,7 @@ def boucleangleonemarble(li,ci,state):
 	dictio = {}
 	isitp = False
 	if li == 4 and ci == 0:
-		print("4 and 0")
+		#print("4 and 0")
 		for elem in ["NE","E","SE"]:
 			#print(addDirection((li,ci),elem))
 			xi,yi=addDirection((li,ci),elem)
@@ -313,7 +318,7 @@ def boucleangleonemarble(li,ci,state):
 
 		pass
 	elif li == 8 and ci ==8:
-		print("8 and 4")
+		#print("8 and 4")
 		for elem in ["W","NW","NE"]:
 			#print(addDirection((li,ci),elem))
 			xi,yi=addDirection((li,ci),elem)
@@ -323,7 +328,7 @@ def boucleangleonemarble(li,ci,state):
 				dictio[elem] = (xi,yi)	
 
 	elif li == 0 and ci ==0:
-		print("0 and 0")
+		#print("0 and 0")
 		for elem in ["SW","SE","E"]:
 			#print(addDirection((li,ci),elem))
 			xi,yi=addDirection((li,ci),elem)
@@ -334,7 +339,7 @@ def boucleangleonemarble(li,ci,state):
 		pass
 
 	elif li == 8 and ci ==4:
-		print("8 and 4")
+		#print("8 and 4")
 		for elem in ["NW","NE","E"]:
 			#print(addDirection((li,ci),elem))
 			xi,yi=addDirection((li,ci),elem)
@@ -344,7 +349,7 @@ def boucleangleonemarble(li,ci,state):
 				dictio[elem] = (xi,yi)
 
 	elif li == 0 and ci == 4:
-		print("0 and 4")
+		#print("0 and 4")
 		for elem in ["W","SW","SE"]:
 			#print(addDirection((li,ci),elem))
 			xi,yi=addDirection((li,ci),elem)
@@ -354,7 +359,7 @@ def boucleangleonemarble(li,ci,state):
 				dictio[elem] = (xi,yi)			
 		pass
 	elif li == 4 and ci == 8:
-		print("4 and 8")
+		#print("4 and 8")
 		for elem in ["NW","W","SW"]:
 			#print(addDirection((li,ci),elem))
 			xi,yi=addDirection((li,ci),elem)
@@ -364,7 +369,7 @@ def boucleangleonemarble(li,ci,state):
 				dictio[elem] = (xi,yi)			
 		pass
 	elif 4<li<8 and 0<ci<4:
-		print("48 and 04")
+		#print("48 and 04")
 		for elem in ["NW","NE","E","SE"]:
 			#print(addDirection((li,ci),elem))
 			xi,yi=addDirection((li,ci),elem)
@@ -374,7 +379,7 @@ def boucleangleonemarble(li,ci,state):
 				dictio[elem] = (xi,yi)			
 		pass
 	elif 4<li<8 and 4<ci<8:
-		print("48 and 04")
+		#print("48 and 04")
 		for elem in ["W","NW","NE","E"]:
 			#print(addDirection((li,ci),elem))
 			xi,yi=addDirection((li,ci),elem)
@@ -384,7 +389,7 @@ def boucleangleonemarble(li,ci,state):
 				dictio[elem] = (xi,yi)			
 		pass	
 	elif 0<li<4 and 4<ci<8:
-		print("04 and 48")
+		#print("04 and 48")
 		for elem in ["NW","W","SW","SE"]:
 			#print(addDirection((li,ci),elem))
 			xi,yi=addDirection((li,ci),elem)
@@ -394,7 +399,7 @@ def boucleangleonemarble(li,ci,state):
 				dictio[elem] = (xi,yi)			
 		pass
 	elif li==0 and 0<ci<4:
-		print("0 and 04")
+		#print("0 and 04")
 		for elem in ["W","SW","SE","E"]:
 			#print(addDirection((li,ci),elem))
 			xi,yi=addDirection((li,ci),elem)
@@ -404,7 +409,7 @@ def boucleangleonemarble(li,ci,state):
 				dictio[elem] = (xi,yi)			
 		pass
 	elif 0<li<4 and ci==0:
-		print("04 and 0")
+		#print("04 and 0")
 		for elem in ["SW","SE","E","NE"]:
 			#print(addDirection((li,ci),elem))
 			xi,yi=addDirection((li,ci),elem)
@@ -414,7 +419,7 @@ def boucleangleonemarble(li,ci,state):
 				dictio[elem] = (xi,yi)			
 		pass
 	elif 4<li<8 and ci==8:
-		print("48 and 8")
+		#print("48 and 8")
 		for elem in ["SW","W","NW","NE"]:
 			#print(addDirection((li,ci),elem))
 			xi,yi=addDirection((li,ci),elem)
@@ -424,7 +429,7 @@ def boucleangleonemarble(li,ci,state):
 				dictio[elem] = (xi,yi)			
 		pass
 	elif li==8 and 4<ci<8:
-		print("8 and 48")
+		#print("8 and 48")
 		for elem in ["W","NW","NE","E"]:
 			#print(addDirection((li,ci),elem))
 			xi,yi=addDirection((li,ci),elem)
@@ -632,7 +637,7 @@ def boucle2marblesexceptionmove(dictio1,dictio2,pos1,pos2):# mouvements possible
 
 	for elem in dictio1:		
 		for otherelem in dictio2:
-			print("ok2")
+			#print("ok2")
 			if elem == otherelem: # si 2 deplacements en commun ( deplacement en parallele)
 				#print("ok")
 				dict2marble[elem] = dictio1[elem]
@@ -641,37 +646,38 @@ def boucle2marblesexceptionmove(dictio1,dictio2,pos1,pos2):# mouvements possible
 
 	for otherelem in dictio2:
 		# deplacements en serie 
-		if (dictio2[otherelem][0],dictio2[otherelem][1]-2) == pos1 or (dictio2[otherelem][0],dictio2[otherelem][1]+2) == pos1 :#axe des y vu du voisin
+		if ((dictio2[otherelem][0],dictio2[otherelem][1]-2) == pos1 and (dictio2[otherelem][0],dictio2[otherelem][1]-1) == pos2) or ((dictio2[otherelem][0],dictio2[otherelem][1]+2) == pos1 and (dictio2[otherelem][0],dictio2[otherelem][1]+1) == pos2) :#axe des y vu du voisin
 			dict2marble[otherelem] = dictio2[otherelem]
 			#print("other",elem,dictio2[otherelem],otherelem)
 			pass
 	
-		elif (dictio2[otherelem][0]-2,dictio2[otherelem][1]) == pos1 or (dictio2[otherelem][0]+2,dictio2[otherelem][1]) == pos1 :#axe des x vu du voisin
+		elif ((dictio2[otherelem][0]-2,dictio2[otherelem][1]) == pos1 and (dictio2[otherelem][0]-1,dictio2[otherelem][1]) == pos2) or ((dictio2[otherelem][0]+2,dictio2[otherelem][1]) == pos1 and (dictio2[otherelem][0]+1,dictio2[otherelem][1]) == pos2) :#axe des x vu du voisin
 			dict2marble[otherelem] = dictio2[otherelem]
+			#print("other",elem,dictio2[otherelem],otherelem,pos1,(dictio2[otherelem][0],dictio2[otherelem][1]))
 			pass
 		# en diagonale 
-		elif (dictio2[otherelem][0]-2,dictio2[otherelem][1]-2) == pos1 or (dictio2[otherelem][0]+2,dictio2[otherelem][1]+2) == pos1 :#diag vu du voisin
+		elif ((dictio2[otherelem][0]-2,dictio2[otherelem][1]-2) == pos1 and (dictio2[otherelem][0]-1,dictio2[otherelem][1]-1) == pos2) or ((dictio2[otherelem][0]+2,dictio2[otherelem][1]+2) == pos1 and (dictio2[otherelem][0]+1,dictio2[otherelem][1]+1) == pos2):#diag vu du voisin
 			dict2marble[otherelem] = dictio2[otherelem]
 			#print("other",elem,dictio2[otherelem],otherelem)
 			pass		
 
 	for elem in dictio1:		
-		if (dictio1[elem][0],dictio1[elem][1]+2) == pos2 or (dictio1[elem][0],dictio1[elem][1]-2) == pos2 : # axe des y vue de moi
+		if ((dictio1[elem][0],dictio1[elem][1]+2) == pos2 and (dictio1[elem][0],dictio1[elem][1]+1) == pos1) or ((dictio1[elem][0],dictio1[elem][1]-2) == pos2 and (dictio1[elem][0],dictio1[elem][1]-1) == pos1): # axe des y vue de moi
 			dict2marble[elem] = dictio1[elem]
 			#print("ok")
 			#print("me",elem,dictio1[elem])
 			pass
 		
-		elif (dictio1[elem][0]+2,dictio1[elem][1]) == pos2 or (dictio1[elem][0]-2,dictio1[elem][1]) == pos2 :# axes des x vu de moi
+		elif ((dictio1[elem][0]+2,dictio1[elem][1]) == pos2 and (dictio1[elem][0]+1,dictio1[elem][1]) == pos1) or ((dictio1[elem][0]-2,dictio1[elem][1]) == pos2 and (dictio1[elem][0]-1,dictio1[elem][1]) == pos1):# axes des x vu de moi
 			dict2marble[elem] = dictio1[elem]
 			pass
 
-		elif (dictio1[elem][0]+2,dictio1[elem][1]+2) == pos2 or (dictio1[elem][0]-2,dictio1[elem][1]-2) == pos2 : #diag vue de moi
+		elif ((dictio1[elem][0]+2,dictio1[elem][1]+2) == pos2 and (dictio1[elem][0]+1,dictio1[elem][1]+1) == pos1) or ((dictio1[elem][0]-2,dictio1[elem][1]-2) == pos2 and (dictio1[elem][0]-1,dictio1[elem][1]-1) == pos1): #diag vue de moi
 			dict2marble[elem] = dictio1[elem]
 			#print("me",elem,dictio1[elem])
 			pass
 
-	print(dict2marble)		
+	#print(dict2marble)		
 	return statevar3,dict2marble
 
 def moveennemi2m(state,pos,dictio,currentmarble):
@@ -730,13 +736,13 @@ def move3Marbleispossible(state,pos):
 	statevarneighbour = False
 	dictiofinal = {}
 	Allie = symbols[state['current']]# get allie symbole
-	print(find2Neighbor(state['board'],pos,Allie,True))
+	#print(find2Neighbor(state['board'],pos,Allie,True))
 	if find2Neighbor(state['board'],(l1,c1),Allie,True)[0] :# si il y a voisin
 		for elem in list(find2Neighbor(state['board'],(l1,c1),Allie,True)[1].keys()): # regarde pour chaque direction des voisins
 			xn,yn = find2Neighbor(state['board'],(l1,c1),Allie,True)[1][elem][0]		#recupere les coordonnes du voisin 1
 			xnp1,ynp1 = find2Neighbor(state['board'],(l1,c1),Allie,True)[1][elem][1] #recupere les coordonnes du voisin 1
 			#print(find2Neighbor(state['board'],(l1,c1),Allie,True)[1][elem][0])
-			print(xn,yn,xnp1,ynp1)
+			#print(xn,yn,xnp1,ynp1)
 
 	return None
 
@@ -788,7 +794,8 @@ def findNeighborv2(grid,location,symbol,varstate=False):
 	isneigbour = False
 	dictneighbour = {}
 	for direction in list(directions.keys()):
-		if isOnBoard(addDirection(location,direction)):
+		posf = addDirection(location,direction)
+		if isOnBoard(posf) and getStatusgrid(grid, posf)==symbol  :
 			dictneighbour[direction] = addDirection(location,direction)
 			isneigbour = True
 	#print("v2",isneigbour,dictneighbour)
@@ -836,7 +843,7 @@ def find2Neighbor(grid,location,symbol,varstate=False):
 			isneigbour = True
 
 	if varstate == True :
-		print("v1",isneigbour,dictneighbour)
+		#print("v1",isneigbour,dictneighbour)
 		return isneigbour,dictneighbour
 	return neighbors
 
@@ -882,7 +889,7 @@ if __name__=='__main__':
 	#moveaMarbleispossible(state, (4,4))
 
 	#print(moveaMarbleispossible(state, (4,3)))
-	print(move2Marbleispossible(state,(0,0)))
+	print(move2Marbleispossible(state,(8,8)))
 	#print(move3Marbleispossible(state,(5,5)))
 	#print(findNeighbor(state['board'],(8,8),'B',True))
 	#print(addDirection((0,0),'NW'))
