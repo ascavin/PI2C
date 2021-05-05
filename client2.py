@@ -43,7 +43,7 @@ class game:
             if (data['request']=='ping'):
                 sendJSON(c,{'response':'pong'})
             elif (data['request']=='play'):
-                print(data)
+                #print(data)
                 nextMove=self.play(data)
                 sendJSON(c,nextMove)
         c.close()
