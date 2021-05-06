@@ -49,7 +49,7 @@ class game:
         c.close()
 
     def move(self,state):
-        nextMove=negamax.bin(state)
+        nextMove=negamax.run(state)
         return nextMove
 
     def play(self,data):

@@ -193,33 +193,34 @@ def negamaxWithPruningIterativeDeepening(state, player, timeout=0.2):
 def run(state):
 	result=[]
 	allMoves=moves(state)
-	newStates=[]
-	M=find.opponent(symbols[state['current']])
-	for move in allMoves:
-		print(move)
-		previous=0
-		nextstep=0
-		newState=find.moveMarblesTrain(state,move[0],move[1])
-		for i,line in enumerate(state['board']):
-			for e,column in enumerate(line):
-				if state['board'][i][e]==M:
-					previous=previous+1
-		for i,line in enumerate(newState['board']):
-			for e,column in enumerate(line):
-				if newState['board'][i][e]==M:
-					nextstep=nextstep+1
-		if nextstep<previous:
-			result={"response": "move",
-			"move": {'marbles':move[0][0],'direction':move[0][1]},
-			"message": "pass"}
-			return result
-		else :
-			newStates.append(newState)
+	# newStates=[]
+	# M=find.opponent(symbols[state['current']])
+	# for move in allMoves:
+	# 	print(move)
+	# 	previous=0
+	# 	nextstep=0
+	# 	newState=find.moveMarblesTrain(state,move[0],move[1])
+	# 	for i,line in enumerate(state['board']):
+	# 		for e,column in enumerate(line):
+	# 			if state['board'][i][e]==M:
+	# 				previous=previous+1
+	# 	for i,line in enumerate(newState['board']):
+	# 		for e,column in enumerate(line):
+	# 			if newState['board'][i][e]==M:
+	# 				nextstep=nextstep+1
+	# 	if nextstep<previous:
+	# 		result={"response": "move",
+	# 		"move": {'marbles':move[0][0],'direction':move[0][1]},
+	# 		"message": "pass"}
+	# 		return result
+	# 	else :
+	# 		newStates.append(newState)
 	print("-------------")	
 	nextMove=random.sample(allMoves,1)
+	print(nextMove)
 	print("next",nextMove)
 	result={"response": "move",
-	"move": {'marbles':nextMove[0][0][0],'direction':nextMove[0][1]},
+	"move": {'marbles':nextMove[0][0],'direction':nextMove[0][1]},
 	"message": "pass"}
 	return result
 
