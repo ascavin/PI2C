@@ -59,6 +59,7 @@ def findMove(grid,marble,symbol):
             alignement.append(neighbor(grid,(marble[0]+directions[direction][0]*e,marble[1]+directions[direction][1]*e)))
             possibilities=getPossibilities(symbol)
             for i,possibilitie in enumerate(possibilities):
+                print(alignement)
                 #print("-------------------------")      
                 if possibilitie == alignement :
                     #print("possibilitie",possibilitie)
@@ -88,8 +89,12 @@ def findMove(grid,marble,symbol):
 
             
 def neighbor(grid,marble):
-    if move.isOnBoard(marble) :
-        return grid[marble[0]][marble[1]]
+    #print(marble)
+    if  marble[0]>=0 and marble[0]<8 and marble[1]<8 and marble[1]>=0:
+        res=grid[marble[0]][marble[1]]
+        if res=='X':
+            res='E'
+        return res
     else : return 'E'
 
 def getPossibilities(symbol):

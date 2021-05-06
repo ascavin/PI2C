@@ -196,7 +196,7 @@ def run(state):
 	newStates=[]
 	M=find.opponent(symbols[state['current']])
 	for move in allMoves:
-		#+print(move)
+		print(move)
 		previous=0
 		nextstep=0
 		newState=find.moveMarblesTrain(state,move[0],move[1])
@@ -219,7 +219,7 @@ def run(state):
 	nextMove=random.sample(allMoves,1)
 	print("next",nextMove)
 	result={"response": "move",
-	"move": {'marbles':nextMove[0][0],'direction':nextMove[0][1]},
+	"move": {'marbles':nextMove[0][0][0],'direction':nextMove[0][1]},
 	"message": "pass"}
 	return result
 
@@ -241,6 +241,7 @@ def bin(state):
 		moves_marble = rs.findMove(state['board'],marble,symbols[state['current']])
 		for elem in moves_marble:		
 			allMoves.append(elem)
+	print(allMoves)
 	M=symbols[state['current']]
 	goodMoves=[]
 	for move in allMoves:
@@ -257,10 +258,10 @@ def bin(state):
 					nextstep=nextstep+1
 		if nextstep==previous:
 			goodMoves.append(move)
-	print((goodMoves))	
+	print(goodMoves)	
 	nextMove=random.sample(goodMoves,1)
 	print("next",nextMove)
 	result={"response": "move",
 	"move": {'marbles':nextMove[0][0],'direction':nextMove[0][1]},
 	"message": "pass"}
-	return False
+	return result

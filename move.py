@@ -671,7 +671,7 @@ def boucle2marblesexceptionmove(dictio1,dictio2,pos1,pos2):# mouvements possible
 			#print("me",elem,dictio1[elem])
 			pass
 
-	print(dict2marble)		
+	#print(dict2marble)		
 	return statevar3,dict2marble
 
 def moveennemi2m(state,pos,dictio,currentmarble):
@@ -836,7 +836,7 @@ def find2Neighbor(grid,location,symbol,varstate=False):
 			isneigbour = True
 
 	if varstate == True :
-		print("v1",isneigbour,dictneighbour)
+		#print("v1",isneigbour,dictneighbour)
 		return isneigbour,dictneighbour
 	return neighbors
 
