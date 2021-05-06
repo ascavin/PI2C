@@ -155,6 +155,7 @@ def neighbor(grid,marble):
 		return 'X'
 
 def isonboard(grid,marble):
+	li,ci = marble
 	if  (0<=li<=4 and 0<=ci<=4) or (5<=li<=8 and 5<=ci<=8) or (5<=li<=8 and 0<=ci<=4 and not grid[li][ci] == 'X') or (0<=li<=4 and 5<=ci<=8 and not grid[li][ci] == 'X'):
 		return True
 	else :
