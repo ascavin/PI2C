@@ -45,13 +45,16 @@ class game:
             elif (data['request']=='play'):
                 #print(data)
                 nextMove=self.play(data)
+                print(nextMove)
                 sendJSON(c,nextMove)
         c.close()
 
     def move(self,state):
         nextMove=negamax.bin(state)
-        return nextMove
-
+        result={"response": "move",
+	            "move": {'marbles':nextMove[1][0],'direction':nextMove[1][1]},
+	            "message": "pass"}
+        return result
     def play(self,data):
         if data['lives']>=1:
             nextMove=self.move(data['state'])
