@@ -35,6 +35,8 @@ def isWinning(state,player):
 def winner(state):
 	if isWinning(state,find.opponent(symbols[state['current']])) :
 		return state['player'][state['current']]
+	if isWinning(state,symbols[state['current']]) :
+		return state['player'][state['current']]
 	return None
 	 
 

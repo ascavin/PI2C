@@ -55,7 +55,7 @@ def findMove(grid,marble,symbol):
 			
 def neighbor(grid,marble):
 	#print(marble)
-	if  marble[0]>=0 and marble[0]<8 and marble[1]<8 and marble[1]>=0:
+	if  marble[0]>=0 and marble[0]<=8 and marble[1]<=8 and marble[1]>=0:
 		res=grid[marble[0]][marble[1]]
 		if res=='X':
 			res='E'
