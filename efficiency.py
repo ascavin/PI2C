@@ -72,6 +72,8 @@ def getBorder():
 			(1,0)]
 	return border
 
+def 
+
 def findMarbleNearBorder(state,symbol):
 	marbles=getMarbleLocation(state,symbol)
 	borders = getBorder()
