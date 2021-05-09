@@ -155,6 +155,7 @@ def neighbor(grid,marble):
 		return 'X'
 
 def isonboard(grid,marble):
+	li,ci = marble
 	if  (0<=li<=4 and 0<=ci<=4) or (5<=li<=8 and 5<=ci<=8) or (5<=li<=8 and 0<=ci<=4 and not grid[li][ci] == 'X') or (0<=li<=4 and 5<=ci<=8 and not grid[li][ci] == 'X'):
 		return True
 	else :
@@ -204,9 +205,10 @@ def sumito3m(grid,m1,m2,m3,moves,direction):
 			if eachdirection == direction or eachdirection == opposite[direction]:
 				pass
 			else:# directions de lalignement exclu
-				if getStatusgrid(grid,addDirection(elem, eachdirection)) == 'E':
-					directionlist.append(eachdirection)
-					print(directionlist)
+				if isonboard(grid,addDirection(elem, eachdirection)):
+					if getStatusgrid(grid,addDirection(elem, eachdirection)) == 'E':
+						directionlist.append(eachdirection)
+						print(directionlist)
 	for i in range(0,len(directions)-3):
 		if directionlist.count(directionlist[i]) == 3 :
 			moves.append([[m1,m2,m3],directionlist[i]])
@@ -222,9 +224,10 @@ def sumito2m(grid,m1,m2,moves,direction):
 			if eachdirection == direction or eachdirection == opposite[direction]:
 				pass
 			else:# directions de lalignement exclu
-				if getStatusgrid(grid,addDirection(elem, eachdirection)) == 'E':
-					directionlist.append(eachdirection)
-					print(directionlist)
+				if isonboard(grid,addDirection(elem, eachdirection)):
+					if getStatusgrid(grid,addDirection(elem, eachdirection)) == 'E':
+						directionlist.append(eachdirection)
+						print(directionlist)
 	for i in range(0,len(directions)-3):
 		if directionlist.count(directionlist[i]) == 2 :
 			moves.append([[m1,m2],directionlist[i]])
