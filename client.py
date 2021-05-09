@@ -49,6 +49,7 @@ class game:
 
     def move(self,state):
         nextMove=negamax.run(state)
+        #test
         return nextMove
 
     def play(self,data):
