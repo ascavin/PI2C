@@ -86,52 +86,52 @@ def findMove(grid,marble,symbol):
 					if i == 2: 
 						print("2")
 						moves.append([[m1,m2],direction])
-						sumito2m(m1,m2,moves,direction)
+						sumito2m(grid,m1,m2,moves,direction)
 					if i==3:
 						print("3")
-						sumito2m(m1,m2,moves,direction)
+						sumito2m(grid,m1,m2,moves,direction)
 						pass
 					if i == 4:
 						print("4")
 						moves.append([[m1,m2,m3],direction])
-						sumito3m(m1,m2,m3,moves,direction)
+						sumito3m(grid,m1,m2,m3,moves,direction)
 							
 					if i == 5:
 						print("5")
-						sumito3m(m1,m2,m3,moves,direction)
+						sumito3m(grid,m1,m2,m3,moves,direction)
 						pass
 					if (i == 6):
 						moves.append([[m1,m2],direction])
-						sumito2m(m1,m2,moves,direction)
+						sumito2m(grid,m1,m2,moves,direction)
 						print("6")
 					if i == 7:
 						print("7")
 						moves.append([[m1,m2],direction])
-						sumito2m(m1,m2,moves,direction)	
+						sumito2m(grid,m1,m2,moves,direction)	
 								
 					if i == 8:
 						print("8")
-						sumito2m(m1,m2,moves,direction)
+						sumito2m(grid,m1,m2,moves,direction)
 						pass
 					if i == 9:
 						print("9")
-						sumito3m(m1,m2,m3,moves,direction)
+						sumito3m(grid,m1,m2,m3,moves,direction)
 						pass
 					if i == 10 or i==11:#possible sumito
 						print("10 et 11")
 						moves.append([[m1,m2,m3],direction])
-						sumito3m(m1,m2,m3,moves,direction)
+						sumito3m(grid,m1,m2,m3,moves,direction)
  
 						print("ok")
 
 					if i == 12 or i==13:
 						print("12 et 13")
 						moves.append([[m1,m2,m3],direction])
-						sumito3m(m1,m2,m3,moves,direction)
+						sumito3m(grid,m1,m2,m3,moves,direction)
 						
 					if i == 14:
 						print("14")
-						sumito3m(m1,m2,m3,moves,direction)
+						sumito3m(grid,m1,m2,m3,moves,direction)
 						pass
 
 
@@ -196,7 +196,7 @@ def getPossibilities(symbol):
 					#['B','B','W','W','W'], 						#:False		#14
 	return possibilities
 
-def sumito3m(m1,m2,m3,moves,direction):
+def sumito3m(grid,m1,m2,m3,moves,direction):
 	directionlist = []
 	for elem in [m1,m2,m3]:#pour chaque position
 		for eachdirection in directions :#pour chaque direction
@@ -214,7 +214,7 @@ def sumito3m(m1,m2,m3,moves,direction):
 	directionlist.clear()
 	return None
 
-def sumito2m(m1,m2,moves,direction):
+def sumito2m(grid,m1,m2,moves,direction):
 	directionlist = []
 	for elem in [m1,m2]:#pour chaque position
 		for eachdirection in directions :#pour chaque direction
