@@ -111,7 +111,7 @@ def MAX(state, player):#allie
 	for move in moves(state):#parmis tout les mouvements possibles au départ 
 		print("move",move)
 		newState = apply(state, move) # jouer chaque mouvement et garder en memoire le mvt joue 
-		value, _ = MIN(successor, player)# au tour du joueur adverse de jouer (calcul des coups possibles du joueur adverses et retourne son meilleur coup pour gagner)
+		value, _ = MIN(newState, player)# au tour du joueur adverse de jouer (calcul des coups possibles du joueur adverses et retourne son meilleur coup pour gagner)
 		if value > theValue:
 			theValue, theMove = value, move
 	return theValue, theMove
@@ -124,8 +124,8 @@ def MIN(state, player):#adversaire
 
 	theValue, theMove = float('inf'), None
 	for move in moves(state):#parmis tout les mouvements possibles au départ
-		successor = apply(state, move)# jouer chaque mouvement et garder en memoire le mvt joue 
-		value, _ = MAX(successor, player)# au tour du joueur adverse de jouer (calcul des coups possibles du joueur adverses et retourne son meilleur coup pour gagner)
+		newState = apply(state, move)# jouer chaque mouvement et garder en memoire le mvt joue 
+		value, _ = MAX(newState, player)# au tour du joueur adverse de jouer (calcul des coups possibles du joueur adverses et retourne son meilleur coup pour gagner)
 		if value < theValue:
 			theValue, theMove = value, move
 	return theValue, theMove
