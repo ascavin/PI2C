@@ -66,7 +66,7 @@ def findMove(grid,marble,symbol):
 
 				#if direction =='W':			
 				#print("possibilitie",possibilitie)
-				print("alignement",alignement,"possiblities",possibilitie,possibilitie == alignement) 
+				#print("alignement",alignement,"possiblities",possibilitie,possibilitie == alignement) 
 				if possibilitie == alignement :	
 					#print(possibilitie)
 					#print(alignement)	

@@ -165,15 +165,17 @@ def valueOfState(state):
 	Advantage = marbleCount(state,find.opponent(symbols[state['current']]))
 	OpponentNearBorder = len(findMarbleNearBorder(state,find.opponent(symbols[state['current']])))
 	OpponentCrownSecond = len(findMarbleCrownSecond(state,find.opponent(symbols[state['current']])))
-	AlliesCrownCenter = len(findMarbleCrownCenter(state,symbols[state['current']]))	
-	return (abs((Advantage-14))*2744+OpponentNearBorder*196+OpponentCrownSecond*14+AlliesCrownCenter*1)
+	AlliesCrownCenter = len(findMarbleCrownCenter(state,symbols[state['current']]))
+	AlliesNearBorder = len(findMarbleNearBorder(state,symbols[state['current']]))
+	AlliesCrownSecond = len(findMarbleCrownSecond(state,symbols[state['current']]))	
+	return (14000-Advantage*1000)+OpponentNearBorder*100+OpponentCrownSecond*50-AlliesNearBorder*10
 
 def valueOfMove(state,move,symbol):
 	def show(state):
 		print('\n'.join([' '.join(line) for line in state['board']]))
 		print()
 	#previousNeighborAllies = countNeighbor(state,symbols[state['current']])
-	show(state)
+	#show(state)
 	previousAdvantage = marbleCount(state,find.opponent(symbols[state['current']]))
 	previousOpponentNearBorder = len(findMarbleNearBorder(state,find.opponent(symbols[state['current']])))
 	previousOpponentCrownSecond = len(findMarbleCrownSecond(state,find.opponent(symbols[state['current']])))
@@ -188,32 +190,46 @@ def valueOfMove(state,move,symbol):
 	nextAlliesCrownCenter = len(findMarbleCrownCenter(newState,symbols[state['current']]))
 	nextAlliesNearBorder = len(findMarbleNearBorder(newState,symbols[state['current']]))
 	nextAlliesCrownSecond = len(findMarbleCrownSecond(newState,symbols[state['current']]))
-	show(newState)
+	#show(newState)
 	value = 0
-	if previousAdvantage > nextAdvantage :
-		value = value+2744	
-		if previousOpponentNearBorder<nextOpponentNearBorder :
+	diff=0
+	if previousAdvantage>nextAdvantage:
+		diff = previousAdvantage - nextAdvantage
+		value = value+diff*1000000
+		if previousOpponentNearBorder< nextOpponentNearBorder :
 			diff = nextOpponentNearBorder-previousOpponentNearBorder
-			value = value+diff*196
-		if previousOpponentCrownSecond<nextOpponentCrownSecond :
+			value = value + diff*500000
+		if previousOpponentCrownSecond < nextOpponentCrownSecond :
 			diff = nextOpponentCrownSecond-previousOpponentCrownSecond
-			value = value+diff*14
-		if previousAlliesCrownSecond<nextAlliesCrownSecond :
-			diff = nextAlliesCrownCenter-previousAlliesCrownCenter
-			value = value+diff*1
+			value = value + diff*50000
 	else :
-		if previousAlliesNearBorder > nextAlliesNearBorder:
+		if  previousOpponentNearBorder < nextOpponentNearBorder:
+			diff =nextOpponentNearBorder - previousOpponentNearBorder
+			value = value+diff*1000000
+		if previousOpponentCrownSecond < nextOpponentCrownSecond:
+			diff = nextOpponentCrownSecond - previousOpponentCrownSecond
+			value = value+diff*100000
+		if previousAlliesNearBorder > nextAlliesNearBorder:		
 			diff = previousAlliesNearBorder - nextAlliesNearBorder
-			value = value+2744*diff
-		if previousOpponentNearBorder<nextOpponentNearBorder :
-			diff = nextOpponentNearBorder-previousOpponentNearBorder
-			value = value+diff*196
-		if previousOpponentCrownSecond<nextOpponentCrownSecond :
-			diff = nextOpponentCrownSecond-previousOpponentCrownSecond
-			value = value+diff*14
-		if previousAlliesCrownSecond<nextAlliesCrownSecond :
-			diff = nextAlliesCrownCenter-previousAlliesCrownCenter
-			value = value+diff*1
+			value = value+diff*10000
+		else :
+			diff = previousAlliesNearBorder - nextAlliesNearBorder
+			value = value+diff*5000
+
+		if previousAlliesCrownCenter < nextAlliesCrownCenter :
+			diff =  nextAlliesCrownCenter- previousAlliesCrownCenter
+			value = value+diff*1000
+		else :
+			diff =  nextAlliesCrownCenter- previousAlliesCrownCenter
+			value = value+diff*500
+		if previousAlliesCrownSecond > nextAlliesCrownSecond :
+			diff =  previousAlliesCrownSecond- nextAlliesCrownSecond
+			value = value+diff*100
+		else :
+			diff =  previousAlliesCrownSecond- nextAlliesCrownSecond
+			value = value+diff*50
+
+	print(move," | diff",diff," | value",value)
 	return value
 
 if __name__=='__main__':

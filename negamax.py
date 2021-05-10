@@ -66,6 +66,7 @@ def moves(state):
 				if (state['board'][i][e]==symbol):
 					locations.append((i,e))
 		return locations
+	#print("in moves symbol",symbols[state['current']])
 	marbles = getMarbleLocation(state,symbols[state['current']])
 	allMoves=[]
 	moves_marble=[]
@@ -95,9 +96,6 @@ def next(state,fun):
 
 
 
-def heuristic(state, player):
-	res= efficiency.valueOfState(state)
-	return res
 
 from collections import defaultdict
 
@@ -321,4 +319,79 @@ def possibilities(state):
 		result.append(savingData)
 	return result
 	
-		
+def MinMax(state,depth):
+	if (winner(state) or depth <= 0) :
+		#print("stop")
+		return efficiency.valueOfState(state),None
+
+	if (state["current"]==0):
+		bestScore=float("-inf")
+		allMoves=moves(state)
+		for move in allMoves:
+			#value=efficiency.valueOfMove(state,move,state["current"])
+			nextState=apply(state,move)
+			state["current"]=1
+			depth=depth-1
+			#print("max",depth)
+			value,_ = MinMax(nextState,depth)
+			if value > bestScore :
+				bestScore=value
+				bestMove =move
+	else :
+		bestScore=float("inf")
+		allMoves=moves(state)
+		for move in allMoves:
+			#value=efficiency.valueOfMove(state,move,state["current"])
+			nextState=apply(state,move)
+			state["current"]=0
+			depth=depth-1
+			#print("min",depth)
+			value,_ = MinMax(nextState,depth)
+			if value < bestScore :
+				bestScore=value
+				bestMove =move
+	return bestScore,bestMove
+
+
+def heuristic(state):
+	if gameOver(state):
+		theWinner = winner(state)
+		if theWinner is None:
+			return 0
+		if theWinner == state['player'][state['current']]:
+			return 100000
+		if theWinner == state['player'][state['current']]%2+1:
+			return -100000
+	res = efficiency.valueOfState(state)
+	return res
+	
+def negamaxWithPruningLimitedDepth(state, player, depth=4, alpha=float('-inf'), beta=float('inf')):
+	if gameOver(state) or depth == 0:
+		return -heuristic(state), None
+
+	theValue, theMove = float('-inf'), None
+	for move in moves(state):
+		successor = apply(state, move)
+		value, _ = negamaxWithPruningLimitedDepth(successor, state["current"]%2+1, depth-1, -beta, -alpha)
+		if value > theValue:
+			theValue, theMove = value, move
+		alpha = max(alpha, theValue)
+		if alpha >= beta:
+			break
+	return -theValue, theMove
+
+if __name__=='__main__':
+	state={'players': ['toto2', 'toto1'],
+			'current': 0,
+	  		'board': [['W', 'W', 'W', 'W', 'W', 'X', 'X', 'X', 'X'],
+	  			['W', 'W', 'W', 'W', 'W', 'W', 'X', 'X', 'X'],
+	    		['E', 'E', 'W', 'W', 'W', 'E', 'E', 'X', 'X'],
+		 		['E', 'E', 'E', 'E', 'E', 'E', 'E', 'E', 'X'],
+		 		['E', 'E', 'E', 'E', 'E', 'E', 'E', 'E', 'E'],
+		   		['X', 'E', 'E', 'B', 'E', 'E', 'E', 'E', 'E'],
+		    	['X', 'X', 'E', 'E', 'B', 'B', 'B', 'E', 'E'],
+			 	['X', 'X', 'X', 'B', 'B', 'B', 'B', 'B', 'B'],
+			  	['X', 'X', 'X', 'X', 'B', 'B', 'B', 'B', 'B']]
+		}
+	result=MinMax(state,3)
+	print(result)

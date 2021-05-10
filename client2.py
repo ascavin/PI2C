@@ -51,10 +51,6 @@ class game:
 
     def move(self,state):
         result=negamax.think(state)
-        #nextMove=negamax.negamaxWithPruningIterativeDeepening(state,state['current'])
-        #result={"response": "move",
-	    #        "move": {'marbles':nextMove[1][0],'direction':nextMove[1][1]},
-	    #        "message": "pass"}
         return result
     def play(self,data):
         if data['lives']>=1:

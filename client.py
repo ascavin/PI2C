@@ -51,7 +51,11 @@ class game:
 
     def move(self,state):
         result=negamax.think(state)
-        #nextMove=negamax.negamaxWithPruningIterativeDeepening(state,state['current'])
+        return result
+        #nextMove=negamax.negamaxWithPruningLimitedDepth(state, state["current"], depth=3)
+        #result={"response": "move",
+	    #        "move": {'marbles':nextMove[1][0],'direction':nextMove[1][1]},
+	    #        "message": "pass"}
         #result={"response": "move",
 	    #        "move": {'marbles':nextMove[1][0],'direction':nextMove[1][1]},
 	    #        "message": "pass"}
