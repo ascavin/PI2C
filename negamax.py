@@ -93,15 +93,6 @@ def next(state,fun):
 	_, move = fun(state, player)
 	return move
 
-def show(state):
-	state = [
-            'X' if val == 1 else 
-			'O' if val == 2 else 
-			' ' for val in state]
-	print(state[:3])
-	print(state[3:6])
-	print(state[6:])
-	print()
 
 
 def heuristic(state, player):
@@ -111,13 +102,14 @@ def heuristic(state, player):
 from collections import defaultdict
 
 def negamaxWithPruningIterativeDeepening(state, player, timeout=0.2):
-	print('compute')
+	#print('compute')
 	cache = defaultdict(lambda : 0)
 	def cachedNegamaxWithPruningLimitedDepth(state, player, depth, alpha=float('-inf'), beta=float('inf')):
-		print('compute')
+		#print('compute')
 		over = gameOver(state)
-		if over or depth == 0:
+		if over or depth == 0:		
 			res = -heuristic(state, player), None, over
+			print(res)
 
 		else:
 			theValue, theMove, theOver = float('-inf'), None, True
@@ -139,13 +131,12 @@ def negamaxWithPruningIterativeDeepening(state, player, timeout=0.2):
 	depth = 1
 	start = time.time()
 	over = False
-	while value > -9 and time.time() - start < timeout and not over:
+	while time.time() - start < timeout and not over:
 		value, move, over = cachedNegamaxWithPruningLimitedDepth(state, player, depth)
 		depth += 1
 
-	print('depth =', depth)
+	print(value, move)
 	return value, move
-
 
 def run(state):
 	result=[]
@@ -182,6 +173,28 @@ def run(state):
 	return result
 
 
+def random1(state):
+	def getMarbleLocation(state,symbol):
+		locations=[] 
+		for i,line in enumerate(state['board']):
+			for e,column in enumerate(line) :
+				if (state['board'][i][e]==symbol):
+					locations.append((i,e))
+		return locations
+	marbles = getMarbleLocation(state,symbols[state['current']])
+	allMoves=[]
+	moves_marble=[]
+	for marble in marbles:
+		moves_marble = rs.findMove(state['board'],marble,symbols[state['current']])
+		for elem in moves_marble:		
+			allMoves.append(elem)
+	nextMove=random.sample(allMoves,1)
+	print(nextMove)
+	result={"response": "move",
+	"move": {'marbles':nextMove[0][0],'direction':nextMove[0][1]},
+	"message": "pass"}
+	return result
+	
 
 def think(state):
 	def getMarbleLocation(state,symbol):
@@ -202,10 +215,14 @@ def think(state):
 	for move in allMoves:
 		values.append(efficiency.valueOfMove(state,move,symbols[state['current']]))
 	choice=max(values)
-	move=values.index(choice)
-	print(allMoves[move])
+	moves=[]
+	for i,value in enumerate(values) :
+		if value == choice :
+			moves.append(allMoves[i])
+	nextMove=random.sample(moves,1)
+	print(nextMove)
 	result={"response": "move",
-	"move": {'marbles':allMoves[move][0],'direction':allMoves[move][1]},
+	"move": {'marbles':nextMove[0][0],'direction':nextMove[0][1]},
 	"message": "pass"}
 	return result
 	

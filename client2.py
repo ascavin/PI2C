@@ -36,24 +36,25 @@ class game:
         client_socket.bind((self.__host, self.__port_client))        # Bind to the port
         client_socket.listen(5)
         while ping:
-            print("try")
+            #print("try")
             c,addr = client_socket.accept()
-            print('Got connection from', addr)    
+            #print('Got connection from', addr)    
             data=receiveJSON(c)
             if (data['request']=='ping'):
                 sendJSON(c,{'response':'pong'})
             elif (data['request']=='play'):
                 #print(data)
                 nextMove=self.play(data)
-                print(nextMove)
+                #print(nextMove)
                 sendJSON(c,nextMove)
         c.close()
 
     def move(self,state):
-        nextMove=negamax.bin(state)
-        result={"response": "move",
-	            "move": {'marbles':nextMove[1][0],'direction':nextMove[1][1]},
-	            "message": "pass"}
+        result=negamax.random1(state)
+        #nextMove=negamax.negamaxWithPruningIterativeDeepening(state,state['current'])
+        #result={"response": "move",
+	    #        "move": {'marbles':nextMove[1][0],'direction':nextMove[1][1]},
+	    #        "message": "pass"}
         return result
     def play(self,data):
         if data['lives']>=1:
