@@ -50,7 +50,7 @@ class game:
         c.close()
 
     def move(self,state):
-        result=negamax.think(state)
+        result=negamax.random1(state)
         return result
         #nextMove=negamax.negamaxWithPruningLimitedDepth(state, state["current"], depth=3)
         #result={"response": "move",

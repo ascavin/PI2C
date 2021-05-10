@@ -203,31 +203,32 @@ def valueOfMove(state,move,symbol):
 			diff = nextOpponentCrownSecond-previousOpponentCrownSecond
 			value = value + diff*50000
 	else :
-		if  previousOpponentNearBorder < nextOpponentNearBorder:
-			diff =nextOpponentNearBorder - previousOpponentNearBorder
-			value = value+diff*1000000
-		if previousOpponentCrownSecond < nextOpponentCrownSecond:
-			diff = nextOpponentCrownSecond - previousOpponentCrownSecond
-			value = value+diff*100000
+		
 		if previousAlliesNearBorder > nextAlliesNearBorder:		
 			diff = previousAlliesNearBorder - nextAlliesNearBorder
-			value = value+diff*10000
+			value = value+diff*1000000
 		else :
 			diff = previousAlliesNearBorder - nextAlliesNearBorder
-			value = value+diff*5000
-
-		if previousAlliesCrownCenter < nextAlliesCrownCenter :
-			diff =  nextAlliesCrownCenter- previousAlliesCrownCenter
-			value = value+diff*1000
-		else :
-			diff =  nextAlliesCrownCenter- previousAlliesCrownCenter
-			value = value+diff*500
+			value = value+diff*500000
+		if  previousOpponentNearBorder < nextOpponentNearBorder:
+			diff =nextOpponentNearBorder - previousOpponentNearBorder
+			value = value+diff*100000
+		if previousOpponentCrownSecond < nextOpponentCrownSecond:
+			diff = nextOpponentCrownSecond - previousOpponentCrownSecond
+			value = value+diff*10000
 		if previousAlliesCrownSecond > nextAlliesCrownSecond :
 			diff =  previousAlliesCrownSecond- nextAlliesCrownSecond
-			value = value+diff*100
+			value = value+diff*1000
 		else :
 			diff =  previousAlliesCrownSecond- nextAlliesCrownSecond
+			value = value+diff*500
+		if previousAlliesCrownCenter < nextAlliesCrownCenter :
+			diff =  nextAlliesCrownCenter- previousAlliesCrownCenter
+			value = value+diff*100
+		else :
+			diff =  nextAlliesCrownCenter- previousAlliesCrownCenter
 			value = value+diff*50
+		
 
 	print(move," | diff",diff," | value",value)
 	return value
