@@ -65,7 +65,7 @@ def moves(state):
 		return locations
 	marbles = getMarbleLocation(state,symbols[state['current']])
 	moves=[]
-	print(marbles)
+	#print(marbles)
 	for marble in marbles:
 		try :
 			moveschoices=find.move2Marbleispossible(state,marble)
@@ -99,6 +99,36 @@ def moves(state):
 def apply(state, move):            #to change state of grid use apply
 	res=find.moveMarblesTrain(state,move[0],move[1])
 	return res
+
+#but : partir de l'etat gagnant du joueur et remonter jusqu'a l'etat initial du jeu pour pouvoir selectionner
+# les moves qui vont nous permettre de gagner
+
+def MAX(state, player):#allie
+	if gameOver(state):
+		return utility(state, player), None
+
+	theValue, theMove = float('-inf'), None
+	for move in moves(state):#parmis tout les mouvements possibles au départ 
+		print("move",move)
+		newState = apply(state, move) # jouer chaque mouvement et garder en memoire le mvt joue 
+		value, _ = MIN(successor, player)# au tour du joueur adverse de jouer (calcul des coups possibles du joueur adverses et retourne son meilleur coup pour gagner)
+		if value > theValue:
+			theValue, theMove = value, move
+	return theValue, theMove
+
+
+
+def MIN(state, player):#adversaire
+	if gameOver(state):
+		return utility(state, player), None
+
+	theValue, theMove = float('inf'), None
+	for move in moves(state):#parmis tout les mouvements possibles au départ
+		successor = apply(state, move)# jouer chaque mouvement et garder en memoire le mvt joue 
+		value, _ = MAX(successor, player)# au tour du joueur adverse de jouer (calcul des coups possibles du joueur adverses et retourne son meilleur coup pour gagner)
+		if value < theValue:
+			theValue, theMove = value, move
+	return theValue, theMove
 
 def timeit(fun):
 	def wrapper(*args, **kwargs):
@@ -266,3 +296,17 @@ def bin(state):
 	"move": {'marbles':nextMove[0][0],'direction':nextMove[0][1]},
 	"message": "pass"}
 	return result
+
+
+if (__name__=="__main__"):
+	
+	state, next = find.Abalone(["jojo","jack"])
+
+	def show(state):
+		print('\n'.join([' '.join(line) for line in state]))
+		print()
+	show(state['board'])
+	print("moves available",moves(state))
+	print(MAX(state, state['current']))
+	
+    
