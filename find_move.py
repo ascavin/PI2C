@@ -51,7 +51,7 @@ def findMove(grid,marble,symbol):
 		find=True
 		e=1        #nombre d'élément de l'alignement
 		alignement.clear()
-		while find and e<5:           
+		while find and e<6:           
 			#print("neighbor",(marble[0]+directions[direction][0]*e,marble[1]+directions[direction][1]*e),neighbor(grid,(marble[0]+directions[direction][0]*e,marble[1]+directions[direction][1]*e)))
 			#print(alignement.append(neighbor(grid,(marble[0]+directions[direction][0]*e,marble[1]+directions[direction][1]*e))))
 			alignement.append(neighbor(grid,(marble[0]+directions[direction][0]*e,marble[1]+directions[direction][1]*e)))
@@ -66,23 +66,20 @@ def findMove(grid,marble,symbol):
 
 				#if direction =='W':			
 				#print("possibilitie",possibilitie)
-					#print("alignement",alignement) 
+				print("alignement",alignement,"possiblities",possibilitie,possibilitie == alignement) 
 				if possibilitie == alignement :	
 					#print(possibilitie)
 					#print(alignement)	
 					m1 = [marble[0],marble[1]]
 					m2 = [marble[0]+directions[direction][0],marble[1]+directions[direction][1]]
-					m3 = [marble[0]+directions[direction][0]*2,marble[1]+directions[direction][1]*2]
-								
+					m3 = [marble[0]+directions[direction][0]*2,marble[1]+directions[direction][1]*2]							
 					find=False
 										
 					if i == 0: 
 						#print("0")
-						moves.append([[m1],direction])
-						
-					if i == 1:
+						moves.append([[m1],direction])				
+					#if i == 1:
 						#print("1")
-						pass
 					if i == 2: 
 						#print("2")
 						moves.append([[m1,m2],direction])
@@ -90,7 +87,6 @@ def findMove(grid,marble,symbol):
 					if i==3:
 						#print("3")
 						sumito2m(grid,m1,m2,moves,direction)
-						pass
 					if i == 4:
 						#print("4")
 						moves.append([[m1,m2,m3],direction])
@@ -99,7 +95,6 @@ def findMove(grid,marble,symbol):
 					if i == 5:
 						#print("5")
 						sumito3m(grid,m1,m2,m3,moves,direction)
-						pass
 					if (i == 6):
 						moves.append([[m1,m2],direction])
 						sumito2m(grid,m1,m2,moves,direction)
@@ -112,11 +107,9 @@ def findMove(grid,marble,symbol):
 					if i == 8:
 						#print("8")
 						sumito2m(grid,m1,m2,moves,direction)
-						pass
 					if i == 9:
 						#print("9")
 						sumito3m(grid,m1,m2,m3,moves,direction)
-						pass
 					if i == 10 or i==11:#possible sumito
 						#print("10 et 11")
 						moves.append([[m1,m2,m3],direction])

@@ -177,24 +177,43 @@ def valueOfMove(state,move,symbol):
 	previousAdvantage = marbleCount(state,find.opponent(symbols[state['current']]))
 	previousOpponentNearBorder = len(findMarbleNearBorder(state,find.opponent(symbols[state['current']])))
 	previousOpponentCrownSecond = len(findMarbleCrownSecond(state,find.opponent(symbols[state['current']])))
-	previousAlliesCrownCenter = len(findMarbleCrownCenter(state,symbols[state['current']]))	
+	previousAlliesCrownCenter = len(findMarbleCrownCenter(state,symbols[state['current']]))
+	previousAlliesNearBorder = len(findMarbleNearBorder(state,symbols[state['current']]))
+	previousAlliesCrownSecond = len(findMarbleCrownSecond(state,symbols[state['current']]))
 	newState=find.moveMarblesTrain(state,move[0],move[1])
 	#nextNeighborAllies = countNeighbor(newState,symbols[state['current']])
 	nextAdvantage = marbleCount(newState,find.opponent(symbols[state['current']]))
 	nextOpponentNearBorder = len(findMarbleNearBorder(newState,find.opponent(symbols[state['current']])))
 	nextOpponentCrownSecond = len(findMarbleCrownSecond(newState,find.opponent(symbols[state['current']])))
 	nextAlliesCrownCenter = len(findMarbleCrownCenter(newState,symbols[state['current']]))
+	nextAlliesNearBorder = len(findMarbleNearBorder(newState,symbols[state['current']]))
+	nextAlliesCrownSecond = len(findMarbleCrownSecond(newState,symbols[state['current']]))
 	show(newState)
 	value = 0
 	if previousAdvantage > nextAdvantage :
-		value = value+500	
-	if previousOpponentNearBorder<nextOpponentNearBorder :
-		value = value+400
-	if previousOpponentCrownSecond<nextOpponentCrownSecond :
-		value = value+300
-	if previousAlliesCrownCenter<nextAlliesCrownCenter :
-		value = value+200
-	print(value)
+		value = value+2744	
+		if previousOpponentNearBorder<nextOpponentNearBorder :
+			diff = nextOpponentNearBorder-previousOpponentNearBorder
+			value = value+diff*196
+		if previousOpponentCrownSecond<nextOpponentCrownSecond :
+			diff = nextOpponentCrownSecond-previousOpponentCrownSecond
+			value = value+diff*14
+		if previousAlliesCrownSecond<nextAlliesCrownSecond :
+			diff = nextAlliesCrownCenter-previousAlliesCrownCenter
+			value = value+diff*1
+	else :
+		if previousAlliesNearBorder > nextAlliesNearBorder:
+			diff = previousAlliesNearBorder - nextAlliesNearBorder
+			value = value+2744*diff
+		if previousOpponentNearBorder<nextOpponentNearBorder :
+			diff = nextOpponentNearBorder-previousOpponentNearBorder
+			value = value+diff*196
+		if previousOpponentCrownSecond<nextOpponentCrownSecond :
+			diff = nextOpponentCrownSecond-previousOpponentCrownSecond
+			value = value+diff*14
+		if previousAlliesCrownSecond<nextAlliesCrownSecond :
+			diff = nextAlliesCrownCenter-previousAlliesCrownCenter
+			value = value+diff*1
 	return value
 
 if __name__=='__main__':
