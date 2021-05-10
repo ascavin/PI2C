@@ -51,7 +51,7 @@ def findMove(grid,marble,symbol):
 		find=True
 		e=1        #nombre d'élément de l'alignement
 		alignement.clear()
-		while find and e<5:           
+		while find and e<6:           
 			#print("neighbor",(marble[0]+directions[direction][0]*e,marble[1]+directions[direction][1]*e),neighbor(grid,(marble[0]+directions[direction][0]*e,marble[1]+directions[direction][1]*e)))
 			#print(alignement.append(neighbor(grid,(marble[0]+directions[direction][0]*e,marble[1]+directions[direction][1]*e))))
 			alignement.append(neighbor(grid,(marble[0]+directions[direction][0]*e,marble[1]+directions[direction][1]*e)))
@@ -66,71 +66,64 @@ def findMove(grid,marble,symbol):
 
 				#if direction =='W':			
 				#print("possibilitie",possibilitie)
-					#print("alignement",alignement) 
+				print("alignement",alignement,"possiblities",possibilitie,possibilitie == alignement) 
 				if possibilitie == alignement :	
 					#print(possibilitie)
 					#print(alignement)	
 					m1 = [marble[0],marble[1]]
 					m2 = [marble[0]+directions[direction][0],marble[1]+directions[direction][1]]
-					m3 = [marble[0]+directions[direction][0]*2,marble[1]+directions[direction][1]*2]
-								
+					m3 = [marble[0]+directions[direction][0]*2,marble[1]+directions[direction][1]*2]							
 					find=False
 										
 					if i == 0: 
-						print("0")
-						moves.append([[m1],direction])
-						
-					if i == 1:
-						print("1")
-						pass
+						#print("0")
+						moves.append([[m1],direction])				
+					#if i == 1:
+						#print("1")
 					if i == 2: 
-						print("2")
+						#print("2")
 						moves.append([[m1,m2],direction])
 						sumito2m(grid,m1,m2,moves,direction)
 					if i==3:
-						print("3")
+						#print("3")
 						sumito2m(grid,m1,m2,moves,direction)
-						pass
 					if i == 4:
-						print("4")
+						#print("4")
 						moves.append([[m1,m2,m3],direction])
 						sumito3m(grid,m1,m2,m3,moves,direction)
 							
 					if i == 5:
-						print("5")
+						#print("5")
 						sumito3m(grid,m1,m2,m3,moves,direction)
-						pass
 					if (i == 6):
 						moves.append([[m1,m2],direction])
 						sumito2m(grid,m1,m2,moves,direction)
-						print("6")
+						#print("6")
 					if i == 7:
-						print("7")
+						#print("7")
 						moves.append([[m1,m2],direction])
 						sumito2m(grid,m1,m2,moves,direction)	
 								
 					if i == 8:
-						print("8")
+						#print("8")
 						sumito2m(grid,m1,m2,moves,direction)
-						pass
 					if i == 9:
-						print("9")
+						#print("9")
 						sumito3m(grid,m1,m2,m3,moves,direction)
-						pass
 					if i == 10 or i==11:#possible sumito
-						print("10 et 11")
+						#print("10 et 11")
 						moves.append([[m1,m2,m3],direction])
 						sumito3m(grid,m1,m2,m3,moves,direction)
  
-						print("ok")
+						#print("ok")
 
 					if i == 12 or i==13:
-						print("12 et 13")
+						#print("12 et 13")
 						moves.append([[m1,m2,m3],direction])
 						sumito3m(grid,m1,m2,m3,moves,direction)
 						
 					if i == 14:
-						print("14")
+						#print("14")
 						sumito3m(grid,m1,m2,m3,moves,direction)
 						pass
 
@@ -208,10 +201,10 @@ def sumito3m(grid,m1,m2,m3,moves,direction):
 				if isonboard(grid,addDirection(elem, eachdirection)):
 					if getStatusgrid(grid,addDirection(elem, eachdirection)) == 'E':
 						directionlist.append(eachdirection)
-						print(directionlist)
-	for i in range(0,len(directions)-3):
-		if directionlist.count(directionlist[i]) == 3 :
-			moves.append([[m1,m2,m3],directionlist[i]])
+						#print(directionlist)
+	for i in directions:
+		if directionlist.count(i) == 3 :
+			moves.append([[m1,m2,m3],i])
 			pass	
 	directionlist.clear()
 	return None
@@ -227,10 +220,11 @@ def sumito2m(grid,m1,m2,moves,direction):
 				if isonboard(grid,addDirection(elem, eachdirection)):
 					if getStatusgrid(grid,addDirection(elem, eachdirection)) == 'E':
 						directionlist.append(eachdirection)
-						print(directionlist)
-	for i in range(0,len(directions)-3):
-		if directionlist.count(directionlist[i]) == 2 :
-			moves.append([[m1,m2],directionlist[i]])
+						#print(directionlist)
+	#print("longeur", len(directions))
+	for i in directions:
+		if directionlist.count(i) == 2 :
+			moves.append([[m1,m2],i])
 			pass	
 	directionlist.clear()
 	return None
@@ -261,7 +255,7 @@ if __name__=='__main__':
 	#grid[3][2] = 'W'
 	#grid[3][1] = 'W'
 
-	result=findMove(grid,(4,1),'B')
+	result=findMove(grid,(2,2),'W')
 	show(grid)
 	print(result)
 
