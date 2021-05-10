@@ -166,7 +166,7 @@ def valueOfState(state):
 	OpponentNearBorder = len(findMarbleNearBorder(state,find.opponent(symbols[state['current']])))
 	OpponentCrownSecond = len(findMarbleCrownSecond(state,find.opponent(symbols[state['current']])))
 	AlliesCrownCenter = len(findMarbleCrownCenter(state,symbols[state['current']]))	
-	return (Advantage*1568+OpponentNearBorder*112+OpponentCrownSecond*28+AlliesCrownCenter*1)
+	return (abs((Advantage-14))*2744+OpponentNearBorder*196+OpponentCrownSecond*14+AlliesCrownCenter*1)
 
 def valueOfMove(state,move,symbol):
 	def show(state):

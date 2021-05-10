@@ -228,7 +228,6 @@ def think(state):
 	
 		
 
-
 def bin(state):
 	def getMarbleLocation(state,symbol):
 		locations=[] 
@@ -268,3 +267,58 @@ def bin(state):
 	"move": {'marbles':nextMove[0][0],'direction':nextMove[0][1]},
 	"message": "pass"}
 	return result
+
+def bestMove(state):
+	ties0 = possibilities(state)
+	ties1 =[]
+	ties2 =[]
+	ties3 =[]
+	for tie in ties0:
+		ties1.append(possibilities(tie[0]))
+	for tie in ties1:
+		ties2.append(possibilities(tie[0]))
+	for tie in ties2:
+		ties3.append(possibilities(tie[0]))
+	values=[]
+	for tie0 in ties0:
+		for tie1 in ties1:
+			for tie2 in ties2:
+				for tie3 in ties3:
+					value = tie0[2] + tie1[2] +tie2[2] +tie3[2]
+					values.append(value)
+	choice=max(values)
+	for tie0 in ties0:
+		for tie1 in ties1:
+			for tie2 in ties2:
+				for tie3 in ties3:
+					value = tie0[2] + tie1[2] +tie2[2] +tie3[2]
+					if value == choice : 
+						move=tie0[1]
+	result={"response": "move",
+	"move": {'marbles':move[0],'direction':move[1]},
+	"message": "pass"}
+	return result
+
+def possibilities(state):
+	def getMarbleLocation(state,symbol):
+		locations=[] 
+		for i,line in enumerate(state['board']):
+			for e,column in enumerate(line) :
+				if (state['board'][i][e]==symbol):
+					locations.append((i,e))
+		return locations
+	marbles = getMarbleLocation(state,symbols[state['current']])
+	allMoves=[]
+	moves_marble=[]
+	for marble in marbles:
+		moves_marble = rs.findMove(state['board'],marble,symbols[state['current']])
+		for elem in moves_marble:		
+			allMoves.append(elem)
+	result=[]
+	for move in allMoves:
+		newState,value = efficiency.valueOfMove(state,move,symbols[state['current']])
+		savingData  = [newState, move, value]
+		result.append(savingData)
+	return result
+	
+		
