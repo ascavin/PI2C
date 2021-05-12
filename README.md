@@ -38,7 +38,7 @@ Python
 - *Thirdly, Ai attack ! :* The Ai try to push out the opponent marbles as soon as possible even if there is other moves available
 
 - *Thourthly, Ai defend ! :* if a allie marble is on the boarderline in alignment with opponents marbles,
-                        The Ai try to make escape the marble 
+                        The Ai try to evade the marble 
 
 ## **4. How to run a Ai game :**  
 
