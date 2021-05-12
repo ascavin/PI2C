@@ -35,10 +35,10 @@ Python
 - *Second, Ai push the marbles ! :* the Ai try to push the marble near the boarderline of the board,
               from the center to the second crown and form the second crown to the last crown(boarderline)
 
-- *Thirdly, Ai attack ! :* The Ai try to push out the opponent marbles as soon as possible even if there is other moves available
+- *Thirdly, Ai attack ! :* The Ai try to push out opponents marbles as soon as possible even if there is other available moves
 
 - *Thourthly, Ai defend ! :* if a allie marble is on the boarderline in alignment with opponents marbles,
-                        The Ai try to evade the marble 
+                        The Ai try to break the line firstly (if it's possible) or otherwise,the Ai evade the marble 
 
 ## **4. How to run a Ai game :**  
 
