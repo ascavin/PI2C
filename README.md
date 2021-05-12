@@ -27,3 +27,9 @@ Python
 
 - *random :* 
 
+- *copy :* 
+
+## **3. AI strategy :**  
+
+
+## **4. How to run this :**  
