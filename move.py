@@ -50,7 +50,7 @@ def checkMarbles(state, move):
 		if getColor(state, pos) != color:
 			raise game.BadMove('Marble {} is not yours'.format(pos))
 		
-def isOnBoard(pos):
+def isOnBoard(pos):#is the marble on the board
 	l, c = pos
 	if min(pos) < 0:
 		return False
@@ -64,7 +64,7 @@ def addDirection(pos, direction):
 	D = directions[direction]
 	return (pos[0] + D[0], pos[1] + D[1])
 
-def moveOneMarble(state, pos, direction):
+def moveOneMarble(state, pos, direction):# is for moving a marble 
 	li, ci = pos
 	ld, cd = addDirection(pos, direction)
 	color = getColor(state, pos)
@@ -89,37 +89,37 @@ def moveOneMarble(state, pos, direction):
 
 	return res
 
-def opponent(color):
+def opponent(color):# return the symbol of the opponent player
 	if color == 'W':
 		return 'B'
 	return 'W'
 
-def getStatus(state, pos):
+def getStatus(state, pos):# get the status of a case on the board and return 'E' or 'W' or 'B'
 	if not isOnBoard(pos):
 		raise game.BadMove('The position {} is outside the board'.format(pos))
 	return state['board'][pos[0]][pos[1]]
 
-def getStatusgrid(state, pos):
+def getStatusgrid(state, pos):# get the status of a case on the board and return 'E' or 'W' or 'B' directly on the grid
 	if not isOnBoard(pos):
 		raise game.BadMove('The position {} is outside the board'.format(pos))
 	return state[pos[0]][pos[1]]
 
-def isEmpty(state, pos):
+def isEmpty(state, pos):#check if a case is empty
 	return getStatus(state, pos) == 'E'
 
-def isFree(state, pos):
+def isFree(state, pos):#check if a case is available
 	if isOnBoard(pos):
 		return isEmpty(state, pos)
 	else:
 		return True
 
-def getColor(state, pos):
+def getColor(state, pos):#return the color of the player on the 'pos' location
 	status = getStatus(state, pos)
 	if status == 'W' or status == 'B':
 		return status
 	raise game.BadMove('There is no marble here {}'.format(pos))
 
-def moveMarblesTrain(state, marbles, direction):
+def moveMarblesTrain(state, marbles, direction):#move more than 1 marble
 	if direction in ['E', 'SE', 'SW']:
 		marbles = sorted(marbles, key=lambda L: -(L[0]*9+L[1]))
 	else:
@@ -190,11 +190,6 @@ def Abalone(players):
 		]
 	}
 
-	# move = {
-	# 	'marbles': [],
-	# 	'direction': ''
-	# }
-
 	def next(state, move):
 		if move is None:
 			raise game.BadMove('None is not a valid move')
@@ -226,7 +221,7 @@ def Abalone(players):
 	return state, next
 
 
-def findMove(grid,marble,symbol):
+def findMove(grid,marble,symbol):# check all moves (sumito,line) available for a marble (or 2 or 3) of a player 
 	moves=[]
 	alignement=[]
 	possibilities=[]
@@ -236,21 +231,12 @@ def findMove(grid,marble,symbol):
 		e=1        #nombre d'élément de l'alignement
 		alignement.clear()
 		while find and e<6:           
-			#print("neighbor",(marble[0]+directions[direction][0]*e,marble[1]+directions[direction][1]*e),neighbor(grid,(marble[0]+directions[direction][0]*e,marble[1]+directions[direction][1]*e)))
-			#print(alignement.append(neighbor(grid,(marble[0]+directions[direction][0]*e,marble[1]+directions[direction][1]*e))))
-			alignement.append(neighbor(grid,(marble[0]+directions[direction][0]*e,marble[1]+directions[direction][1]*e)))
+			#print("neighbor",(marble[0]+directions[direction][0]*e,marble[1]+directions[direction][1]*e),insidetheboard(grid,(marble[0]+directions[direction][0]*e,marble[1]+directions[direction][1]*e)))
+			#print(alignement.append(insidetheboard(grid,(marble[0]+directions[direction][0]*e,marble[1]+directions[direction][1]*e))))
+			alignement.append(insidetheboard(grid,(marble[0]+directions[direction][0]*e,marble[1]+directions[direction][1]*e)))
 			possibilities=getPossibilities(symbol)
 			#print(alignement)
 			for i,possibilitie in enumerate(possibilities):
-					 
-				#print("i",i) 
-				# if i == 7:
-				# 	print(possibilitie)   
-				# 	print("-------------------------")
-
-				#if direction =='W':			
-				#print("possibilitie",possibilitie)
-				#print("alignement",alignement,"possiblities",possibilitie,possibilitie == alignement) 
 				if possibilitie == alignement :	
 					#print(possibilitie)
 					#print(alignement)	
@@ -321,7 +307,7 @@ def findMove(grid,marble,symbol):
 #manque les mouvements en paralleles
 
 			
-def neighbor(grid,marble):
+def insidetheboard(grid,marble):#check if the marble is inside the board , otherwise , it returns 'X' for outside location
 	li,ci = marble
 	#print(marble)
 	if  (0<=li<=4 and 0<=ci<=4) or (5<=li<=8 and 5<=ci<=8) or (5<=li<=8 and 0<=ci<=4 and not grid[li][ci] == 'X') or (0<=li<=4 and 5<=ci<=8 and not grid[li][ci] == 'X'):
@@ -331,14 +317,14 @@ def neighbor(grid,marble):
 	else : 
 		return 'X'
 
-def isonboard(grid,marble):
+def isonboard(grid,marble):#boolean version of the insidetheboard function
 	li,ci = marble
 	if  (0<=li<=4 and 0<=ci<=4) or (5<=li<=8 and 5<=ci<=8) or (5<=li<=8 and 0<=ci<=4 and not grid[li][ci] == 'X') or (0<=li<=4 and 5<=ci<=8 and not grid[li][ci] == 'X'):
 		return True
 	else :
 		return False 
 
-def getPossibilities(symbol):         
+def getPossibilities(symbol):#return all movement possible on abalone board according to the rules of the game         
 	possibilities =[
 					['E'],                 				#:True,    #0    
 					['X'],								#:False		#1
@@ -357,24 +343,9 @@ def getPossibilities(symbol):
 					[symbol,symbol,opponent(symbol),opponent(symbol),opponent(symbol)], #:False,   #14    #je ne peux pas bouger		possible sumito
 					]
 
-					#['E'],                 			#:True		#0
-					#['X'] or out 						#: False	#1
-					#['B','E'],             			#:True		#2
-					#['B','X'] or ['B',out] 			#: False	#3
-					#['B','B','E'],         				#:True		#4
-					#['B','B','X'] or ['B','B',out] 		#: False	#5
-					#['B','W','E'],         				#:True		#6
-					#['B','W','X'], or  ['B','W',out]   	#:True		#7
-					#['B','W','W'],         				#:False		#8
-					#['B','B','B'],         				#:False		#9
-					#['B','B','W','E'],     					#:True		#10
-					#['B','B','W','X'] or ['B','B','W',out]		#:True		#11
-					#['B','B','W','W','E'], 						#:True		#12
-					#['B','B','W','W','X'] or ['B','B','W','W',out]	#:True		#13
-					#['B','B','W','W','W'], 						#:False		#14
 	return possibilities
 
-def sumito3m(grid,m1,m2,m3,moves,direction):
+def sumito3m(grid,m1,m2,m3,moves,direction):# function for sumito of 3 marbles
 	directionlist = []
 	for elem in [m1,m2,m3]:#pour chaque position
 		for eachdirection in directions :#pour chaque direction
@@ -393,7 +364,7 @@ def sumito3m(grid,m1,m2,m3,moves,direction):
 	directionlist.clear()
 	return None
 
-def sumito2m(grid,m1,m2,moves,direction):
+def sumito2m(grid,m1,m2,moves,direction):# function for sumito of 2 marbles
 	directionlist = []
 	for elem in [m1,m2]:#pour chaque position
 		for eachdirection in directions :#pour chaque direction

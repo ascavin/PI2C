@@ -1,7 +1,7 @@
 from collections import defaultdict
 import random
 import time 
-import move as find
+import move as mv
 import efficiency
 
 state = [ 
@@ -23,7 +23,7 @@ symbols = ['B', 'W']
 	 
 
 def utility(state, player):
-	theWinner = find.winner(state)
+	theWinner = mv.winner(state)
 	if theWinner is None:
 		return 0
 	if theWinner == player:
@@ -31,7 +31,7 @@ def utility(state, player):
 	return -1
 
 def gameOver(state):
-	if find.winner(state) is not None:
+	if mv.winner(state) is not None:
 		return True
 	else : 
 		return False
@@ -52,13 +52,13 @@ def moves(state):
 	allMoves=[]
 	moves_marble=[]
 	for marble in marbles:
-		moves_marble = find.findMove(state['board'],marble,symbols[state['current']])
+		moves_marble = mv.findMove(state['board'],marble,symbols[state['current']])
 		for elem in moves_marble:		
 			allMoves.append(elem)
 	return allMoves
 
 def apply(state, move):            #to change state of grid use apply
-	res=find.moveMarblesTrain(state,move[0],move[1])
+	res=mv.moveMarblesTrain(state,move[0],move[1])
 	return res
 
 def timeit(fun):
@@ -121,12 +121,12 @@ def run(state):
 	result=[]
 	allMoves=moves(state)
 	newStates=[]
-	M=find.opponent(symbols[state['current']])
+	M=mv.opponent(symbols[state['current']])
 	for move in allMoves:
 		print(move)
 		previous=0
 		nextstep=0
-		newState=find.moveMarblesTrain(state,move[0],move[1])
+		newState=mv.moveMarblesTrain(state,move[0],move[1])
 		for i,line in enumerate(state['board']):
 			for e,column in enumerate(line):
 				if state['board'][i][e]==M:
@@ -164,7 +164,7 @@ def random1(state):
 	allMoves=[]
 	moves_marble=[]
 	for marble in marbles:
-		moves_marble = find.findMove(state['board'],marble,symbols[state['current']])
+		moves_marble = mv.findMove(state['board'],marble,symbols[state['current']])
 		for elem in moves_marble:		
 			allMoves.append(elem)
 	nextMove=random.sample(allMoves,1)
@@ -187,7 +187,7 @@ def think(state):
 	allMoves=[]
 	moves_marble=[]
 	for marble in marbles:
-		moves_marble = find.findMove(state['board'],marble,symbols[state['current']])
+		moves_marble = mv.findMove(state['board'],marble,symbols[state['current']])
 		for elem in moves_marble:		
 			allMoves.append(elem)
 	values=[]
@@ -219,7 +219,7 @@ def bin(state):
 	allMoves=[]
 	moves_marble=[]
 	for marble in marbles:
-		moves_marble = find.findMove(state['board'],marble,symbols[state['current']])
+		moves_marble = mv.findMove(state['board'],marble,symbols[state['current']])
 		for elem in moves_marble:		
 			allMoves.append(elem)
 	print(allMoves)
@@ -228,7 +228,7 @@ def bin(state):
 	for move in allMoves:
 		previous=0
 		nextstep=0
-		newState=find.moveMarblesTrain(state,move[0],move[1])
+		newState=mv.moveMarblesTrain(state,move[0],move[1])
 		for i,line in enumerate(state['board']):
 			for e,column in enumerate(line):
 				if state['board'][i][e]==M:
@@ -290,7 +290,7 @@ def possibilities(state):
 	allMoves=[]
 	moves_marble=[]
 	for marble in marbles:
-		moves_marble = find.findMove(state['board'],marble,symbols[state['current']])
+		moves_marble = mv.findMove(state['board'],marble,symbols[state['current']])
 		for elem in moves_marble:		
 			allMoves.append(elem)
 	result=[]
@@ -301,7 +301,7 @@ def possibilities(state):
 	return result
 	
 def MinMax(state,depth):
-	if (find.winner(state) or depth <= 0) :
+	if (mv.winner(state) or depth <= 0) :
 		#print("stop")
 		return efficiency.valueOfState(state),None
 
@@ -336,7 +336,7 @@ def MinMax(state,depth):
 
 def heuristic(state):
 	if gameOver(state):
-		theWinner = find.winner(state)
+		theWinner = mv.winner(state)
 		if theWinner is None:
 			return 0
 		if theWinner == state['player'][state['current']]:
@@ -440,7 +440,7 @@ def getAllMoves(state, currentPlayer):
 	marbles = getMarbleLocation(state,symbols[state['current']])
 	allMoves=[]
 	for marble in marbles:
-		movesMarble = find.findMove(state['board'],marble,symbols[state['current']])
+		movesMarble = mv.findMove(state['board'],marble,symbols[state['current']])
 		for move in movesMarble:
 			newState={"player":deepcopy(state["player"]),"current":deepcopy(state["current"]),"board":deepcopy(state['board'])}
 			newBoard=apply(newState,move)
