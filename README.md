@@ -32,7 +32,7 @@ Python
 ## **3. AI strategy :**  
 
 
-## **4. How to run this :**  
+## **4. How to run a Ai game :**  
 
 - *Firstly :*  open the repository "PI2CChampionshipRunner" and run the "server.py" file with the command : 'python server.py abalone'
 
