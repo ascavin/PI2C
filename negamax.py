@@ -21,28 +21,10 @@ lines = [
 	[2, 4, 6]
 ]
 symbols = ['B', 'W']
-
-def isWinning(state,player):
-	toCount = player
-	count = 0
-	for line in state['board']:
-		for case in line:
-			if case == toCount:
-				count += 1
-	if count<9:
-		True
-	return False
-
-def winner(state):
-	if isWinning(state,find.opponent(symbols[state['current']])) :
-		return state['player'][state['current']]
-	if isWinning(state,symbols[state['current']]) :
-		return state['player'][state['current']]
-	return None
 	 
 
 def utility(state, player):
-	theWinner = winner(state)
+	theWinner = find.winner(state)
 	if theWinner is None:
 		return 0
 	if theWinner == player:
@@ -50,7 +32,7 @@ def utility(state, player):
 	return -1
 
 def gameOver(state):
-	if winner(state) is not None:
+	if find.winner(state) is not None:
 		return True
 	else : 
 		return False
@@ -320,7 +302,7 @@ def possibilities(state):
 	return result
 	
 def MinMax(state,depth):
-	if (winner(state) or depth <= 0) :
+	if (find.winner(state) or depth <= 0) :
 		#print("stop")
 		return efficiency.valueOfState(state),None
 
@@ -355,7 +337,7 @@ def MinMax(state,depth):
 
 def heuristic(state):
 	if gameOver(state):
-		theWinner = winner(state)
+		theWinner = find.winner(state)
 		if theWinner is None:
 			return 0
 		if theWinner == state['player'][state['current']]:
@@ -442,18 +424,18 @@ def evaluateMove(state,player):
 
 
 
-def minimax(state,maxPlayer):
-
-		return maxEval, bestmove
-	else:
-		minEval=float('inf')
-		best_move = None 
-		for move in getAllMoves(state, currentPlayer,game):
-			evaluation = minimax(move,depth-1,True,game)[0]
-			minEval=min(inEval,evaluation)
-			if minEval==evaluation:
-				bestMove=move
-		return maxEval, bestmove
+#def minimax(state,maxPlayer):
+#
+#		return maxEval, bestmove
+#	else:
+#		minEval=float('inf')
+#		best_move = None 
+#		for move in getAllMoves(state, currentPlayer,game):
+#			evaluation = minimax(move,depth-1,True,game)[0]
+#			minEval=min(inEval,evaluation)
+#			if minEval==evaluation:
+#				bestMove=move
+#		return maxEval, bestmove
 
 def getAllMoves(state, currentPlayer):
 	marbles = getMarbleLocation(state,symbols[state['current']])
