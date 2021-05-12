@@ -30,7 +30,14 @@ Python
 - *copy :* 
 
 ## **3. AI strategy :**  
+- *First, Ai take the location advantage ! :* all the marbles go to the center of the board and stay together as possible as they can
 
+- *Second, Ai push the marbles ! :* the Ai try to push the marble near the boarderline of the board
+
+- *Thirdly, Ai attack ! :* The Ai try to push out the opponent marbles as soon as possible even if there is other moves available
+
+- *Thourthly, Ai defend ! :* if a allie marble is on the boarderline in alignment with opponents marbles,
+                        The Ai try to escape
 
 ## **4. How to run a Ai game :**  
 
