@@ -162,13 +162,52 @@ def advantage(state,symbol):
 		return None
 
 def valueOfState(state):
-	Advantage = marbleCount(state,find.opponent(symbols[state['current']]))
-	OpponentNearBorder = len(findMarbleNearBorder(state,find.opponent(symbols[state['current']])))
-	OpponentCrownSecond = len(findMarbleCrownSecond(state,find.opponent(symbols[state['current']])))
-	AlliesCrownCenter = len(findMarbleCrownCenter(state,symbols[state['current']]))
-	AlliesNearBorder = len(findMarbleNearBorder(state,symbols[state['current']]))
-	AlliesCrownSecond = len(findMarbleCrownSecond(state,symbols[state['current']]))	
-	return (14000-Advantage*1000)+OpponentNearBorder*100+OpponentCrownSecond*50-AlliesNearBorder*10
+	advantage = marbleCount(state,find.opponent(symbols[state['current']]))
+	opponentNearBorder = len(findMarbleNearBorder(state,find.opponent(symbols[state['current']])))
+	opponentCrownSecond = len(findMarbleCrownSecond(state,find.opponent(symbols[state['current']])))
+	alliesCrownCenter = len(findMarbleCrownCenter(state,symbols[state['current']]))
+	alliesNearBorder = len(findMarbleNearBorder(state,symbols[state['current']]))
+	alliesCrownSecond = len(findMarbleCrownSecond(state,symbols[state['current']]))
+	return {"advantage":advantage,"opponentNearBorder":opponentNearBorder,"opponentCrownSecond":opponentCrownSecond,"alliesCrownCenter":alliesCrownCenter,"alliesNearBorder":alliesNearBorder,"alliesCrownSecond":alliesCrownSecond}
+	
+def diff(previousState,nexState):
+	if previousAdvantage>nextAdvantage:
+		diff = previousAdvantage - nextAdvantage
+		value = value+diff*1000000
+		if previousOpponentNearBorder< nextOpponentNearBorder :
+			diff = nextOpponentNearBorder-previousOpponentNearBorder
+			value = value + diff*500000
+		if previousOpponentCrownSecond < nextOpponentCrownSecond :
+			diff = nextOpponentCrownSecond-previousOpponentCrownSecond
+			value = value + diff*50000
+	else :
+		
+		if previousAlliesNearBorder > nextAlliesNearBorder:		
+			diff = previousAlliesNearBorder - nextAlliesNearBorder
+			value = value+diff*1000000
+		else :
+			diff = previousAlliesNearBorder - nextAlliesNearBorder
+			value = value+diff*500000
+		if  previousOpponentNearBorder < nextOpponentNearBorder:
+			diff =nextOpponentNearBorder - previousOpponentNearBorder
+			value = value+diff*100000
+		if previousOpponentCrownSecond < nextOpponentCrownSecond:
+			diff = nextOpponentCrownSecond - previousOpponentCrownSecond
+			value = value+diff*10000
+		if previousAlliesCrownSecond > nextAlliesCrownSecond :
+			diff =  previousAlliesCrownSecond- nextAlliesCrownSecond
+			value = value+diff*1000
+		else :
+			diff =  previousAlliesCrownSecond- nextAlliesCrownSecond
+			value = value+diff*500
+		if previousAlliesCrownCenter < nextAlliesCrownCenter :
+			diff =  nextAlliesCrownCenter- previousAlliesCrownCenter
+			value = value+diff*100
+		else :
+			diff =  nextAlliesCrownCenter- previousAlliesCrownCenter
+			value = value+diff*50
+	return value
+
 
 def valueOfMove(state,move,symbol):
 	def show(state):
@@ -228,8 +267,7 @@ def valueOfMove(state,move,symbol):
 		else :
 			diff =  nextAlliesCrownCenter- previousAlliesCrownCenter
 			value = value+diff*50
-		
-
+	
 	print(move," | diff",diff," | value",value)
 	return value
 

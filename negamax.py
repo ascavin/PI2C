@@ -395,3 +395,74 @@ if __name__=='__main__':
 		}
 	result=MinMax(state,3)
 	print(result)
+
+################################################################################################
+
+
+def evaluate(state):
+	return False 
+
+def getAllPieces(state,symbol):
+	locations=[] 
+	for i,line in enumerate(state['board']):
+		for e,column in enumerate(line) :
+			if (state['board'][i][e]==symbol):
+				locations.append((i,e))
+	return locations
+
+def aiMove(state,marbles,move):
+	return False
+
+from copy import deepcopy
+
+global depth
+global tree
+
+def climb(state,depth):
+	depth=0
+	player=0
+	while depth<3:
+		movesValue=evaluateMove(state,player)
+		tree.append(movesValues)
+		currentDepth=currentDepth+1
+		for move in movesValue :
+			climb(move[0],depth)
+
+
+def evaluateMove(state,player):
+	for move in getAllMoves(state, currentPlayer):
+		valuesPreviousState=efficiency.valueOfState(state)
+		newState={"player":deepcopy(state["player"]),"current":deepcopy(state["current"]),"board":deepcopy(state['board'])}
+		newState=apply(newState,move)
+		valuesNextState=efficiency.valueOfState(newState)
+		value = efficiency.diff(valuesPreviousState,valuesNextState)
+		allMoves.append([newState,move,value])
+	return allMoves
+
+
+
+
+def minimax(state,maxPlayer):
+
+		return maxEval, bestmove
+	else:
+		minEval=float('inf')
+		best_move = None 
+		for move in getAllMoves(state, currentPlayer,game):
+			evaluation = minimax(move,depth-1,True,game)[0]
+			minEval=min(inEval,evaluation)
+			if minEval==evaluation:
+				bestMove=move
+		return maxEval, bestmove
+
+def getAllMoves(state, currentPlayer):
+	marbles = getMarbleLocation(state,symbols[state['current']])
+	allMoves=[]
+	for marble in marbles:
+		movesMarble = rs.findMove(state['board'],marble,symbols[state['current']])
+		for move in movesMarble:
+			newState={"player":deepcopy(state["player"]),"current":deepcopy(state["current"]),"board":deepcopy(state['board'])}
+			newBoard=apply(newState,move)
+			allMoves.append(newState,move)
+	return allMoves
+
