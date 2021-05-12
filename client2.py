@@ -50,7 +50,7 @@ class game:
         c.close()
 
     def move(self,state):
-        result=negamax.think(state)
+        result=negamax.think2(state)
         return result
     def play(self,data):
         if data['lives']>=1:
