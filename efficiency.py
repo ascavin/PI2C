@@ -201,9 +201,7 @@ def diff(previousState,nextState):
 		else :
 			diff = previousAlliesNearBorder - nextAlliesNearBorder
 			value = value+diff*500000
-		if  previousOpponentNearBorder < nextOpponentNearBorder:
-			diff =nextOpponentNearBorder - previousOpponentNearBorder
-			value = value+diff*100000
+
 		if previousOpponentCrownSecond < nextOpponentCrownSecond:
 			diff = nextOpponentCrownSecond - previousOpponentCrownSecond
 			value = value+diff*10000
@@ -234,7 +232,14 @@ def valueOfMove(state,move,symbol):
 	previousAlliesCrownCenter = len(findMarbleCrownCenter(state,symbols[state['current']]))
 	previousAlliesNearBorder = len(findMarbleNearBorder(state,symbols[state['current']]))
 	previousAlliesCrownSecond = len(findMarbleCrownSecond(state,symbols[state['current']]))
+	previousNeighbor = countNeighbor(state,symbols[state['current']])
+	previousEliminationLine=0
+	nextEliminationLine=0
+	for marble in findMarbleNearBorder(state,symbols[state['current']]):
+		previousEliminationLine=findEscape(state,marble)
 	newState=mv.moveMarblesTrain(state,move[0],move[1])
+	for marble in findMarbleNearBorder(newState,symbols[state['current']]):
+		nextEliminationLine=findEscape(newState,marble)
 	#nextNeighborAllies = countNeighbor(newState,symbols[state['current']])
 	nextAdvantage = marbleCount(newState,mv.opponent(symbols[state['current']]))
 	nextOpponentNearBorder = len(findMarbleNearBorder(newState,mv.opponent(symbols[state['current']])))
@@ -242,72 +247,125 @@ def valueOfMove(state,move,symbol):
 	nextAlliesCrownCenter = len(findMarbleCrownCenter(newState,symbols[state['current']]))
 	nextAlliesNearBorder = len(findMarbleNearBorder(newState,symbols[state['current']]))
 	nextAlliesCrownSecond = len(findMarbleCrownSecond(newState,symbols[state['current']]))
+	nextNeighbor = countNeighbor(state,symbols[state['current']])
 	#show(newState)
 	value = 0
 	diff=0
+
 	if previousAdvantage>nextAdvantage:
 		diff = previousAdvantage - nextAdvantage
-		value = value+diff*1000000
+		value = value+diff*4000000
 		if previousOpponentNearBorder< nextOpponentNearBorder :
 			diff = nextOpponentNearBorder-previousOpponentNearBorder
-			value = value + diff*500000
+			value = value + diff*1000000
 		if previousOpponentCrownSecond < nextOpponentCrownSecond :
 			diff = nextOpponentCrownSecond-previousOpponentCrownSecond
-			value = value + diff*50000
+			value = value + diff*300000
+		if nextNeighbor > previousNeighbor:
+			diff =nextNeighbor-previousNeighbor
+			value = value + 100*diff
 	else :
-		
 		if previousAlliesNearBorder > nextAlliesNearBorder:		
 			diff = previousAlliesNearBorder - nextAlliesNearBorder
-			value = value+diff*1000000
+			value = value+diff*4000000
 		else :
 			diff = previousAlliesNearBorder - nextAlliesNearBorder
 			value = value+diff*500000
+		if previousEliminationLine>nextEliminationLine:
+			diff=previousEliminationLine-nextEliminationLine
+			value = value+diff*100000
 		if  previousOpponentNearBorder < nextOpponentNearBorder:
 			diff =nextOpponentNearBorder - previousOpponentNearBorder
 			value = value+diff*100000
-		if previousOpponentCrownSecond < nextOpponentCrownSecond:
+		if previousOpponentCrownSecond <= nextOpponentCrownSecond:
 			diff = nextOpponentCrownSecond - previousOpponentCrownSecond
 			value = value+diff*10000
-		if previousAlliesCrownSecond > nextAlliesCrownSecond :
+		if previousAlliesCrownSecond >= nextAlliesCrownSecond :
 			diff =  previousAlliesCrownSecond- nextAlliesCrownSecond
 			value = value+diff*1000
 		else :
 			diff =  previousAlliesCrownSecond- nextAlliesCrownSecond
 			value = value+diff*500
+		if nextNeighbor > previousNeighbor:
+			diff =nextNeighbor-previousNeighbor
+			value = value + 10*diff
 		if previousAlliesCrownCenter < nextAlliesCrownCenter :
 			diff =  nextAlliesCrownCenter- previousAlliesCrownCenter
 			value = value+diff*100
 		else :
 			diff =  nextAlliesCrownCenter- previousAlliesCrownCenter
-			value = value+diff*50
-	
-	print(move," | diff",diff," | value",value)
+			value = value+diff*50	
 	return value
+
+
+def getBorderEscape():
+	border=[[(0,0)],
+			[(0,1),(0,2),(0,3)],
+			[(0,4)],
+			[(1,5),(2,6),(3,7)],
+			[(4,8)],
+			[(5,8),(6,8),(7,8)],
+			[(8,8)],
+			[(8,7),(8,6),(8,5)],
+			[(8,4)],
+			[(7,3),(6,2),(5,1)],
+			[(4,0)],
+			[(3,0),(2,0),(1,0)]]
+	return border
+
+def getEscapeDirection():
+	escape =[['E','SE','SW'],
+			['SE','SW'],
+			['SE','SW','W'],
+			['SW','W'],
+			['SW','W','NW'],
+			['W','NW'],
+			['W','NW','NE'],
+			['NW','NE'],
+			['NW','NE','E'],
+			['NE','E'],
+			['SE','E','NE'],
+			['E','SE']]
+	return escape
+
+def findEscape(state,marble):
+	borders=getBorderEscape()
+	eliminationDirection=getEscapeDirection()
+	values=[]
+	for i,border in enumerate(borders) :
+		for positionBorder in border :
+			if marble[0]==positionBorder[0] and marble[1]==positionBorder[1]:
+				for direction in eliminationDirection[i]:
+					value=0
+					for i in range(1,3):
+						pos = (marble[0]+directions[direction][0]*i,marble[1]+directions[direction][1]*i)
+						if state["board"][pos[0]][pos[1]]==mv.opponent(symbols[state["current"]]):
+							value=value+1
+							print("----------------------------------------")
+							print(value)
+					values.append(value)
+	return max(values)
 
 if __name__=='__main__':
 	state={'players': ['toto2', 'toto1'],
-			'current': 0,
+			'current': 1,
 	  		'board': [['W', 'W', 'W', 'W', 'W', 'X', 'X', 'X', 'X'],
-	  			['W', 'W', 'W', 'W', 'W', 'W', 'X', 'X', 'X'],
-	    		['E', 'E', 'W', 'W', 'W', 'E', 'E', 'X', 'X'],
-		 		['E', 'E', 'E', 'E', 'E', 'E', 'E', 'E', 'X'],
-		 		['E', 'E', 'E', 'E', 'E', 'E', 'E', 'E', 'E'],
-		   		['X', 'E', 'E', 'B', 'E', 'E', 'E', 'E', 'E'],
-		    	['X', 'X', 'E', 'E', 'B', 'B', 'B', 'E', 'E'],
-			 	['X', 'X', 'X', 'B', 'B', 'B', 'B', 'B', 'B'],
-			  	['X', 'X', 'X', 'X', 'B', 'B', 'B', 'B', 'B']]
+	  			['W', 'E', 'E', 'E', 'E', 'E', 'X', 'X', 'X'],
+	    		['E', 'B', 'E', 'E', 'E', 'E', 'E', 'X', 'X'],
+		 		['E', 'E', 'B', 'E', 'E', 'E', 'E', 'E', 'X'],
+		 		['E', 'E', 'E', 'B', 'E', 'E', 'E', 'E', 'E'],
+		   		['X', 'E', 'E', 'E', 'E', 'E', 'E', 'E', 'E'],
+		    	['X', 'X', 'E', 'E', 'E', 'E', 'E', 'E', 'E'],
+			 	['X', 'X', 'X', 'E', 'E', 'E', 'E', 'E', 'E'],
+			  	['X', 'X', 'X', 'X', 'E', 'E', 'E', 'E', 'E']]
 		}
-	moves=[[[[8, 8], [7, 8]], 'NE'], [[[8, 8]], 'SW'], [[[8, 8], [7, 7], [6, 6]], 'NW'],[[[8, 4], [7, 4], [6, 4]], 'NE']]
+	moves=[[[[1,0]], 'SW']]
 	values=[]
 	for i,move in enumerate(moves):
 		values.append(valueOfMove(state,move,symbols[state['current']]))
-	choice=max(values)
-	print("choice",choice)
-	for i,elem in enumerate(values) :
-		if elem == choice :
-			move.append(moves[i])
-	print("move",move)
 	#print(moves[move])
 
 
+
+		
 		
