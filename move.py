@@ -1,7 +1,7 @@
 import gamestest as game
 import copy
 
-symbols = ['B', 'W']
+symbols = ['B', 'W']# symbols of players ; 'white marbles' and 'black marbles'
 
 directions = {
 	'NE': (-1,  0),
@@ -10,7 +10,7 @@ directions = {
 	'SE': ( 1,  1),
 	 'E': ( 0,  1),
 	 'W': ( 0, -1)
-}
+}# directions possible on the abalone board
 
 opposite = {
 	'NE': 'SW',
@@ -19,10 +19,10 @@ opposite = {
 	'SE': 'NW',
 	'E': 'W',
 	'W': 'E'
-}
+}# opposite of each directions
 
 
-def getDirectionName(directionTuple):
+def getDirectionName(directionTuple):# return the name of the direction associate with location move 
 	for dirName in directions:
 		if directionTuple == directions[dirName]:
 			return dirName
@@ -60,7 +60,7 @@ def isOnBoard(pos):#is the marble on the board
 		return False
 	return True
 
-def addDirection(pos, direction):
+def addDirection(pos, direction):# moving of one case from the 'pos' location to an other selected by direction 
 	D = directions[direction]
 	return (pos[0] + D[0], pos[1] + D[1])
 
@@ -142,19 +142,19 @@ def moveMarblesTrain(state, marbles, direction):#move more than 1 marble
 
 	return state
 
-def moveMarbles(state, marbles, direction):
+def moveMarbles(state, marbles, direction):#for moving many marbles 
 	for pos in marbles:
 		state = moveOneMarble(state, pos, direction)
 	return state
 
-def sameLine(direction1, direction2):
+def sameLine(direction1, direction2):# check if directions of marbles are the same or opposite to find an alignment 
 	if direction1 == direction2:
 		return True
 	if direction1 == opposite[direction2]:
 		return True
 	return False
 
-def isWinning(state):
+def isWinning(state):# check if there is a winner in the game (if there is 6 marbles of a player out)
 	toCount = opponent(symbols[state['current']])
 	count = 0
 	for line in state['board']:
@@ -163,14 +163,14 @@ def isWinning(state):
 				count += 1
 	return count < 9
 
-def winner(state):
+def winner(state):# return the winner 
 	if isWinning(state,opponent(symbols[state['current']])) :
 		return state['player'][state['current']]
 	if isWinning(state,symbols[state['current']]) :
 		return state['player'][state['current']]
 	return None
 
-def Abalone(players):
+def Abalone(players):# return the board with the players and the current player
 	if len(players) != 2:
 		raise game.BadGameInit('Tic Tac Toe must be played by 2 players')
 
@@ -222,13 +222,13 @@ def Abalone(players):
 
 
 def findMove(grid,marble,symbol):# check all moves (sumito,line) available for a marble (or 2 or 3) of a player 
-	moves=[]
-	alignement=[]
-	possibilities=[]
-	for direction in directions :
+	moves=[]#initialize moves 
+	alignement=[]#initialize alignment
+	possibilities=[]#initialize possibilities
+	for direction in directions :#for each direction
 		#print('test diretion :',direction)
 		find=True
-		e=1        #nombre d'élément de l'alignement
+		e=1        #elements number of the alignment
 		alignement.clear()
 		while find and e<6:           
 			#print("neighbor",(marble[0]+directions[direction][0]*e,marble[1]+directions[direction][1]*e),insidetheboard(grid,(marble[0]+directions[direction][0]*e,marble[1]+directions[direction][1]*e)))
@@ -240,59 +240,59 @@ def findMove(grid,marble,symbol):# check all moves (sumito,line) available for a
 				if possibilitie == alignement :	
 					#print(possibilitie)
 					#print(alignement)	
-					m1 = [marble[0],marble[1]]
-					m2 = [marble[0]+directions[direction][0],marble[1]+directions[direction][1]]
-					m3 = [marble[0]+directions[direction][0]*2,marble[1]+directions[direction][1]*2]							
+					m1 = [marble[0],marble[1]]#marble1
+					m2 = [marble[0]+directions[direction][0],marble[1]+directions[direction][1]]#marble2, next to marble1
+					m3 = [marble[0]+directions[direction][0]*2,marble[1]+directions[direction][1]*2]#marble3, next to marble2							
 					find=False
 										
-					if i == 0: 
+					if i == 0: #if the next position after m1 is empty
 						#print("0")
 						moves.append([[m1],direction])				
 					#if i == 1:
 						#print("1")
-					if i == 2: 
+					if i == 2: #if the next position after m1 is an m2 allie marble and if the next possible after m2 is empty
 						#print("2")
 						moves.append([[m1,m2],direction])
 						sumito2m(grid,m1,m2,moves,direction)
-					if i==3:
+					if i==3:#if the next position after m1 is an m2 allie marble and if the next possible after m2 is outside the board
 						#print("3")
 						sumito2m(grid,m1,m2,moves,direction)
-					if i == 4:
+					if i == 4:#if the next position after m1 is an m2 allie marble and if the next position after m2 is an m3 allie marble and if the next possible after m2 is empty
 						#print("4")
 						moves.append([[m1,m2,m3],direction])
 						sumito3m(grid,m1,m2,m3,moves,direction)
 							
-					if i == 5:
+					if i == 5:#if the next position after m1 is an m2 allie marble, if the next position after m2 is an m3 allie marble and  if the next possible after m3 is outside the board
 						#print("5")
 						sumito3m(grid,m1,m2,m3,moves,direction)
-					if (i == 6):
+					if (i == 6):#if the next position after m1 is an m2 allie marble, if the next position after m2 is an m3 opponent marble and  if the next possible after m3 is empty
 						moves.append([[m1,m2],direction])
 						sumito2m(grid,m1,m2,moves,direction)
 						#print("6")
-					if i == 7:
+					if i == 7:#if the next position after m1 is an m2 allie marble, if the next position after m2 is an m3 opponent marble and  if the next possible after m3 is outside the board
 						#print("7")
 						moves.append([[m1,m2],direction])
 						sumito2m(grid,m1,m2,moves,direction)	
 								
-					if i == 8:
+					if i == 8:#if the next position after m1 is an m2 opponent marble, if the next position after m2 is an m3 opponent marble 
 						#print("8")
 						sumito2m(grid,m1,m2,moves,direction)
-					if i == 9:
+					if i == 9:#if the next position after m1 is an m2 allie marble, if the next position after m2 is an m3 allie marble and if the next position after m3 is an m4 allie marble
 						#print("9")
 						sumito3m(grid,m1,m2,m3,moves,direction)
-					if i == 10 or i==11:#possible sumito
+					if i == 10 or i==11:#if the next position after m1 is an m2 allie marble, if the next position after m2 is an m3 allie marble and if the next position after m3 is an m4 opponent marble and next location is empty or outside
 						#print("10 et 11")
 						moves.append([[m1,m2,m3],direction])
 						sumito3m(grid,m1,m2,m3,moves,direction)
  
 						#print("ok")
 
-					if i == 12 or i==13:
+					if i == 12 or i==13:#if the next position after m1 is an m2 allie marble, if the next position after m2 is an m3 allie marble, if the next position after m3 is an m4 opponent marble,if the next position after m4 is an m5 opponent marble  and next location is empty or outside
 						#print("12 et 13")
 						moves.append([[m1,m2,m3],direction])
 						sumito3m(grid,m1,m2,m3,moves,direction)
 						
-					if i == 14:
+					if i == 14:#if the next position after m1 is an m2 allie marble, if the next position after m2 is an m3 allie marble, if the next position after m3 is an m4 opponent marble,if the next position after m4 is an m5 opponent marble and if the next position after m5 is an m6 opponent marble  
 						#print("14")
 						sumito3m(grid,m1,m2,m3,moves,direction)
 						pass
@@ -303,8 +303,6 @@ def findMove(grid,marble,symbol):# check all moves (sumito,line) available for a
 
 			e=e+1   
 	return moves
-
-#manque les mouvements en paralleles
 
 			
 def insidetheboard(grid,marble):#check if the marble is inside the board , otherwise , it returns 'X' for outside location
@@ -347,8 +345,8 @@ def getPossibilities(symbol):#return all movement possible on abalone board acco
 
 def sumito3m(grid,m1,m2,m3,moves,direction):# function for sumito of 3 marbles
 	directionlist = []
-	for elem in [m1,m2,m3]:#pour chaque position
-		for eachdirection in directions :#pour chaque direction
+	for elem in [m1,m2,m3]:#for each marble
+		for eachdirection in directions :#for each direction
 			#print(direction)
 			if eachdirection == direction or eachdirection == opposite[direction]:
 				pass
@@ -366,8 +364,8 @@ def sumito3m(grid,m1,m2,m3,moves,direction):# function for sumito of 3 marbles
 
 def sumito2m(grid,m1,m2,moves,direction):# function for sumito of 2 marbles
 	directionlist = []
-	for elem in [m1,m2]:#pour chaque position
-		for eachdirection in directions :#pour chaque direction
+	for elem in [m1,m2]:#for each marble
+		for eachdirection in directions :#for each direction
 			#print(direction)
 			if eachdirection == direction or eachdirection == opposite[direction]:
 				pass
@@ -377,8 +375,8 @@ def sumito2m(grid,m1,m2,moves,direction):# function for sumito of 2 marbles
 						directionlist.append(eachdirection)
 						#print(directionlist)
 	#print("longeur", len(directions))
-	for i in directions:
-		if directionlist.count(i) == 2 :
+	for i in directions:# for each direction
+		if directionlist.count(i) == 2 :# if there is two times the same direction -> sumito available
 			moves.append([[m1,m2],i])
 			pass	
 	directionlist.clear()

@@ -11,7 +11,7 @@ directions = {
 	 'W': ( 0, -1)
 }
 
-def getMarbleLocation(state,symbol):
+def getMarbleLocation(state,symbol):#return the location of a marble 
 	locations=[] 
 	for i,line in enumerate(state['board']):
 		for e,column in enumerate(line) :
@@ -20,7 +20,7 @@ def getMarbleLocation(state,symbol):
 	return locations
 
 
-def marbleCount(state,symbol):
+def marbleCount(state,symbol):# count the total number of white marbles or black marbles on the board 
 	result=getMarbleLocation(state,symbol)
 	return len(result)
 
