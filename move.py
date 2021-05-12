@@ -304,8 +304,6 @@ def findMove(grid,marble,symbol):# check all moves (sumito,line) available for a
 			e=e+1   
 	return moves
 
-#manque les mouvements en paralleles
-
 			
 def insidetheboard(grid,marble):#check if the marble is inside the board , otherwise , it returns 'X' for outside location
 	li,ci = marble
