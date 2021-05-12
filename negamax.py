@@ -361,6 +361,60 @@ def negamaxWithPruningLimitedDepth(state, player, depth=4, alpha=float('-inf'), 
 			break
 	return -theValue, theMove
 
+from copy import deepcopy
+
+global childs
+
+childs=[[]]
+def climb(state,depth):
+	player=0
+	currentDepth=0
+	movesValue=evaluateMove(state)
+	for i,move in enumerate(movesValue):
+		childs[0].append(move)
+	#for child in childs[0]:
+	#	print(child)
+	while currentDepth<depth:
+		childs.append([])
+		currentDepth=currentDepth+1
+		print(len(childs))
+		for previousState in childs[currentDepth-1] :																#je parcours tout les �tats � la profondeur currentDepth
+			childs[currentDepth-1].append([])
+			print(previousState)
+			for indexState,newStateToEvaluate in enumerate(moves(previousState[0])):				#je calcule et �value tout les �tats possible � currentDepth +1
+				movesValue=evaluateMove(childs[currentDepth-1][0][indexState])
+	
+				for indexState,newStateEvaluated in enumerate(movesValue):							#j'ajoute � la profondeur currentDepth + 1 tout les �tats possibles
+					childs[currentDepth][indexState]=newStateEvaluated
+	
+
+def start(state,depth):
+	depth=0
+	player=0
+	movesValue=evaluateMove(state,player)
+	for i,move in enumerate(movesValue):
+		tree[i]=move
+	return tree
+
+def evaluateMove(state):
+	allMoves=[]
+	for move in moves(state):
+		valuesPreviousState=efficiency.valueOfState(state)
+		newState={"players":deepcopy(state["players"]),"current":deepcopy(state["current"]),"board":deepcopy(state['board'])}
+		newState=apply(newState,move)
+		valuesNextState=efficiency.valueOfState(newState)
+		value = efficiency.diff(valuesPreviousState,valuesNextState)
+		allMoves.append([newState,move,value])
+	return allMoves
+
+def getAllPieces(state,symbol):
+	locations=[] 
+	for i,line in enumerate(state['board']):
+		for e,column in enumerate(line) :
+			if (state['board'][i][e]==symbol):
+				locations.append((i,e))
+	return locations
+
 if __name__=='__main__':
 	state={'players': ['toto2', 'toto1'],
 			'current': 0,
@@ -374,76 +428,29 @@ if __name__=='__main__':
 			 	['X', 'X', 'X', 'B', 'B', 'B', 'B', 'B', 'B'],
 			  	['X', 'X', 'X', 'X', 'B', 'B', 'B', 'B', 'B']]
 		}
-	result=MinMax(state,3)
-	print(result)
 
+	result=climb(state,2)
+	for i,child in enumerate(result):
+		print("######################################################################################",i)
+		print(child)
 ################################################################################################
 
 
 def evaluate(state):
 	return False 
 
-def getAllPieces(state,symbol):
-	locations=[] 
-	for i,line in enumerate(state['board']):
-		for e,column in enumerate(line) :
-			if (state['board'][i][e]==symbol):
-				locations.append((i,e))
-	return locations
+
 
 def aiMove(state,marbles,move):
 	return False
 
-from copy import deepcopy
-
-global depth
-global tree
-
-def climb(state,depth):
-	depth=0
-	player=0
-	while depth<3:
-		movesValue=evaluateMove(state,player)
-		tree.append(movesValues)
-		currentDepth=currentDepth+1
-		for move in movesValue :
-			climb(move[0],depth)
 
 
-def evaluateMove(state,player):
-	for move in getAllMoves(state, currentPlayer):
-		valuesPreviousState=efficiency.valueOfState(state)
-		newState={"player":deepcopy(state["player"]),"current":deepcopy(state["current"]),"board":deepcopy(state['board'])}
-		newState=apply(newState,move)
-		valuesNextState=efficiency.valueOfState(newState)
-		value = efficiency.diff(valuesPreviousState,valuesNextState)
-		allMoves.append([newState,move,value])
-	return allMoves
-
-
-
-
-#def minimax(state,maxPlayer):
-#
-#		return maxEval, bestmove
-#	else:
-#		minEval=float('inf')
-#		best_move = None 
-#		for move in getAllMoves(state, currentPlayer,game):
-#			evaluation = minimax(move,depth-1,True,game)[0]
-#			minEval=min(inEval,evaluation)
-#			if minEval==evaluation:
-#				bestMove=move
-#		return maxEval, bestmove
-
-def getAllMoves(state, currentPlayer):
-	marbles = getMarbleLocation(state,symbols[state['current']])
-	allMoves=[]
-	for marble in marbles:
-		movesMarble = mv.findMove(state['board'],marble,symbols[state['current']])
-		for move in movesMarble:
-			newState={"player":deepcopy(state["player"]),"current":deepcopy(state["current"]),"board":deepcopy(state['board'])}
-			newBoard=apply(newState,move)
-			allMoves.append(newState,move)
-	return allMoves
-
+	#tree[depth]=movesValues
+#	currentDepth=currentDepth+1
+#	while depth<3:
+#		for move in movesValue :
+#			climb(move[0],depth)
+#		movesValue=evaluateMove(state,player)
+#		tree[depth]=movesValues
+#		currentDepth=currentDepth+1
