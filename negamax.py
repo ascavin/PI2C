@@ -1,9 +1,11 @@
 from collections import defaultdict
 import random
 import time 
-import move as find
+import move
 import find_move as rs
 import efficiency
+
+symbols = ['B', 'W']
 
 state = [ 
     None,None,None,
@@ -20,23 +22,12 @@ lines = [
 	[0, 4, 8],
 	[2, 4, 6]
 ]
-symbols = ['B', 'W']
 
-def isWinning(state,player):
-	toCount = player
-	count = 0
-	for line in state['board']:
-		for case in line:
-			if case == toCount:
-				count += 1
-	if count<9:
-		True
-	return False
 
 def winner(state):
-	if isWinning(state,find.opponent(symbols[state['current']])) :
+	if move.isWinning(state,move.opponent(symbols[state['current']])) :
 		return state['player'][state['current']]
-	if isWinning(state,symbols[state['current']]) :
+	if move.isWinning(state,symbols[state['current']]) :
 		return state['player'][state['current']]
 	return None
 	 
@@ -76,7 +67,7 @@ def moves(state):
 	return allMoves
 
 def apply(state, move):            #to change state of grid use apply
-	res=find.moveMarblesTrain(state,move[0],move[1])
+	res=move.moveMarblesTrain(state,move[0],move[1])
 	return res
 
 #but : partir de l'etat gagnant du joueur et remonter jusqu'a l'etat initial du jeu pour pouvoir selectionner
@@ -88,7 +79,7 @@ def MAX(state, player):#allie
 
 	theValue, theMove = float('-inf'), None
 	for move in moves(state):#parmis tout les mouvements possibles au départ 
-		print("move",move)
+		#print("move",move)
 		newState = apply(state, move) # jouer chaque mouvement et garder en memoire le mvt joue 
 		value, _ = MIN(newState, player)# au tour du joueur adverse de jouer (calcul des coups possibles du joueur adverses et retourne son meilleur coup pour gagner)
 		if value > theValue:
@@ -139,7 +130,7 @@ def negamaxWithPruningIterativeDeepening(state, player, timeout=0.2):
 		over = gameOver(state)
 		if over or depth == 0:		
 			res = -heuristic(state, player), None, over
-			print(res)
+			#print(res)
 
 		else:
 			theValue, theMove, theOver = float('-inf'), None, True
@@ -165,19 +156,19 @@ def negamaxWithPruningIterativeDeepening(state, player, timeout=0.2):
 		value, move, over = cachedNegamaxWithPruningLimitedDepth(state, player, depth)
 		depth += 1
 
-	print(value, move)
+	#print(value, move)
 	return value, move
 
 def run(state):
 	result=[]
 	allMoves=moves(state)
 	newStates=[]
-	M=find.opponent(symbols[state['current']])
+	M=move.opponent(symbols[state['current']])
 	for move in allMoves:
-		print(move)
+		#print(move)
 		previous=0
 		nextstep=0
-		newState=find.moveMarblesTrain(state,move[0],move[1])
+		newState=move.moveMarblesTrain(state,move[0],move[1])
 		for i,line in enumerate(state['board']):
 			for e,column in enumerate(line):
 				if state['board'][i][e]==M:
@@ -193,10 +184,10 @@ def run(state):
 			return result
 		else :
 			newStates.append(newState)
-	print("-------------")	
+	#print("-------------")	
 	nextMove=random.sample(allMoves,1)
-	print(nextMove)
-	print("next",nextMove)
+	#print(nextMove)
+	#print("next",nextMove)
 	result={"response": "move",
 	"move": {'marbles':nextMove[0][0],'direction':nextMove[0][1]},
 	"message": "pass"}
@@ -219,7 +210,7 @@ def random1(state):
 		for elem in moves_marble:		
 			allMoves.append(elem)
 	nextMove=random.sample(allMoves,1)
-	print(nextMove)
+	#print(nextMove)
 	result={"response": "move",
 	"move": {'marbles':nextMove[0][0],'direction':nextMove[0][1]},
 	"message": "pass"}
@@ -250,7 +241,7 @@ def think(state):
 		if value == choice :
 			moves.append(allMoves[i])
 	nextMove=random.sample(moves,1)
-	print(nextMove)
+	#print(nextMove)
 	result={"response": "move",
 	"move": {'marbles':nextMove[0][0],'direction':nextMove[0][1]},
 	"message": "pass"}
@@ -273,13 +264,13 @@ def bin(state):
 		moves_marble = rs.findMove(state['board'],marble,symbols[state['current']])
 		for elem in moves_marble:		
 			allMoves.append(elem)
-	print(allMoves)
+	#print(allMoves)
 	M=symbols[state['current']]
 	goodMoves=[]
 	for move in allMoves:
 		previous=0
 		nextstep=0
-		newState=find.moveMarblesTrain(state,move[0],move[1])
+		newState=move.moveMarblesTrain(state,move[0],move[1])
 		for i,line in enumerate(state['board']):
 			for e,column in enumerate(line):
 				if state['board'][i][e]==M:
@@ -290,9 +281,9 @@ def bin(state):
 					nextstep=nextstep+1
 		if nextstep==previous:
 			goodMoves.append(move)
-	print(goodMoves)	
+	#print(goodMoves)	
 	nextMove=random.sample(goodMoves,1)
-	print("next",nextMove)
+	#print("next",nextMove)
 	result={"response": "move",
 	"move": {'marbles':nextMove[0][0],'direction':nextMove[0][1]},
 	"message": "pass"}
@@ -355,7 +346,7 @@ def possibilities(state):
 		
 if (__name__=="__main__"):
 	
-	state, next = find.Abalone(["jojo","jack"])
+	state, next = move.Abalone(["jojo","jack"])
 
 	def show(state):
 		print('\n'.join([' '.join(line) for line in state]))

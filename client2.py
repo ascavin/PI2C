@@ -23,7 +23,7 @@ class game:
         subscription=True
         while subscription:
             data = receiveJSON(server_socket)
-            print(data)
+            #print(data)
             if (data['response']=="ok"):
                 subscription=False  
                 return True
