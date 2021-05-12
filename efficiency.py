@@ -170,7 +170,21 @@ def valueOfState(state):
 	alliesCrownSecond = len(findMarbleCrownSecond(state,symbols[state['current']]))
 	return {"advantage":advantage,"opponentNearBorder":opponentNearBorder,"opponentCrownSecond":opponentCrownSecond,"alliesCrownCenter":alliesCrownCenter,"alliesNearBorder":alliesNearBorder,"alliesCrownSecond":alliesCrownSecond}
 	
-def diff(previousState,nexState):
+def diff(previousState,nextState):
+	previousAdvantage=previousState["advantage"]
+	previousOpponentNearBorder=previousState["opponentNearBorder"]
+	previousOpponentCrownSecond =previousState["opponentCrownSecond"]
+	previousAlliesCrownCenter=previousState["alliesCrownCenter"]
+	previousAlliesNearBorder=previousState["alliesNearBorder"]
+	previousAlliesCrownSecond=previousState["alliesCrownSecond"]
+	nextAdvantage=nextState["advantage"]
+	nextOpponentNearBorder=nextState["opponentNearBorder"]
+	nextOpponentCrownSecond =nextState["opponentCrownSecond"]
+	nextAlliesCrownCenter=nextState["alliesCrownCenter"]
+	nextAlliesNearBorder=nextState["alliesNearBorder"]
+	nextAlliesCrownSecond=nextState["alliesCrownSecond"]
+	value=0
+	diff=0
 	if previousAdvantage>nextAdvantage:
 		diff = previousAdvantage - nextAdvantage
 		value = value+diff*1000000
