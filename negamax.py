@@ -2,7 +2,6 @@ from collections import defaultdict
 import random
 import time 
 import move as find
-import find_move as rs
 import efficiency
 
 state = [ 
@@ -53,7 +52,7 @@ def moves(state):
 	allMoves=[]
 	moves_marble=[]
 	for marble in marbles:
-		moves_marble = rs.findMove(state['board'],marble,symbols[state['current']])
+		moves_marble = find.findMove(state['board'],marble,symbols[state['current']])
 		for elem in moves_marble:		
 			allMoves.append(elem)
 	return allMoves
@@ -165,7 +164,7 @@ def random1(state):
 	allMoves=[]
 	moves_marble=[]
 	for marble in marbles:
-		moves_marble = rs.findMove(state['board'],marble,symbols[state['current']])
+		moves_marble = find.findMove(state['board'],marble,symbols[state['current']])
 		for elem in moves_marble:		
 			allMoves.append(elem)
 	nextMove=random.sample(allMoves,1)
@@ -188,7 +187,7 @@ def think(state):
 	allMoves=[]
 	moves_marble=[]
 	for marble in marbles:
-		moves_marble = rs.findMove(state['board'],marble,symbols[state['current']])
+		moves_marble = find.findMove(state['board'],marble,symbols[state['current']])
 		for elem in moves_marble:		
 			allMoves.append(elem)
 	values=[]
@@ -220,7 +219,7 @@ def bin(state):
 	allMoves=[]
 	moves_marble=[]
 	for marble in marbles:
-		moves_marble = rs.findMove(state['board'],marble,symbols[state['current']])
+		moves_marble = find.findMove(state['board'],marble,symbols[state['current']])
 		for elem in moves_marble:		
 			allMoves.append(elem)
 	print(allMoves)
@@ -291,7 +290,7 @@ def possibilities(state):
 	allMoves=[]
 	moves_marble=[]
 	for marble in marbles:
-		moves_marble = rs.findMove(state['board'],marble,symbols[state['current']])
+		moves_marble = find.findMove(state['board'],marble,symbols[state['current']])
 		for elem in moves_marble:		
 			allMoves.append(elem)
 	result=[]
@@ -441,7 +440,7 @@ def getAllMoves(state, currentPlayer):
 	marbles = getMarbleLocation(state,symbols[state['current']])
 	allMoves=[]
 	for marble in marbles:
-		movesMarble = rs.findMove(state['board'],marble,symbols[state['current']])
+		movesMarble = find.findMove(state['board'],marble,symbols[state['current']])
 		for move in movesMarble:
 			newState={"player":deepcopy(state["player"]),"current":deepcopy(state["current"]),"board":deepcopy(state['board'])}
 			newBoard=apply(newState,move)

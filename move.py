@@ -226,6 +226,193 @@ def Abalone(players):
 	return state, next
 
 
+def findMove(grid,marble,symbol):
+	moves=[]
+	alignement=[]
+	possibilities=[]
+	for direction in directions :
+		#print('test diretion :',direction)
+		find=True
+		e=1        #nombre d'élément de l'alignement
+		alignement.clear()
+		while find and e<6:           
+			#print("neighbor",(marble[0]+directions[direction][0]*e,marble[1]+directions[direction][1]*e),neighbor(grid,(marble[0]+directions[direction][0]*e,marble[1]+directions[direction][1]*e)))
+			#print(alignement.append(neighbor(grid,(marble[0]+directions[direction][0]*e,marble[1]+directions[direction][1]*e))))
+			alignement.append(neighbor(grid,(marble[0]+directions[direction][0]*e,marble[1]+directions[direction][1]*e)))
+			possibilities=getPossibilities(symbol)
+			#print(alignement)
+			for i,possibilitie in enumerate(possibilities):
+					 
+				#print("i",i) 
+				# if i == 7:
+				# 	print(possibilitie)   
+				# 	print("-------------------------")
+
+				#if direction =='W':			
+				#print("possibilitie",possibilitie)
+				#print("alignement",alignement,"possiblities",possibilitie,possibilitie == alignement) 
+				if possibilitie == alignement :	
+					#print(possibilitie)
+					#print(alignement)	
+					m1 = [marble[0],marble[1]]
+					m2 = [marble[0]+directions[direction][0],marble[1]+directions[direction][1]]
+					m3 = [marble[0]+directions[direction][0]*2,marble[1]+directions[direction][1]*2]							
+					find=False
+										
+					if i == 0: 
+						#print("0")
+						moves.append([[m1],direction])				
+					#if i == 1:
+						#print("1")
+					if i == 2: 
+						#print("2")
+						moves.append([[m1,m2],direction])
+						sumito2m(grid,m1,m2,moves,direction)
+					if i==3:
+						#print("3")
+						sumito2m(grid,m1,m2,moves,direction)
+					if i == 4:
+						#print("4")
+						moves.append([[m1,m2,m3],direction])
+						sumito3m(grid,m1,m2,m3,moves,direction)
+							
+					if i == 5:
+						#print("5")
+						sumito3m(grid,m1,m2,m3,moves,direction)
+					if (i == 6):
+						moves.append([[m1,m2],direction])
+						sumito2m(grid,m1,m2,moves,direction)
+						#print("6")
+					if i == 7:
+						#print("7")
+						moves.append([[m1,m2],direction])
+						sumito2m(grid,m1,m2,moves,direction)	
+								
+					if i == 8:
+						#print("8")
+						sumito2m(grid,m1,m2,moves,direction)
+					if i == 9:
+						#print("9")
+						sumito3m(grid,m1,m2,m3,moves,direction)
+					if i == 10 or i==11:#possible sumito
+						#print("10 et 11")
+						moves.append([[m1,m2,m3],direction])
+						sumito3m(grid,m1,m2,m3,moves,direction)
+ 
+						#print("ok")
+
+					if i == 12 or i==13:
+						#print("12 et 13")
+						moves.append([[m1,m2,m3],direction])
+						sumito3m(grid,m1,m2,m3,moves,direction)
+						
+					if i == 14:
+						#print("14")
+						sumito3m(grid,m1,m2,m3,moves,direction)
+						pass
+
+
+					break
+
+
+			e=e+1   
+	return moves
+
+#manque les mouvements en paralleles
+
+			
+def neighbor(grid,marble):
+	li,ci = marble
+	#print(marble)
+	if  (0<=li<=4 and 0<=ci<=4) or (5<=li<=8 and 5<=ci<=8) or (5<=li<=8 and 0<=ci<=4 and not grid[li][ci] == 'X') or (0<=li<=4 and 5<=ci<=8 and not grid[li][ci] == 'X'):
+		res=grid[marble[0]][marble[1]]
+
+		return res
+	else : 
+		return 'X'
+
+def isonboard(grid,marble):
+	li,ci = marble
+	if  (0<=li<=4 and 0<=ci<=4) or (5<=li<=8 and 5<=ci<=8) or (5<=li<=8 and 0<=ci<=4 and not grid[li][ci] == 'X') or (0<=li<=4 and 5<=ci<=8 and not grid[li][ci] == 'X'):
+		return True
+	else :
+		return False 
+
+def getPossibilities(symbol):         
+	possibilities =[
+					['E'],                 				#:True,    #0    
+					['X'],								#:False		#1
+					[symbol,'E'],            			 #:True,    #2    possible sumito
+					[symbol,'X'],						#False,		#3		possible sumito
+					[symbol,symbol,'E'],         			#:True,    #4    possible sumito
+					[symbol,symbol,'X'],					#False,		#5	possible sumito
+					[symbol,opponent(symbol),'E'],        			#:True,    #6    #je sors une bille adverse		possible sumito
+					[symbol,opponent(symbol),'X'],					#:True 		#7														possible sumito
+					[symbol,opponent(symbol),opponent(symbol)],        					#:False,   #8    #je ne peux pas bouger			possible sumito
+					[symbol,symbol,symbol],        					 					#:False,   #9    #je ne peux pas bouger			possible sumito
+					[symbol,symbol,opponent(symbol),'E'],     							#:True,    #10    #je sors une bille adverse	possible sumito
+					[symbol,symbol,opponent(symbol),'X'],								#:True, 	#11									possible sumito
+					[symbol,symbol,opponent(symbol),opponent(symbol),'E'], 				#:True,    #12    #je sors une bille adverse	possible sumito
+					[symbol,symbol,opponent(symbol),opponent(symbol),'X'],				#:True 		#13									possible sumito
+					[symbol,symbol,opponent(symbol),opponent(symbol),opponent(symbol)], #:False,   #14    #je ne peux pas bouger		possible sumito
+					]
+
+					#['E'],                 			#:True		#0
+					#['X'] or out 						#: False	#1
+					#['B','E'],             			#:True		#2
+					#['B','X'] or ['B',out] 			#: False	#3
+					#['B','B','E'],         				#:True		#4
+					#['B','B','X'] or ['B','B',out] 		#: False	#5
+					#['B','W','E'],         				#:True		#6
+					#['B','W','X'], or  ['B','W',out]   	#:True		#7
+					#['B','W','W'],         				#:False		#8
+					#['B','B','B'],         				#:False		#9
+					#['B','B','W','E'],     					#:True		#10
+					#['B','B','W','X'] or ['B','B','W',out]		#:True		#11
+					#['B','B','W','W','E'], 						#:True		#12
+					#['B','B','W','W','X'] or ['B','B','W','W',out]	#:True		#13
+					#['B','B','W','W','W'], 						#:False		#14
+	return possibilities
+
+def sumito3m(grid,m1,m2,m3,moves,direction):
+	directionlist = []
+	for elem in [m1,m2,m3]:#pour chaque position
+		for eachdirection in directions :#pour chaque direction
+			#print(direction)
+			if eachdirection == direction or eachdirection == opposite[direction]:
+				pass
+			else:# directions de lalignement exclu
+				if isonboard(grid,addDirection(elem, eachdirection)):
+					if getStatusgrid(grid,addDirection(elem, eachdirection)) == 'E':
+						directionlist.append(eachdirection)
+						#print(directionlist)
+	for i in directions:
+		if directionlist.count(i) == 3 :
+			moves.append([[m1,m2,m3],i])
+			pass	
+	directionlist.clear()
+	return None
+
+def sumito2m(grid,m1,m2,moves,direction):
+	directionlist = []
+	for elem in [m1,m2]:#pour chaque position
+		for eachdirection in directions :#pour chaque direction
+			#print(direction)
+			if eachdirection == direction or eachdirection == opposite[direction]:
+				pass
+			else:# directions de lalignement exclu
+				if isonboard(grid,addDirection(elem, eachdirection)):
+					if getStatusgrid(grid,addDirection(elem, eachdirection)) == 'E':
+						directionlist.append(eachdirection)
+						#print(directionlist)
+	#print("longeur", len(directions))
+	for i in directions:
+		if directionlist.count(i) == 2 :
+			moves.append([[m1,m2],i])
+			pass	
+	directionlist.clear()
+	return None
+
 
 if __name__=='__main__':
 	def show(state):

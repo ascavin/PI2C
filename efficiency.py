@@ -40,7 +40,7 @@ def countNeighbor(state,symbol):
 	for marble in marbles:
 		for direction in directions:
 			position=(marble[0]+directions[direction][0],marble[0]+directions[direction][1])
-			if find_move.neighbor(state['board'],position)==symbol:
+			if find.neighbor(state['board'],position)==symbol:
 				if neighbor(state['board'],position)==symbol:
 					neighbors=neighbors+1
 	return neighbors
