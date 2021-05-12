@@ -32,7 +32,8 @@ Python
 ## **3. AI strategy :**  
 - *First, Ai take the location advantage ! :* all the marbles go to the center of the board and stay together as possible as they can
 
-- *Second, Ai push the marbles ! :* the Ai try to push the marble near the boarderline of the board,from the center to the second crown and to the last crown(boarderline)
+- *Second, Ai push the marbles ! :* the Ai try to push the marble near the boarderline of the board,
+              from the center to the second crown and form the second crown to the last crown(boarderline)
 
 - *Thirdly, Ai attack ! :* The Ai try to push out the opponent marbles as soon as possible even if there is other moves available
 
