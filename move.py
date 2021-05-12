@@ -50,7 +50,7 @@ def checkMarbles(state, move):
 		if getColor(state, pos) != color:
 			raise game.BadMove('Marble {} is not yours'.format(pos))
 		
-def isOnBoard(pos):
+def isOnBoard(pos):#is the marble on the board
 	l, c = pos
 	if min(pos) < 0:
 		return False
@@ -60,21 +60,11 @@ def isOnBoard(pos):
 		return False
 	return True
 
-def isnotOnBoard(pos):
-	l, c = pos
-	if min(pos) < 0:
-		return True
-	if max(pos) > 8:
-		return True
-	if abs(c-l) >= 5:
-		return True
-	return False
-
 def addDirection(pos, direction):
 	D = directions[direction]
 	return (pos[0] + D[0], pos[1] + D[1])
 
-def moveOneMarble(state, pos, direction):
+def moveOneMarble(state, pos, direction):# is for moving a marble 
 	li, ci = pos
 	ld, cd = addDirection(pos, direction)
 	color = getColor(state, pos)
@@ -99,52 +89,37 @@ def moveOneMarble(state, pos, direction):
 
 	return res
 
-def opponent(color):
+def opponent(color):# return the symbol of the opponent player
 	if color == 'W':
 		return 'B'
 	return 'W'
 
-def getStatus(state, pos):
+def getStatus(state, pos):# get the status of a case on the board and return 'E' or 'W' or 'B'
 	if not isOnBoard(pos):
 		raise game.BadMove('The position {} is outside the board'.format(pos))
 	return state['board'][pos[0]][pos[1]]
 
-def getStatusgrid(state, pos):
+def getStatusgrid(state, pos):# get the status of a case on the board and return 'E' or 'W' or 'B' directly on the grid
 	if not isOnBoard(pos):
 		raise game.BadMove('The position {} is outside the board'.format(pos))
 	return state[pos[0]][pos[1]]
 
-def isEmpty(state, pos):
+def isEmpty(state, pos):#check if a case is empty
 	return getStatus(state, pos) == 'E'
 
-def isnotEmpty(state, pos):
-	return getStatus(state, pos) == 'W' or getStatus(state, pos) == 'B'
-
-def isFree(state, pos):
+def isFree(state, pos):#check if a case is available
 	if isOnBoard(pos):
 		return isEmpty(state, pos)
 	else:
 		return True
 
-def isout(state, pos):
-	if isnotOnBoard(pos) or getStatus(state, pos) == 'X':
-		return True
-	else:
-		return False
-
-def isboardFree(state, pos):
-	if isOnBoard(pos):
-		return isnotEmpty(state, pos)
-	else:
-		return False
-
-def getColor(state, pos):
+def getColor(state, pos):#return the color of the player on the 'pos' location
 	status = getStatus(state, pos)
 	if status == 'W' or status == 'B':
 		return status
 	raise game.BadMove('There is no marble here {}'.format(pos))
 
-def moveMarblesTrain(state, marbles, direction):
+def moveMarblesTrain(state, marbles, direction):#move more than 1 marble
 	if direction in ['E', 'SE', 'SW']:
 		marbles = sorted(marbles, key=lambda L: -(L[0]*9+L[1]))
 	else:
@@ -188,6 +163,12 @@ def isWinning(state):
 				count += 1
 	return count < 9
 
+def winner(state):
+	if isWinning(state,opponent(symbols[state['current']])) :
+		return state['player'][state['current']]
+	if isWinning(state,symbols[state['current']]) :
+		return state['player'][state['current']]
+	return None
 
 def Abalone(players):
 	if len(players) != 2:
@@ -208,11 +189,6 @@ def Abalone(players):
 			['X', 'X', 'X', 'X', 'B', 'B', 'B', 'B', 'B']
 		]
 	}
-
-	# move = {
-	# 	'marbles': [],
-	# 	'direction': ''
-	# }
 
 	def next(state, move):
 		if move is None:
@@ -245,610 +221,168 @@ def Abalone(players):
 	return state, next
 
 
+def findMove(grid,marble,symbol):# check all moves (sumito,line) available for a marble (or 2 or 3) of a player 
+	moves=[]
+	alignement=[]
+	possibilities=[]
+	for direction in directions :
+		#print('test diretion :',direction)
+		find=True
+		e=1        #nombre d'élément de l'alignement
+		alignement.clear()
+		while find and e<6:           
+			#print("neighbor",(marble[0]+directions[direction][0]*e,marble[1]+directions[direction][1]*e),insidetheboard(grid,(marble[0]+directions[direction][0]*e,marble[1]+directions[direction][1]*e)))
+			#print(alignement.append(insidetheboard(grid,(marble[0]+directions[direction][0]*e,marble[1]+directions[direction][1]*e))))
+			alignement.append(insidetheboard(grid,(marble[0]+directions[direction][0]*e,marble[1]+directions[direction][1]*e)))
+			possibilities=getPossibilities(symbol)
+			#print(alignement)
+			for i,possibilitie in enumerate(possibilities):
+				if possibilitie == alignement :	
+					#print(possibilitie)
+					#print(alignement)	
+					m1 = [marble[0],marble[1]]
+					m2 = [marble[0]+directions[direction][0],marble[1]+directions[direction][1]]
+					m3 = [marble[0]+directions[direction][0]*2,marble[1]+directions[direction][1]*2]							
+					find=False
+										
+					if i == 0: 
+						#print("0")
+						moves.append([[m1],direction])				
+					#if i == 1:
+						#print("1")
+					if i == 2: 
+						#print("2")
+						moves.append([[m1,m2],direction])
+						sumito2m(grid,m1,m2,moves,direction)
+					if i==3:
+						#print("3")
+						sumito2m(grid,m1,m2,moves,direction)
+					if i == 4:
+						#print("4")
+						moves.append([[m1,m2,m3],direction])
+						sumito3m(grid,m1,m2,m3,moves,direction)
+							
+					if i == 5:
+						#print("5")
+						sumito3m(grid,m1,m2,m3,moves,direction)
+					if (i == 6):
+						moves.append([[m1,m2],direction])
+						sumito2m(grid,m1,m2,moves,direction)
+						#print("6")
+					if i == 7:
+						#print("7")
+						moves.append([[m1,m2],direction])
+						sumito2m(grid,m1,m2,moves,direction)	
+								
+					if i == 8:
+						#print("8")
+						sumito2m(grid,m1,m2,moves,direction)
+					if i == 9:
+						#print("9")
+						sumito3m(grid,m1,m2,m3,moves,direction)
+					if i == 10 or i==11:#possible sumito
+						#print("10 et 11")
+						moves.append([[m1,m2,m3],direction])
+						sumito3m(grid,m1,m2,m3,moves,direction)
+ 
+						#print("ok")
 
-def findNeighbor(grid,location,symbol,varstate=False):
-	neighbors=[]
-	isneigbour = False
-	dictneighbour = {}
-	if (location[1]<=7) :
-		if (grid[location[0]][location[1]+1]==symbol):  #E
-			neighbors.append((location[0],location[1]+1,'E'))
-			dictneighbour["E"] = (location[0],location[1]+1)
-			isneigbour = True
-	if (location[1]>=1):
-		if (grid[location[0]][location[1]-1]==symbol):  #W
-			neighbors.append((location[0],location[1]-1,'W'))
-			dictneighbour["W"] = (location[0],location[1]-1)
-			isneigbour = True
-	if (location[1]<=7 and location[0]<=7):
-		if (grid[location[0]+1][location[1]+1]==symbol):  #SE
-			neighbors.append((location[0]+1,location[1]+1,'SE'))
-			dictneighbour["SE"] = (location[0]+1,location[1]+1)
-			isneigbour = True
-	if  (location[1]>=1 and location[0]>=1):
-		if (grid[location[0]-1][location[1]-1]==symbol):  #NW
-			neighbors.append((location[0]-1,location[1]-1,'NW'))
-			dictneighbour["NW"] = (location[0]-1,location[1]-1)
-			isneigbour = True
-	if (location[0]>=1):
-		if (grid[location[0]-1][location[1]]==symbol):  #NE
-			neighbors.append((location[0]-1,location[1],'NE'))
-			dictneighbour["NE"] = (location[0]-1,location[1])
-			isneigbour = True
-	if (location[0]<=7) :
-		if (grid[location[0]+1][location[1]]==symbol):  #SW
-			neighbors.append((location[0]+1,location[1],'SW'))
-			dictneighbour["SW"] = (location[0]+1,location[1])
-			isneigbour = True
-
-	if varstate == True :
-		#print("v1",isneigbour,dictneighbour)
-		return isneigbour,dictneighbour
-	return neighbors
+					if i == 12 or i==13:
+						#print("12 et 13")
+						moves.append([[m1,m2,m3],direction])
+						sumito3m(grid,m1,m2,m3,moves,direction)
+						
+					if i == 14:
+						#print("14")
+						sumito3m(grid,m1,m2,m3,moves,direction)
+						pass
 
 
-
-#def bouclecenter(li,ci):
-#
-#	for x in [li-1,li,li+1]:
-#		for y in [ci-1,ci,ci+1]:# tout autour de la bille
-#			#print(x,y)
-#			#status = getStatus(state, (x,y))
-#			#if status == 'E' :
-#			#	statevar = True
-#			#else : 
-#			#	statevar = False
-#	return False
+					break
 
 
-	
-def boucleangleonemarble(li,ci,state):
-	#result = []
-	dictio = {}
-	isitp = False
-	if li == 4 and ci == 0:
-		#print("4 and 0")
-		for elem in ["NE","E","SE"]:
-			#print(addDirection((li,ci),elem))
-			xi,yi=addDirection((li,ci),elem)
-			if state['board'][xi][yi] == "E":
-				isitp = True
-				#result.append([addDirection((li,ci),elem),elem])
-				dictio[elem] = (xi,yi)
+			e=e+1   
+	return moves
 
-		pass
-	elif li == 8 and ci ==8:
-		#print("8 and 4")
-		for elem in ["W","NW","NE"]:
-			#print(addDirection((li,ci),elem))
-			xi,yi=addDirection((li,ci),elem)
-			if state['board'][xi][yi] == "E":
-				isitp = True
-				#result.append([addDirection((li,ci),elem),elem])
-				dictio[elem] = (xi,yi)	
+#manque les mouvements en paralleles
 
-	elif li == 0 and ci ==0:
-		#print("0 and 0")
-		for elem in ["SW","SE","E"]:
-			#print(addDirection((li,ci),elem))
-			xi,yi=addDirection((li,ci),elem)
-			if state['board'][xi][yi] == "E":
-				isitp = True
-				#result.append([addDirection((li,ci),elem),elem])
-				dictio[elem] = (xi,yi)		
-		pass
+			
+def insidetheboard(grid,marble):#check if the marble is inside the board , otherwise , it returns 'X' for outside location
+	li,ci = marble
+	#print(marble)
+	if  (0<=li<=4 and 0<=ci<=4) or (5<=li<=8 and 5<=ci<=8) or (5<=li<=8 and 0<=ci<=4 and not grid[li][ci] == 'X') or (0<=li<=4 and 5<=ci<=8 and not grid[li][ci] == 'X'):
+		res=grid[marble[0]][marble[1]]
 
-	elif li == 8 and ci ==4:
-		#print("8 and 4")
-		for elem in ["NW","NE","E"]:
-			#print(addDirection((li,ci),elem))
-			xi,yi=addDirection((li,ci),elem)
-			if state['board'][xi][yi] == "E":
-				isitp = True
-				#result.append([addDirection((li,ci),elem),elem])
-				dictio[elem] = (xi,yi)
-
-	elif li == 0 and ci == 4:
-		#print("0 and 4")
-		for elem in ["W","SW","SE"]:
-			#print(addDirection((li,ci),elem))
-			xi,yi=addDirection((li,ci),elem)
-			if state['board'][xi][yi] == "E":
-				isitp = True
-				#result.append([addDirection((li,ci),elem),elem])
-				dictio[elem] = (xi,yi)			
-		pass
-	elif li == 4 and ci == 8:
-		#print("4 and 8")
-		for elem in ["NW","W","SW"]:
-			#print(addDirection((li,ci),elem))
-			xi,yi=addDirection((li,ci),elem)
-			if state['board'][xi][yi] == "E":
-				isitp = True
-				#result.append([addDirection((li,ci),elem),elem])
-				dictio[elem] = (xi,yi)			
-		pass
-	elif 4<li<8 and 0<ci<4:
-		#print("48 and 04")
-		for elem in ["NW","NE","E","SE"]:
-			#print(addDirection((li,ci),elem))
-			xi,yi=addDirection((li,ci),elem)
-			if state['board'][xi][yi] == "E":
-				isitp = True
-				#result.append([addDirection((li,ci),elem),elem])
-				dictio[elem] = (xi,yi)			
-		pass
-	elif 4<li<8 and 4<ci<8:
-		#print("48 and 04")
-		for elem in ["W","NW","NE","E"]:
-			#print(addDirection((li,ci),elem))
-			xi,yi=addDirection((li,ci),elem)
-			if state['board'][xi][yi] == "E":
-				isitp = True
-				#result.append([addDirection((li,ci),elem),elem])
-				dictio[elem] = (xi,yi)			
-		pass	
-	elif 0<li<4 and 4<ci<8:
-		#print("04 and 48")
-		for elem in ["NW","W","SW","SE"]:
-			#print(addDirection((li,ci),elem))
-			xi,yi=addDirection((li,ci),elem)
-			if state['board'][xi][yi] == "E":
-				isitp = True
-				#result.append([addDirection((li,ci),elem),elem])
-				dictio[elem] = (xi,yi)			
-		pass
-	elif li==0 and 0<ci<4:
-		#print("0 and 04")
-		for elem in ["W","SW","SE","E"]:
-			#print(addDirection((li,ci),elem))
-			xi,yi=addDirection((li,ci),elem)
-			if state['board'][xi][yi] == "E":
-				isitp = True
-				#result.append([addDirection((li,ci),elem),elem])
-				dictio[elem] = (xi,yi)			
-		pass
-	elif 0<li<4 and ci==0:
-		#print("04 and 0")
-		for elem in ["SW","SE","E","NE"]:
-			#print(addDirection((li,ci),elem))
-			xi,yi=addDirection((li,ci),elem)
-			if state['board'][xi][yi] == "E":
-				isitp = True
-				#result.append([addDirection((li,ci),elem),elem])
-				dictio[elem] = (xi,yi)			
-		pass
-	elif 4<li<8 and ci==8:
-		#print("48 and 8")
-		for elem in ["SW","W","NW","NE"]:
-			#print(addDirection((li,ci),elem))
-			xi,yi=addDirection((li,ci),elem)
-			if state['board'][xi][yi] == "E":
-				isitp = True
-				#result.append([addDirection((li,ci),elem),elem])
-				dictio[elem] = (xi,yi)			
-		pass
-	elif li==8 and 4<ci<8:
-		#print("8 and 48")
-		for elem in ["W","NW","NE","E"]:
-			#print(addDirection((li,ci),elem))
-			xi,yi=addDirection((li,ci),elem)
-			if state['board'][xi][yi] == "E":
-				isitp = True
-				#result.append([addDirection((li,ci),elem),elem])
-				dictio[elem] = (xi,yi)			
-		pass
-	
+		return res
 	else : 
-		#print("center")
-		for elem in ["W","NW","NE","E","SE","SW"]:
-			#print(addDirection((li,ci),elem))
-			xi,yi=addDirection((li,ci),elem)
-			if state['board'][xi][yi] == "E":
-				isitp = True
-				#result.append([addDirection((li,ci),elem),elem])
-				dictio[elem] = (xi,yi)
+		return 'X'
 
-		pass
-	#result.insert(0,isitp)
-	return isitp,dictio
-
-def isnotOnBoard(pos):
-	l, c = pos
-	if min(pos) < 0:
+def isonboard(grid,marble):#boolean version of the insidetheboard function
+	li,ci = marble
+	if  (0<=li<=4 and 0<=ci<=4) or (5<=li<=8 and 5<=ci<=8) or (5<=li<=8 and 0<=ci<=4 and not grid[li][ci] == 'X') or (0<=li<=4 and 5<=ci<=8 and not grid[li][ci] == 'X'):
 		return True
-	if max(pos) > 8:
-		return True
-	if abs(c-l) >= 5:
-		return True
-	return False
+	else :
+		return False 
 
-def bouclestayonboard2marble(state,li,ci):
-	Opponent = opponent(symbols[state['current']])
-	Allie = symbols[state['current']]
-	#result = []
-	dictio = {}
-	isitp = False
-	if li == 4 and ci == 0:
-		#print("4 and 0")
-		for elem in ["NE","E","SE"]:
-			#print(addDirection((li,ci),elem))
-			xi,yi=addDirection((li,ci),elem)
-			if state['board'][xi][yi] == "E":
-				isitp = True
-				#result.append([addDirection((li,ci),elem),elem])
-				dictio[elem] = (xi,yi)
-			
-		pass
-	elif li == 8 and ci ==4:
-		#print("8 and 4")
-		for elem in ["NW","NE","E"]:
-			#print(addDirection((li,ci),elem))
-			xi,yi=addDirection((li,ci),elem)
-			if state['board'][xi][yi] == "E":
-				isitp = True
-				#result.append([addDirection((li,ci),elem),elem])
-				dictio[elem] = (xi,yi)
-					
-		pass
-	elif li == 0 and ci == 4:
-		#print("0 and 4")
-		for elem in ["W","SW","SE"]:
-			#print(addDirection((li,ci),elem))
-			xi,yi=addDirection((li,ci),elem)
-			if state['board'][xi][yi] == "E":
-				isitp = True
-				#result.append([addDirection((li,ci),elem),elem])
-				dictio[elem] = (xi,yi)			
-					
-		pass
-	elif li == 4 and ci == 8:
-		#print("4 and 8")
-		for elem in ["NW","W","SW"]:
-			#print(addDirection((li,ci),elem))
-			xi,yi=addDirection((li,ci),elem)
-			if state['board'][xi][yi] == "E":
-				isitp = True
-				#result.append([addDirection((li,ci),elem),elem])
-				dictio[elem] = (xi,yi)	
+def getPossibilities(symbol):#return all movement possible on abalone board according to the rules of the game         
+	possibilities =[
+					['E'],                 				#:True,    #0    
+					['X'],								#:False		#1
+					[symbol,'E'],            			 #:True,    #2    possible sumito
+					[symbol,'X'],						#False,		#3		possible sumito
+					[symbol,symbol,'E'],         			#:True,    #4    possible sumito
+					[symbol,symbol,'X'],					#False,		#5	possible sumito
+					[symbol,opponent(symbol),'E'],        			#:True,    #6    #je sors une bille adverse		possible sumito
+					[symbol,opponent(symbol),'X'],					#:True 		#7														possible sumito
+					[symbol,opponent(symbol),opponent(symbol)],        					#:False,   #8    #je ne peux pas bouger			possible sumito
+					[symbol,symbol,symbol],        					 					#:False,   #9    #je ne peux pas bouger			possible sumito
+					[symbol,symbol,opponent(symbol),'E'],     							#:True,    #10    #je sors une bille adverse	possible sumito
+					[symbol,symbol,opponent(symbol),'X'],								#:True, 	#11									possible sumito
+					[symbol,symbol,opponent(symbol),opponent(symbol),'E'], 				#:True,    #12    #je sors une bille adverse	possible sumito
+					[symbol,symbol,opponent(symbol),opponent(symbol),'X'],				#:True 		#13									possible sumito
+					[symbol,symbol,opponent(symbol),opponent(symbol),opponent(symbol)], #:False,   #14    #je ne peux pas bouger		possible sumito
+					]
 
-	elif li == 0 and ci == 0:
-		#print("4 and 8")
-		for elem in ["SW","SE","E"]:
-			#print(addDirection((li,ci),elem))
-			xi,yi=addDirection((li,ci),elem)
-			if state['board'][xi][yi] == "E":
-				isitp = True
-				#result.append([addDirection((li,ci),elem),elem])
-				dictio[elem] = (xi,yi)				
+	return possibilities
 
-	elif li == 8 and ci == 8:
-		#print("8 and 8")
-		for elem in ["W","NW","NE"]:
-			#print(addDirection((li,ci),elem))
-			xi,yi=addDirection((li,ci),elem)
-			if state['board'][xi][yi] == "E":
-				isitp = True
-				#result.append([addDirection((li,ci),elem),elem])
-				dictio[elem] = (xi,yi)
-
-		pass
-	elif 4<li<8 and 0<ci<4:
-		#print("48 and 04")
-		for elem in ["NW","NE","E","SE"]:
-			#print(addDirection((li,ci),elem))
-			xi,yi=addDirection((li,ci),elem)
-			if state['board'][xi][yi] == "E":
-				isitp = True
-				#result.append([addDirection((li,ci),elem),elem])
-				dictio[elem] = (xi,yi)
-					
-		pass
-	elif 4<li<8 and 4<ci<8:
-		#print("48 and 04")
-		for elem in ["W","NW","NE","E"]:
-			#print(addDirection((li,ci),elem))
-			xi,yi=addDirection((li,ci),elem)
-			if state['board'][xi][yi] == "E":
-				isitp = True
-				#result.append([addDirection((li,ci),elem),elem])
-				dictio[elem] = (xi,yi)	
-				
-		pass	
-	elif 0<li<4 and 4<ci<8:
-		#print("04 and 48")
-		for elem in ["NW","W","SW","SE"]:
-			#print(addDirection((li,ci),elem))
-			xi,yi=addDirection((li,ci),elem)
-			if state['board'][xi][yi] == "E":
-				isitp = True
-				#result.append([addDirection((li,ci),elem),elem])
-				dictio[elem] = (xi,yi)
-					
-		pass
-	elif li==0 and 0<ci<4:
-		#print("0 and 04")
-		for elem in ["W","SW","SE","E"]:
-			#print(addDirection((li,ci),elem))
-			xi,yi=addDirection((li,ci),elem)
-			if state['board'][xi][yi] == "E":
-				isitp = True
-				#result.append([addDirection((li,ci),elem),elem])
-				dictio[elem] = (xi,yi)	
-				
-		pass
-	elif 0<li<4 and ci==0:
-		#print("04 and 0")
-		for elem in ["SW","SE","E","NE"]:
-			#print(addDirection((li,ci),elem))
-			xi,yi=addDirection((li,ci),elem)
-			if state['board'][xi][yi] == "E":
-				isitp = True
-				#result.append([addDirection((li,ci),elem),elem])
-				dictio[elem] = (xi,yi)	
-				
-		pass
-	elif 4<li<8 and ci==8:
-		#print("48 and 8")
-		for elem in ["SW","W","NW","NE"]:
-			#print(addDirection((li,ci),elem))
-			xi,yi=addDirection((li,ci),elem)
-			if state['board'][xi][yi] == "E":
-				isitp = True
-				#result.append([addDirection((li,ci),elem),elem])
-				dictio[elem] = (xi,yi)	
-				
-		pass
-	elif li==8 and 4<ci<8:
-		#print("8 and 48")
-		for elem in ["W","NW","NE","E"]:
-			#print(addDirection((li,ci),elem))
-			xi,yi=addDirection((li,ci),elem)
-			if state['board'][xi][yi] == "E":
-				isitp = True
-				#result.append([addDirection((li,ci),elem),elem])
-				dictio[elem] = (xi,yi)
-		pass
-	
-	else : 
-		#print("center")
-		for elem in ["W","NW","NE","E","SE","SW"]:
-			#print(addDirection((li,ci),elem))
-			xi,yi=addDirection((li,ci),elem)
-			if state['board'][xi][yi] == "E":
-				isitp = True
-				#result.append([addDirection((li,ci),elem),elem])
-				dictio[elem] = (xi,yi)
-			
-		pass
-	#result.insert(0,isitp)
-	return isitp,dictio
-
-def boucle2marblesexceptionmove(dictio1,dictio2,pos1,pos2):# mouvements possible pour les 2 billes
-	dict2marble = {}
-	dictio11 = dictio1
-	dictio22 = dictio2
-	#print(dictio1)
-	#print(dictio2)
-	x1,y1 = pos1
-	x2,y2 = pos2
-	#print("ok1")
-	statevar3 = False
-
-	for elem in dictio1:		
-		for otherelem in dictio2:
-			#print("ok2")
-			if elem == otherelem: # si 2 deplacements en commun ( deplacement en parallele)
-				#print("ok")
-				dict2marble[elem] = dictio1[elem]
-				#print(dictio1[elem])
-				statevar3 = True
-
-	for otherelem in dictio2:
-		# deplacements en serie 
-		if ((dictio2[otherelem][0],dictio2[otherelem][1]-2) == pos1 and (dictio2[otherelem][0],dictio2[otherelem][1]-1) == pos2) or ((dictio2[otherelem][0],dictio2[otherelem][1]+2) == pos1 and (dictio2[otherelem][0],dictio2[otherelem][1]+1) == pos2) :#axe des y vu du voisin
-			dict2marble[otherelem] = dictio2[otherelem]
-			#print("other",elem,dictio2[otherelem],otherelem)
-			pass
-	
-		elif ((dictio2[otherelem][0]-2,dictio2[otherelem][1]) == pos1 and (dictio2[otherelem][0]-1,dictio2[otherelem][1]) == pos2) or ((dictio2[otherelem][0]+2,dictio2[otherelem][1]) == pos1 and (dictio2[otherelem][0]+1,dictio2[otherelem][1]) == pos2) :#axe des x vu du voisin
-			dict2marble[otherelem] = dictio2[otherelem]
-			#print("other",elem,dictio2[otherelem],otherelem,pos1,(dictio2[otherelem][0],dictio2[otherelem][1]))
-			pass
-		# en diagonale 
-		elif ((dictio2[otherelem][0]-2,dictio2[otherelem][1]-2) == pos1 and (dictio2[otherelem][0]-1,dictio2[otherelem][1]-1) == pos2) or ((dictio2[otherelem][0]+2,dictio2[otherelem][1]+2) == pos1 and (dictio2[otherelem][0]+1,dictio2[otherelem][1]+1) == pos2):#diag vu du voisin
-			dict2marble[otherelem] = dictio2[otherelem]
-			#print("other",elem,dictio2[otherelem],otherelem)
-			pass		
-
-	for elem in dictio1:		
-		if ((dictio1[elem][0],dictio1[elem][1]+2) == pos2 and (dictio1[elem][0],dictio1[elem][1]+1) == pos1) or ((dictio1[elem][0],dictio1[elem][1]-2) == pos2 and (dictio1[elem][0],dictio1[elem][1]-1) == pos1): # axe des y vue de moi
-			dict2marble[elem] = dictio1[elem]
-			#print("ok")
-			#print("me",elem,dictio1[elem])
-			pass
-		
-		elif ((dictio1[elem][0]+2,dictio1[elem][1]) == pos2 and (dictio1[elem][0]+1,dictio1[elem][1]) == pos1) or ((dictio1[elem][0]-2,dictio1[elem][1]) == pos2 and (dictio1[elem][0]-1,dictio1[elem][1]) == pos1):# axes des x vu de moi
-			dict2marble[elem] = dictio1[elem]
-			pass
-
-		elif ((dictio1[elem][0]+2,dictio1[elem][1]+2) == pos2 and (dictio1[elem][0]+1,dictio1[elem][1]+1) == pos1) or ((dictio1[elem][0]-2,dictio1[elem][1]-2) == pos2 and (dictio1[elem][0]-1,dictio1[elem][1]-1) == pos1): #diag vue de moi
-			dict2marble[elem] = dictio1[elem]
-			#print("me",elem,dictio1[elem])
-			pass
-
-	#print(dict2marble)		
-	return statevar3,dict2marble
-
-def moveennemi2m(state,pos,dictio,currentmarble):
-	li,ci= pos
-	opponentplayer = opponent(currentmarble)
-	for elem in dictio:# pour chaque alignement
-		elemopo = opposite[elem]
-		# je veux regarder sur la ligne si il ny a pas dadversaire 
-		xv,yv=addDirection((li,ci),elem)#coordonne du voisin 
-
-		#print(isboardFree(state, addDirection((xv,yv),elem)),addDirection((xv,yv),elem),xv,yv,elem)
-		#if isboardFree(state, addDirection((xv,yv),elem)):
-		if isOnBoard(addDirection((xv,yv),elem)):
-			#print("ok")
-			xvp1,yvp1 = addDirection((xv,yv),elem)#1 case apres le voisin
-			
-			#print(isout(state,addDirection((xvp1,yvp1),elem)))
-			if isFree(state, addDirection((xvp1,yvp1),elem)) or isout(state,addDirection((xvp1,yvp1),elem)):
-			#if isOnBoard(addDirection((xvp1,yvp1),elem)):
-				#print("ok2")
-				
-				xvp2,yvp2 = addDirection((xvp1,yvp1),elem)# 2 cases apres le voisin
-				
-				if state['board'][xvp1][yvp1] == opponentplayer and (state['board'][xvp2][yvp2] == "E" or state['board'][xvp2][yvp2] == "X") :
-					dictio[elem][elem] = (xv,yv)
-					#print("ok",dictio[elem])
-					pass
-
-
-
-		#if isFree(state, addDirection((xvp2,yvp2),elemopo)):
-		if isOnBoard(addDirection((li,ci),elemopo)):
-			#print("ok")		
-			xim1,yim1 = addDirection((li,ci),elemopo)#1case avant moi direction oppose
-
-			#print(isout(state,addDirection((xim1,yim1),elemopo)))
-			if isFree(state, addDirection((xim1,yim1),elemopo)) or isout(state, addDirection((xim1,yim1),elemopo)):
-			#if isOnBoard(addDirection((xim1,yim1),elemopo)):
-				xim2,yim2 = addDirection((xim1,yim1),elemopo)#2 cases avant moi direction oppose
-				#print("xv,yv",xv,yv,"xvp1,yvp1",xvp1,yvp1,"xvp2,yvp2",xvp2,yvp2,"xim1,yim1",xim1,yim1,"xim2,yim2",xim2,yim2)
-				#print("ok")
-
-				if state['board'][xim1][yim1] == opponentplayer and (state['board'][xim2][yim2] == "E" or state['board'][xim2][yim2] == "X"):
-					dictio[elem][opposite[elem]] = (xim1,yim1)
-					#print("ok")		
-					pass
-
-	return False
-
-def moveaMarbleispossible(state, pos):
-	li, ci = pos
-	return boucleangleonemarble(li,ci,state)
-
-def move3Marbleispossible(state,pos):
-	l1,c1 = pos
-	statevarneighbour = False
-	dictiofinal = {}
-	Allie = symbols[state['current']]# get allie symbole
-	#print(find2Neighbor(state['board'],pos,Allie,True))
-	if find2Neighbor(state['board'],(l1,c1),Allie,True)[0] :# si il y a voisin
-		for elem in list(find2Neighbor(state['board'],(l1,c1),Allie,True)[1].keys()): # regarde pour chaque direction des voisins
-			xn,yn = find2Neighbor(state['board'],(l1,c1),Allie,True)[1][elem][0]		#recupere les coordonnes du voisin 1
-			xnp1,ynp1 = find2Neighbor(state['board'],(l1,c1),Allie,True)[1][elem][1] #recupere les coordonnes du voisin 1
-			#print(find2Neighbor(state['board'],(l1,c1),Allie,True)[1][elem][0])
-			#print(xn,yn,xnp1,ynp1)
-
+def sumito3m(grid,m1,m2,m3,moves,direction):# function for sumito of 3 marbles
+	directionlist = []
+	for elem in [m1,m2,m3]:#pour chaque position
+		for eachdirection in directions :#pour chaque direction
+			#print(direction)
+			if eachdirection == direction or eachdirection == opposite[direction]:
+				pass
+			else:# directions de lalignement exclu
+				if isonboard(grid,addDirection(elem, eachdirection)):
+					if getStatusgrid(grid,addDirection(elem, eachdirection)) == 'E':
+						directionlist.append(eachdirection)
+						#print(directionlist)
+	for i in directions:
+		if directionlist.count(i) == 3 :
+			moves.append([[m1,m2,m3],i])
+			pass	
+	directionlist.clear()
 	return None
 
-def move2Marbleispossible(state,pos):
-	l1,c1 = pos#possition of the marble
-	statevarneighbour = False
-	dictio13 = {}
-	Allie = symbols[state['current']]# get allie symbole
-	if findNeighborv2(state['board'],(l1,c1),Allie,True)[0] :# si il y a voisin
-		for elem in list(findNeighborv2(state['board'],(l1,c1),Allie,True)[1].keys()): # regarde pour chaque direction des voisins
-			xn,yn = findNeighborv2(state['board'],(l1,c1),Allie,True)[1][elem]		#recupere les coordonnes de chaque voisin
-
-			statevar1,dictio1 = bouclestayonboard2marble(state,l1,c1)# mouvement possible pour ma bille 
-			statevar2,dictio2 = bouclestayonboard2marble(state,xn,yn)# mouvement possible pour mon voisin allie
-			#print(dictio1)
-			#print(dictio2)
-			pos1 = l1,c1
-			pos2 = xn,yn
-			#print("ok")
-			statevar3,dictio12 = boucle2marblesexceptionmove(dictio1,dictio2,pos1,pos2)# mouvements possible pour les 2 billes
-			dictio13[elem] = dictio12
-		pass
-	else :
-		return statevarneighbour 
-	moveennemi2m(state,pos,dictio13,Allie)
-	posmarbles = findNeighborv2(state['board'],(l1,c1),Allie,True)
-	posmarbles[1]["marble1"] = pos
-	#dictio13["marbles"] = pos2marbles(state, pos,Allie)# recupere les cordonne de la bille initiale et des voisins
-	return statevar3,posmarbles[1],dictio13
-#############################################################
-############################################################
-#def pos2marbles(state,pos,Allie):
-#	l1,c1 = pos#position of the marble
-#	dictioposmarbles = {}
-#	dictioposmarbles["marble1"] = pos
-#	if findNeighborv2(state['board'],(l1,c1),Allie,True)[0] :# si il y a voisin
-#		for elem in list(findNeighborv2(state['board'],(l1,c1),Allie,True)[1].keys()): # regarde pour chaque direction des voisins
-#			xn,yn = findNeighborv2(state['board'],(l1,c1),Allie,True)[1][elem]		#recupere les coordonnes de chaque voisin
-#			print(elem)
-#			dictioposmarbles[elem] = (xn,yn)
-#	#print(dictioposmarbles)
-#	return dictioposmarbles
-#################################################################
-#################################################################
-def canImoveamarblenexttoallie(state,pos):
-	return False
-
-def findNeighborv2(grid,location,symbol,varstate=False):
-	isneigbour = False
-	dictneighbour = {}
-	for direction in list(directions.keys()):
-		posf = addDirection(location,direction)
-		if isOnBoard(posf) and getStatusgrid(grid, posf)==symbol  :
-			dictneighbour[direction] = addDirection(location,direction)
-			isneigbour = True
-	#print("v2",isneigbour,dictneighbour)
-	return isneigbour,dictneighbour 
-
-def find2Neighbor(grid,location,symbol,varstate=False):
-	neighbors=[]
-	isneigbour = False
-	dictneighbour = {}
-	if (location[1]<=7) :
-		if (grid[location[0]][location[1]+1]==symbol) and (grid[location[0]][location[1]+2]==symbol):  #E
-			neighbors.append((location[0],location[1]+1,'E'))
-			neighbors.append((location[0],location[1]+2,'E'))
-			dictneighbour["E"] = ((location[0],location[1]+1),(location[0],location[1]+2))
-			isneigbour = True
-	if (location[1]>=1):
-		if (grid[location[0]][location[1]-1]==symbol) and (grid[location[0]][location[1]-2]==symbol):  #W
-			neighbors.append((location[0],location[1]-1,'W'))
-			neighbors.append((location[0],location[1]-2,'W'))
-			dictneighbour["W"] = ((location[0],location[1]-1),(location[0],location[1]-2))
-			isneigbour = True
-	if (location[1]<=7 and location[0]<=7):
-		if (grid[location[0]+1][location[1]+1]==symbol) and (grid[location[0]+2][location[1]+2]==symbol):  #SE
-			neighbors.append((location[0]+1,location[1]+1,'SE'))
-			neighbors.append((location[0]+2,location[1]+2,'SE'))
-			dictneighbour["SE"] = ((location[0]+1,location[1]+1),(location[0]+2,location[1]+2))
-			isneigbour = True
-	if  (location[1]>=1 and location[0]>=1):
-		if (grid[location[0]-1][location[1]-1]==symbol) and (grid[location[0]-2][location[1]-2]==symbol):  #NW
-			neighbors.append((location[0]-1,location[1]-1,'NW'))
-			neighbors.append((location[0]-2,location[1]-2,'NW'))
-			dictneighbour["NW"] = ((location[0]-1,location[1]-1),(location[0]-2,location[1]-2))
-			isneigbour = True
-	if (location[0]>=1):
-		if (grid[location[0]-1][location[1]]==symbol) and (grid[location[0]-2][location[1]]==symbol):  #NE
-			neighbors.append((location[0]-1,location[1],'NE'))
-			neighbors.append((location[0]-2,location[1],'NE'))
-			dictneighbour["NE"] = ((location[0]-1,location[1]),(location[0]-2,location[1]))
-			isneigbour = True
-	if (location[0]<=7) :
-		if (grid[location[0]+1][location[1]]==symbol) and (grid[location[0]+2][location[1]]==symbol):  #SW
-			neighbors.append((location[0]+1,location[1],'SW'))
-			neighbors.append((location[0]+2,location[1],'SW'))
-			dictneighbour["SW"] = ((location[0]+1,location[1]),(location[0]+2,location[1]))
-			isneigbour = True
-
-	if varstate == True :
-		#print("v1",isneigbour,dictneighbour)
-		return isneigbour,dictneighbour
-	return neighbors
-
-
-
+def sumito2m(grid,m1,m2,moves,direction):# function for sumito of 2 marbles
+	directionlist = []
+	for elem in [m1,m2]:#pour chaque position
+		for eachdirection in directions :#pour chaque direction
+			#print(direction)
+			if eachdirection == direction or eachdirection == opposite[direction]:
+				pass
+			else:# directions de lalignement exclu
+				if isonboard(grid,addDirection(elem, eachdirection)):
+					if getStatusgrid(grid,addDirection(elem, eachdirection)) == 'E':
+						directionlist.append(eachdirection)
+						#print(directionlist)
+	#print("longeur", len(directions))
+	for i in directions:
+		if directionlist.count(i) == 2 :
+			moves.append([[m1,m2],i])
+			pass	
+	directionlist.clear()
+	return None
 
 
 if __name__=='__main__':
@@ -857,24 +391,7 @@ if __name__=='__main__':
 		print()
 	Game = Abalone
 	state, next = Abalone(["jojo","jack"])
-	#print(state)
-	#state['board'][4][3] = 'B'
-	#state['board'][4][4] = 'B'
-		#state['board'][4][1] = 'W'
-		#state['board'][3][1] = 'W'
-	#state['board'][3][3] = 'W'
-		#state['board'][5][2] = 'B'
-		#state['board'][4][2] = 'B'
-	#state['board'][6][2] = 'B'
-		#state['board'][6][2] = 'W'
-	#state['board'][4][3] = 'B'
-	#state['board'][4][4] = 'B'
-		#state['board'][5][1] = 'W'
-	#state['board'][3][1] = 'W'
-	#state['board'][3][3] = 'W'
-		#state['board'][5][2] = 'B'
-		#state['board'][5][3] = 'B'
-	#state['board'][6][2] = 'B'
+
 	#state['board'][6][2] = 'W'
 	state['board'][4][1] = 'W'
 	state['board'][3][4] = 'W'
@@ -885,16 +402,3 @@ if __name__=='__main__':
 	state['board'][3][7] = 'W'
 	#state['board'][4][3] = 'B'
 
-	show(state)
-	#moveaMarbleispossible(state, (4,4))
-
-	#print(moveaMarbleispossible(state, (4,3)))
-	print(move2Marbleispossible(state,(8,8)))
-	#print(move3Marbleispossible(state,(5,5)))
-	#print(findNeighbor(state['board'],(8,8),'B',True))
-	#print(addDirection((0,0),'NW'))
-
-
-
-#fct : is it possible to move marble allies ? (is there empty case around allies marble ? )return bool value
-#getStatus()

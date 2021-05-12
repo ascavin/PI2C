@@ -1,5 +1,4 @@
-import move as find 
-import find_move 
+import move as mv 
 import copy
 symbols = ['B', 'W']
 
@@ -40,7 +39,7 @@ def countNeighbor(state,symbol):
 	for marble in marbles:
 		for direction in directions:
 			position=(marble[0]+directions[direction][0],marble[0]+directions[direction][1])
-			if find_move.neighbor(state['board'],position)==symbol:
+			if mv.insidetheboard(state['board'],position)==symbol:
 				if neighbor(state['board'],position)==symbol:
 					neighbors=neighbors+1
 	return neighbors
@@ -153,18 +152,18 @@ def findMarbleCrownSecond(state,symbol):
 
 def advantage(state,symbol):
 	me = marbleCount(state,symbol)
-	you = marbleCount(state,find.opponent(symbol))
+	you = marbleCount(state,mv.opponent(symbol))
 	if me > you :
 		return symbols[state['current']]
 	elif you > me :
-		return find.opponent(symbols[state['current']])
+		return mv.opponent(symbols[state['current']])
 	else : 
 		return None
 
 def valueOfState(state):
-	advantage = marbleCount(state,find.opponent(symbols[state['current']]))
-	opponentNearBorder = len(findMarbleNearBorder(state,find.opponent(symbols[state['current']])))
-	opponentCrownSecond = len(findMarbleCrownSecond(state,find.opponent(symbols[state['current']])))
+	advantage = marbleCount(state,mv.opponent(symbols[state['current']]))
+	opponentNearBorder = len(findMarbleNearBorder(state,mv.opponent(symbols[state['current']])))
+	opponentCrownSecond = len(findMarbleCrownSecond(state,mv.opponent(symbols[state['current']])))
 	alliesCrownCenter = len(findMarbleCrownCenter(state,symbols[state['current']]))
 	alliesNearBorder = len(findMarbleNearBorder(state,symbols[state['current']]))
 	alliesCrownSecond = len(findMarbleCrownSecond(state,symbols[state['current']]))
@@ -229,17 +228,17 @@ def valueOfMove(state,move,symbol):
 		print()
 	#previousNeighborAllies = countNeighbor(state,symbols[state['current']])
 	#show(state)
-	previousAdvantage = marbleCount(state,find.opponent(symbols[state['current']]))
-	previousOpponentNearBorder = len(findMarbleNearBorder(state,find.opponent(symbols[state['current']])))
-	previousOpponentCrownSecond = len(findMarbleCrownSecond(state,find.opponent(symbols[state['current']])))
+	previousAdvantage = marbleCount(state,mv.opponent(symbols[state['current']]))
+	previousOpponentNearBorder = len(findMarbleNearBorder(state,mv.opponent(symbols[state['current']])))
+	previousOpponentCrownSecond = len(findMarbleCrownSecond(state,mv.opponent(symbols[state['current']])))
 	previousAlliesCrownCenter = len(findMarbleCrownCenter(state,symbols[state['current']]))
 	previousAlliesNearBorder = len(findMarbleNearBorder(state,symbols[state['current']]))
 	previousAlliesCrownSecond = len(findMarbleCrownSecond(state,symbols[state['current']]))
-	newState=find.moveMarblesTrain(state,move[0],move[1])
+	newState=mv.moveMarblesTrain(state,move[0],move[1])
 	#nextNeighborAllies = countNeighbor(newState,symbols[state['current']])
-	nextAdvantage = marbleCount(newState,find.opponent(symbols[state['current']]))
-	nextOpponentNearBorder = len(findMarbleNearBorder(newState,find.opponent(symbols[state['current']])))
-	nextOpponentCrownSecond = len(findMarbleCrownSecond(newState,find.opponent(symbols[state['current']])))
+	nextAdvantage = marbleCount(newState,mv.opponent(symbols[state['current']]))
+	nextOpponentNearBorder = len(findMarbleNearBorder(newState,mv.opponent(symbols[state['current']])))
+	nextOpponentCrownSecond = len(findMarbleCrownSecond(newState,mv.opponent(symbols[state['current']])))
 	nextAlliesCrownCenter = len(findMarbleCrownCenter(newState,symbols[state['current']]))
 	nextAlliesNearBorder = len(findMarbleNearBorder(newState,symbols[state['current']]))
 	nextAlliesCrownSecond = len(findMarbleCrownSecond(newState,symbols[state['current']]))
