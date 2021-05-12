@@ -61,8 +61,7 @@ class game:
         
 
 def main(argv):
-    #player=game(argv[1],argv[2])
-    player=game(3002,"toto2")
+    player=game(argv[1],argv[2])
     player.app()
 
 if (__name__=="__main__"):

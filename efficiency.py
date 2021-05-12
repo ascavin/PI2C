@@ -224,8 +224,6 @@ def valueOfMove(state,move,symbol):
 	def show(state):
 		print('\n'.join([' '.join(line) for line in state['board']]))
 		print()
-	#previousNeighborAllies = countNeighbor(state,symbols[state['current']])
-	#show(state)
 	previousAdvantage = marbleCount(state,mv.opponent(symbols[state['current']]))
 	previousOpponentNearBorder = len(findMarbleNearBorder(state,mv.opponent(symbols[state['current']])))
 	previousOpponentCrownSecond = len(findMarbleCrownSecond(state,mv.opponent(symbols[state['current']])))
@@ -240,7 +238,6 @@ def valueOfMove(state,move,symbol):
 	newState=mv.moveMarblesTrain(state,move[0],move[1])
 	for marble in findMarbleNearBorder(newState,symbols[state['current']]):
 		nextEliminationLine=findEscape(newState,marble)
-	#nextNeighborAllies = countNeighbor(newState,symbols[state['current']])
 	nextAdvantage = marbleCount(newState,mv.opponent(symbols[state['current']]))
 	nextOpponentNearBorder = len(findMarbleNearBorder(newState,mv.opponent(symbols[state['current']])))
 	nextOpponentCrownSecond = len(findMarbleCrownSecond(newState,mv.opponent(symbols[state['current']])))
@@ -248,7 +245,6 @@ def valueOfMove(state,move,symbol):
 	nextAlliesNearBorder = len(findMarbleNearBorder(newState,symbols[state['current']]))
 	nextAlliesCrownSecond = len(findMarbleCrownSecond(newState,symbols[state['current']]))
 	nextNeighbor = countNeighbor(state,symbols[state['current']])
-	#show(newState)
 	value = 0
 	diff=0
 
@@ -341,8 +337,6 @@ def findEscape(state,marble):
 						pos = (marble[0]+directions[direction][0]*i,marble[1]+directions[direction][1]*i)
 						if state["board"][pos[0]][pos[1]]==mv.opponent(symbols[state["current"]]):
 							value=value+1
-							print("----------------------------------------")
-							print(value)
 					values.append(value)
 	return max(values)
 
@@ -363,7 +357,6 @@ if __name__=='__main__':
 	values=[]
 	for i,move in enumerate(moves):
 		values.append(valueOfMove(state,move,symbols[state['current']]))
-	#print(moves[move])
 
 
 

@@ -7,6 +7,7 @@ import time
 from collections import defaultdict
 import random
 import negamax
+import song
 
 class game:
     def __init__(self,portClient,name='toto',portServer=3000):
@@ -15,15 +16,16 @@ class game:
         self.__port_server = portServer
         self.__host = "127.0.0.1"
         self.__live = 0
+        self.__sentence = 0
+
     
     def subscribe(self):
-        server_socket = socket.socket()                           # instantiate
-        server_socket.connect((self.__host, self.__port_server))  # connect to the server
+        server_socket = socket.socket()                           
+        server_socket.connect((self.__host, self.__port_server))  
         sendJSON(server_socket,{"request":"subscribe","port":self.__port_client,"name":self.__name,"matricules":"20521"})
         subscription=True
         while subscription:
             data = receiveJSON(server_socket)
-            #print(data)
             if (data['response']=="ok"):
                 subscription=False  
                 return True
@@ -36,43 +38,28 @@ class game:
         client_socket.bind((self.__host, self.__port_client))        # Bind to the port
         client_socket.listen(5)
         while ping:
-            #print("try")
-            c,addr = client_socket.accept()
-            #print('Got connection from', addr)    
+            c,addr = client_socket.accept()   
             data=receiveJSON(c)
             if (data['request']=='ping'):
                 sendJSON(c,{'response':'pong'})
             elif (data['request']=='play'):
-                #print(data)
                 nextMove=self.play(data)
-                #print(nextMove)
+                nextMove["message"]=song.getLyrics()[self.__sentence]
+                self.__sentence=self.__sentence+1
+                if self.__sentence == 64 : self.__sentence = 0
                 sendJSON(c,nextMove)
         c.close()
 
     def move(self,state):
         result=negamax.think2(state)
         return result
-        #nextMove=negamax.negamaxWithPruningLimitedDepth(state, state["current"], depth=3)
-        #result={"response": "move",
-	    #        "move": {'marbles':nextMove[1][0],'direction':nextMove[1][1]},
-	    #        "message": "pass"}
-        #result={"response": "move",
-	    #        "move": {'marbles':nextMove[1][0],'direction':nextMove[1][1]},
-	    #        "message": "pass"}
-        return result
-
 
     def play(self,data):
-        if data['lives']>=1:
-            nextMove=self.move(data['state'])
-        return nextMove
-    
-    
-        
+        nextMove=self.move(data['state'])
+        return nextMove   
 
 def main(argv):
-    #player=game(argv[1],argv[2])
-    player=game(3001,"toto1")
+    player=game(argv[1],argv[2])
     player.app()
 
 if (__name__=="__main__"):
