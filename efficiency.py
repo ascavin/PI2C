@@ -221,6 +221,7 @@ def diff(previousState,nextState):
 
 
 def valueOfMove(state,move,symbol):
+	#compute current postion and give score to  the move
 	def show(state):
 		print('\n'.join([' '.join(line) for line in state['board']]))
 		print()
